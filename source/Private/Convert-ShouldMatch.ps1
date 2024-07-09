@@ -79,7 +79,7 @@ function Convert-ShouldMatch
     # Determine if the command is negated
     $isNegated = Test-PesterCommandNegated -CommandAst $CommandAst
 
-    $sourceSyntaxVersion = Get-PesterCommandSyntaxVersion -CommandAst $CommandAst -CommandName 'Should' -ParameterName 'Match'
+    $sourceSyntaxVersion = Get-PesterCommandSyntaxVersion -CommandAst $CommandAst
 
     # Parse the command elements and convert them to Pester 6 syntax
     if ($PSCmdlet.ParameterSetName -eq 'Pester6')

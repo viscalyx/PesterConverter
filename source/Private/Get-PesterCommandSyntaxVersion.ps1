@@ -32,21 +32,17 @@ function Get-PesterCommandSyntaxVersion {
     (
         [Parameter(Mandatory = $true)]
         [System.Management.Automation.Language.CommandAst]
-        $CommandAst,
-
-        [Parameter(Mandatory = $true)]
-        [System.String]
-        $CommandName,
-
-        [Parameter(Mandatory = $true)]
-        [System.String]
-        $ParameterName
+        $CommandAst
     )
 
     $sourceSyntaxVersion = $null
 
-    # Check if the first command element matches the CommandName and if any of the parameters match the ParameterName
-    if ($CommandAst.CommandElements[0].Extent.Text -eq $CommandName -and $CommandAst.CommandElements.ParameterName -contains $ParameterName) {
+    if ($CommandAst.CommandElements[0].Extent.Text -match 'Should-\w+\b')
+    {
+        $sourceSyntaxVersion = 6
+    }
+    elseif ($CommandAst.CommandElements[0].Extent.Text -eq 'Should' -and (Get-ShouldCommandOperatorName -CommandAst $CommandAst))
+    {
         $sourceSyntaxVersion = 5
     }
 

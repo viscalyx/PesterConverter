@@ -51,11 +51,6 @@ function Get-AstDefinition
     {
         foreach ($filePath in $Path)
         {
-            if ($filePath -is [System.String])
-            {
-                $filePath = Convert-Path -Path $filePath
-            }
-
             $tokens, $parseErrors = $null
 
             Write-Verbose -Message "Parsing the script file: $filePath"

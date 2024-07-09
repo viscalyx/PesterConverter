@@ -113,7 +113,15 @@ function Convert-PesterSyntax
 
             Write-Debug -Message ('Parsing the script block AST: {0}' -f $scriptBlockAst.Extent.Text)
 
-            $shouldCommandAst = $scriptBlockAst | Get-CommandAst -CommandName 'Should' -ErrorAction 'Stop'
+            <#
+                Get all the Should command AST's in the script block AST, and sort
+                them by their start offset in descending order. The descending order
+                is so that we can replace the original extent text with the new extent
+                without reloading the script block AST.
+            #>
+            $shouldCommandAst = $scriptBlockAst |
+                Get-CommandAst -CommandName 'Should' -ErrorAction 'Stop' |
+                Sort-Object -Property { $_.Extent.StartOffset } -Descending
 
             if ($shouldCommandAst)
             {
