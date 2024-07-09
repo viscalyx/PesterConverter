@@ -92,8 +92,22 @@ function Convert-PesterSyntax
 
     process
     {
+        if ($Path.Count -gt 1)
+        {
+            Write-Progress -Id 1 -Activity 'Converting Pester syntax' -Status ('Processing {0} file(s)' -f $Path.Count) -PercentComplete 0
+        }
+        else
+        {
+            Write-Progress -Id 1 -Activity 'Converting Pester syntax' -Status ('Processing file {0}' -f (Split-Path -Path $Path -Leaf)) -PercentComplete 0
+        }
+
         foreach ($filePath in $Path)
         {
+            if ($Path.Count -gt 1)
+            {
+                Write-Progress -Id 1 -Activity 'Converting Pester syntax' -Status "Processing $filePath" -PercentComplete (($Path.IndexOf($filePath) / $Path.Count) * 100)
+            }
+
             if ($filePath -is [System.String])
             {
                 $filePath = Convert-Path -Path $filePath
@@ -107,12 +121,16 @@ function Convert-PesterSyntax
 
             if ($shouldCommandAst)
             {
+                Write-Progress -Id 2 -ParentId 1 -Activity 'Converting Should command syntax' -Status ('Processing {0} command(s)' -f $shouldCommandAst.Count) -PercentComplete 0
+
                 #$shouldCommandAst
 
                 Write-Debug -Message ('Found {0} ''Should'' command(s) in {1}.' -f $shouldCommandAst.Count, $filePath)
 
                 foreach ($commandAst in $shouldCommandAst)
                 {
+                    Write-Progress -Id 2 -ParentId 1 -Activity 'Converting Should command syntax' -Status "Processing extent on line $($commandAst.Extent.StartLineNumber)" -PercentComplete (($shouldCommandAst.IndexOf($commandAst) / $shouldCommandAst.Count) * 100)
+
                     $operatorName = Get-ShouldCommandOperatorName -CommandAst $commandAst -ErrorAction 'Stop'
 
                     if ($operatorName)
@@ -306,6 +324,8 @@ function Convert-PesterSyntax
                     # }
                 }
 
+                Write-Progress -Id 2 -ParentId 1 -Activity 'Converting Should command syntax' -Status 'Completed' -PercentComplete 100 -Completed
+
                 #$syntaxConversion
             }
             else
@@ -313,5 +333,10 @@ function Convert-PesterSyntax
                 Write-Verbose -Message "No 'Should' command found in $filePath."
             }
         }
+    }
+
+    end
+    {
+        Write-Progress -Id 1 -Activity 'Converting Pester syntax' -Status 'Completed' -PercentComplete 100 -Completed
     }
 }
