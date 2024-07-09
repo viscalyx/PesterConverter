@@ -15,10 +15,10 @@
     CompanyName          = 'Viscalyx'
 
     # Copyright statement for this module
-    Copyright            = '(c) Viscalyx. All rights reserved.'
+    Copyright            = 'Copyright the PesterConverter contributors. All rights reserved.'
 
     # Description of the functionality provided by this module
-    Description          = 'Commands ta convert Pester tests syntax.'
+    Description          = 'Commands ta convert Pester tests.'
 
     # Minimum version of the PowerShell engine required by this module
     PowerShellVersion    = '7.0'
@@ -45,28 +45,22 @@
     PrivateData          = @{
         PSData = @{
             # Tags applied to this module. These help with module discovery in online galleries.
-            # Tags = @()
+            Tags         = @('Pester', 'Converter')
 
             # A URL to the license for this module.
-            # LicenseUri = ''
+            LicenseUri   = 'https://github.com/viscalyx/PesterConverter/blob/main/LICENSE'
 
             # A URL to the main website for this project.
-            # ProjectUri = ''
+            ProjectUri   = 'https://github.com/viscalyx/PesterConverter'
 
             # A URL to an icon representing this module.
-            # IconUri = ''
+            IconUri      = 'https://avatars.githubusercontent.com/u/53994072'
 
             # ReleaseNotes of this module
             ReleaseNotes = ''
 
             # Prerelease string of this module
             Prerelease   = ''
-
-            # Flag to indicate whether the module requires explicit user acceptance for install/update/save
-            # RequireLicenseAcceptance = $false
-
-            # External dependent modules of this module
-            # ExternalModuleDependencies = @()
         } # End of PSData hashtable
     } # End of PrivateData hashtable
 }
