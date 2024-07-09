@@ -32,6 +32,7 @@
 function Test-PesterCommandNegated
 {
     [CmdletBinding()]
+    [OutputType([System.Boolean])]
     param
     (
         [Parameter(Mandatory = $true)]

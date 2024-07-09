@@ -19,7 +19,7 @@
         This example retrieves the AST of the 'Should' command.
 
     .INPUTS
-        System.Management.Automation.Language.Ast.
+        [System.Collections.Generic.IEnumerable`1[System.Management.Automation.Language.Ast]]
 
         The AST of a script block.
 
@@ -31,7 +31,7 @@
 function Get-CommandAst
 {
     [CmdletBinding()]
-    [OutputType([System.Management.Automation.Language.CommandAst[]])]
+    [OutputType([System.Collections.Generic.IEnumerable`1[System.Management.Automation.Language.Ast]])]
     param
     (
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
@@ -43,10 +43,15 @@ function Get-CommandAst
         $CommandName
     )
 
-    $commandAsts = $Ast.FindAll({
-        param($node)
-        return $node -is [System.Management.Automation.Language.CommandAst] -and $node.GetCommandName() -eq $CommandName
-    }, $true)
+    process
+    {
+        Write-Verbose -Message "Retrieving the AST of the command: $CommandName"
 
-    return $commandAsts
+        $commandAsts = $Ast.FindAll({
+            param($node)
+            return $node -is [System.Management.Automation.Language.CommandAst] -and $node.GetCommandName() -eq $CommandName
+        }, $true)
+
+        return $commandAsts
+    }
 }

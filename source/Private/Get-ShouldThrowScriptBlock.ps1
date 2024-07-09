@@ -47,51 +47,54 @@ function Get-ShouldThrowScriptBlock
         $ParsePipeline
     )
 
-    # Initialize the scriptblock variable
-    $scriptBlock = $null
-
-    # If scriptblock is not found in the pipeline, look for it in the parameters
-    if ($ParameterName)
+    process
     {
-        # Find the parameter by name
-        $commandParameterAst = $CommandAst.CommandElements |
-            Where-Object -FilterScript {
-                $_ -is [System.Management.Automation.Language.CommandParameterAst] -and
-                $_.ParameterName -eq $ParameterName
+        # Initialize the scriptblock variable
+        $scriptBlock = $null
+
+        # If scriptblock is not found in the pipeline, look for it in the parameters
+        if ($ParameterName)
+        {
+            # Find the parameter by name
+            $commandParameterAst = $CommandAst.CommandElements |
+                Where-Object -FilterScript {
+                    $_ -is [System.Management.Automation.Language.CommandParameterAst] -and
+                    $_.ParameterName -eq $ParameterName
+                }
+
+            if ($commandParameterAst)
+            {
+                $commandParameterIndex = $commandParameterAst.Parent.CommandElements.IndexOf($commandParameterAst)
+
+                # Assuming the next element is the argument to the parameter
+                $argumentAst = $commandParameterAst.Parent.CommandElements[$commandParameterIndex + 1]
+
+                # Retrieve the argument
+                $scriptBlock = $argumentAst.Extent.Text
+
+                # if ($argumentAst -and $argumentAst -is [System.Management.Automation.Language.ScriptBlockExpressionAst])
+                # {
+                #     $scriptBlock = $argumentAst.ScriptBlock
+                # }
             }
-
-        if ($commandParameterAst)
-        {
-            $commandParameterIndex = $commandParameterAst.Parent.CommandElements.IndexOf($commandParameterAst)
-
-            # Assuming the next element is the argument to the parameter
-            $argumentAst = $commandParameterAst.Parent.CommandElements[$commandParameterIndex + 1]
-
-            # Retrieve the argument
-            $scriptBlock = $argumentAst.Extent.Text
-
-            # if ($argumentAst -and $argumentAst -is [System.Management.Automation.Language.ScriptBlockExpressionAst])
-            # {
-            #     $scriptBlock = $argumentAst.ScriptBlock
-            # }
         }
-    }
 
-    # Check if we need to parse the pipeline
-    if (-not $scriptBlock -and $ParsePipeline.IsPresent)
-    {
-        # Attempt to find a pipeline before the CommandAst in the script
-        $pipelineAst = $CommandAst.Parent
-
-        # Only get the scriptblock if the pipeline has more than one element
-        if ($pipelineAst -is [System.Management.Automation.Language.PipelineAst] -and $pipelineAst.PipelineElements.Count -gt 1)
+        # Check if we need to parse the pipeline
+        if (-not $scriptBlock -and $ParsePipeline.IsPresent)
         {
-            # If a pipeline is found, get all the pipeline elements except the one that is the CommandAst
-            $lastPipelineElement = $pipelineAst.PipelineElements[-1]
-            $scriptBlock = $pipelineAst.Extent.Text.Replace($lastPipelineElement.Extent.Text, '').TrimEnd(" |`r`n")
-        }
-    }
+            # Attempt to find a pipeline before the CommandAst in the script
+            $pipelineAst = $CommandAst.Parent
 
-    # Return the scriptblock's text if found, otherwise return null
-    return $scriptBlock
+            # Only get the scriptblock if the pipeline has more than one element
+            if ($pipelineAst -is [System.Management.Automation.Language.PipelineAst] -and $pipelineAst.PipelineElements.Count -gt 1)
+            {
+                # If a pipeline is found, get all the pipeline elements except the one that is the CommandAst
+                $lastPipelineElement = $pipelineAst.PipelineElements[-1]
+                $scriptBlock = $pipelineAst.Extent.Text.Replace($lastPipelineElement.Extent.Text, '').TrimEnd(" |`r`n")
+            }
+        }
+
+        # Return the scriptblock's text if found, otherwise return null
+        return $scriptBlock
+    }
 }

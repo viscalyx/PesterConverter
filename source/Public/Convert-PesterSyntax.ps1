@@ -48,10 +48,6 @@ function Convert-PesterSyntax
         [System.Management.Automation.SwitchParameter]
         $Pester6,
 
-        [Parameter(ParameterSetName = 'Pester6')]
-        [System.Management.Automation.SwitchParameter]
-        $NoCommandAlias,
-
         [Parameter()]
         [System.Management.Automation.SwitchParameter]
         $UseNamedParameters,

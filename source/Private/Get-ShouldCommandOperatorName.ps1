@@ -34,57 +34,60 @@ function Get-ShouldCommandOperatorName
         $CommandAst
     )
 
-    # Operators. Output from Pester's command Get-ShouldOperator.
-    $possibleShouldOperator = @(
-        'Be',
-        'BeExactly',
-        'BeGreaterThan',
-        'BeLessOrEqual',
-        'BeIn',
-        'BeLessThan',
-        'BeGreaterOrEqual',
-        'BeLike',
-        'BeLikeExactly',
-        'BeNullOrEmpty',
-        'BeOfType',
-        'BeTrue',
-        'BeFalse',
-        'Contain',
-        'Exist',
-        'FileContentMatch',
-        'FileContentMatchExactly',
-        'FileContentMatchMultiline',
-        'FileContentMatchMultilineExactly',
-        'HaveCount',
-        'HaveParameter',
-        'Match',
-        'MatchExactly',
-        'Throw',
-        'InvokeVerifiable',
-        'Invoke'
-    )
-
-    # Operator aliases. Output from Pester's command Get-ShouldOperator.
-    $possibleShouldOperatorAlias = @{
-        'EQ' = 'Be'
-        'CEQ' = 'BeExactly'
-        'GT' = 'BeGreaterThan'
-        'LE' = 'BeLessOrEqual'
-        'LT' = 'BeLessThan'
-        'GE' = 'BeGreaterOrEqual'
-        'HaveType' = 'BeOfType'
-        'CMATCH' = 'MatchExactly'
-    }
-
-    $shouldOperatorAsts = $CommandAst.Find({
-        param($node)
-        return $node -is [System.Management.Automation.Language.CommandParameterAst] -and ($node.ParameterName -in $possibleShouldOperator -or $node.ParameterName -in $possibleShouldOperatorAlias.Keys)
-    }, $true)
-
-    if ($shouldOperatorAsts.ParameterName -in $possibleShouldOperatorAlias.Keys)
+    process
     {
-        return $possibleShouldOperatorAlias[$shouldOperatorAsts.ParameterName]
-    }
+        # Operators. Output from Pester's command Get-ShouldOperator.
+        $possibleShouldOperator = @(
+            'Be',
+            'BeExactly',
+            'BeGreaterThan',
+            'BeLessOrEqual',
+            'BeIn',
+            'BeLessThan',
+            'BeGreaterOrEqual',
+            'BeLike',
+            'BeLikeExactly',
+            'BeNullOrEmpty',
+            'BeOfType',
+            'BeTrue',
+            'BeFalse',
+            'Contain',
+            'Exist',
+            'FileContentMatch',
+            'FileContentMatchExactly',
+            'FileContentMatchMultiline',
+            'FileContentMatchMultilineExactly',
+            'HaveCount',
+            'HaveParameter',
+            'Match',
+            'MatchExactly',
+            'Throw',
+            'InvokeVerifiable',
+            'Invoke'
+        )
 
-    return $shouldOperatorAsts.ParameterName
+        # Operator aliases. Output from Pester's command Get-ShouldOperator.
+        $possibleShouldOperatorAlias = @{
+            'EQ' = 'Be'
+            'CEQ' = 'BeExactly'
+            'GT' = 'BeGreaterThan'
+            'LE' = 'BeLessOrEqual'
+            'LT' = 'BeLessThan'
+            'GE' = 'BeGreaterOrEqual'
+            'HaveType' = 'BeOfType'
+            'CMATCH' = 'MatchExactly'
+        }
+
+        $shouldOperatorAsts = $CommandAst.Find({
+            param($node)
+            return $node -is [System.Management.Automation.Language.CommandParameterAst] -and ($node.ParameterName -in $possibleShouldOperator -or $node.ParameterName -in $possibleShouldOperatorAlias.Keys)
+        }, $true)
+
+        if ($shouldOperatorAsts.ParameterName -in $possibleShouldOperatorAlias.Keys)
+        {
+            return $possibleShouldOperatorAlias[$shouldOperatorAsts.ParameterName]
+        }
+
+        return $shouldOperatorAsts.ParameterName
+    }
 }
