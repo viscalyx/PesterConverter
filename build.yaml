@@ -102,7 +102,6 @@ Pester:
       CIFormat: Auto
     CodeCoverage:
       CoveragePercentTarget: 85
-      OutputPath: JaCoCo_coverage.xml
       OutputEncoding: ascii
       UseBreakpoints: false
     TestResult:
@@ -136,6 +135,17 @@ DscTest:
       # Must exclude built module file because it should not be tested like MOF-based resources
       - PesterConverter.psm1
     MainGitBranch: main
+
+####################################################
+#           Code Coverage Configuration            #
+####################################################
+
+CodeCoverage:
+  # Filename of the file that will be outputted by the task Merge_CodeCoverage_Files.
+  CodeCoverageMergedOutputFile: JaCoCo_coverage.xml
+  # File pattern used to search for files under the ./output/testResults folder
+  # by task Merge_CodeCoverage_Files.
+  CodeCoverageFilePattern: Codecov*.xml
 
 ####################################################
 #              PSDepend Configuration              #
@@ -174,13 +184,13 @@ DscResource.DocGenerator:
   Generate_Wiki_Content:
     MofResourceMetadata:
       Type: MofResource
-      Category: Resources
+      Category: MOF-based Resources
     ClassResourceMetadata:
       Type: ClassResource
-      Category: Resources
+      Category: Class-based resources
     CompositeResourceMetadata:
       Type: CompositeResource
-      Category: Resources
+      Category: Composite Resources
   Generate_Wiki_Sidebar:
      Debug: false
      AlwaysOverwrite: true
