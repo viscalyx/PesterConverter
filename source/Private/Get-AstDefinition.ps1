@@ -36,6 +36,7 @@
 #>
 function Get-AstDefinition
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidMultipleTypeAttributes', '', Justification = 'We want to pass in both strings and FileInfo objects to parameter Path.')]
     [CmdletBinding()]
     [OutputType([System.Management.Automation.Language.ScriptBlockAst])]
     param
@@ -50,6 +51,11 @@ function Get-AstDefinition
     {
         foreach ($filePath in $Path)
         {
+            if ($filePath -is [System.String])
+            {
+                $filePath = Convert-Path -Path $filePath
+            }
+
             $tokens, $parseErrors = $null
 
             Write-Verbose -Message "Parsing the script file: $filePath"

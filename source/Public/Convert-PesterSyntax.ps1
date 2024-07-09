@@ -35,7 +35,7 @@
 
 function Convert-PesterSyntax
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidMultipleTypeAttributes ', '', Justification = 'We want to pass in both strings and FileInfo objects to parameter Path.')]
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidMultipleTypeAttributes', '', Justification = 'We want to pass in both strings and FileInfo objects to parameter Path.')]
     [CmdletBinding(DefaultParameterSetName = 'Pester6', SupportsShouldProcess = $true, ConfirmImpact = 'High')]
     param
     (
