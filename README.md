@@ -2,11 +2,11 @@
 
 Commands ta convert Pester tests syntax.
 
-[![Build Status](https://dev.azure.com/viscalyx/PesterConverter/_apis/build/status/viscalyx.PesterConverter?branchName=main)](https://dev.azure.com/viscalyx/PesterConverter/_build/latest?definitionId=32&branchName=main)
-![Azure DevOps coverage (branch)](https://img.shields.io/azure-devops/coverage/viscalyx/PesterConverter/32/main)
+[![Build Status](https://dev.azure.com/viscalyx/PesterConverter/_apis/build/status/viscalyx.PesterConverter?branchName=main)](https://dev.azure.com/viscalyx/PesterConverter/_build/latest?definitionId=33&branchName=main)
+![Azure DevOps coverage (branch)](https://img.shields.io/azure-devops/coverage/viscalyx/PesterConverter/33/main)
 [![codecov](https://codecov.io/gh/viscalyx/PesterConverter/branch/main/graph/badge.svg)](https://codecov.io/gh/viscalyx/PesterConverter)
-[![Azure DevOps tests](https://img.shields.io/azure-devops/tests/viscalyx/PesterConverter/32/main)](https://viscalyx.visualstudio.com/PesterConverter/_test/analytics?definitionId=32&contextType=build)
-[![PowerShell Gallery (with prereleases)](https://img.shields.io/powershellgallery/vpre/PesterConverter?label=PesterConverter%20Preview)](https://www.powershellgallery.com/packages/PesterConverter/)
+[![Azure DevOps tests](https://img.shields.io/azure-devops/tests/viscalyx/PesterConverter/33/main)](https://viscalyx.visualstudio.com/PesterConverter/_test/analytics?definitionId=33&contextType=build)
+[![PowerShell Gallery (with prerelease)](https://img.shields.io/powershellgallery/vpre/PesterConverter?label=PesterConverter%20Preview)](https://www.powershellgallery.com/packages/PesterConverter/)
 [![PowerShell Gallery](https://img.shields.io/powershellgallery/v/PesterConverter?label=PesterConverter)](https://www.powershellgallery.com/packages/PesterConverter/)
 
 ## Code of Conduct
