@@ -139,46 +139,35 @@ function Convert-ShouldThrow
         # Determine if named or positional parameters should be forcibly used
         if ($UseNamedParameters.IsPresent)
         {
-            if ($commandParameters.ExceptionMessage)
-            {
-                $commandParameters.ExceptionMessage.Positional = $false
-            }
-
-            if ($commandParameters.ErrorId)
-            {
-                $commandParameters.ErrorId.Positional = $false
-            }
-
-            if ($commandParameters.ExceptionType)
-            {
-                $commandParameters.ExceptionType.Positional = $false
-            }
-
-            if ($commandParameters.Because)
-            {
-                $commandParameters.Because.Positional = $false
-            }
+            $commandParameters.Keys.ForEach({ $commandParameters.$_.Positional = $false })
         }
         elseif ($UsePositionalParameters.IsPresent)
         {
+            # First set all to named parameters
+            $commandParameters.Keys.ForEach({ $commandParameters.$_.Positional = $false })
+
+            <#
+                If a previous positional parameter is missing then the ones behind
+                it cannot be set to positional.
+            #>
             if ($commandParameters.ExceptionMessage)
             {
                 $commandParameters.ExceptionMessage.Positional = $true
-            }
 
-            if ($commandParameters.ErrorId)
-            {
-                $commandParameters.ErrorId.Positional = $true
-            }
+                if ($commandParameters.ErrorId)
+                {
+                    $commandParameters.ErrorId.Positional = $true
 
-            if ($commandParameters.ExceptionType)
-            {
-                $commandParameters.ExceptionType.Positional = $true
-            }
+                    if ($commandParameters.ExceptionType)
+                    {
+                        $commandParameters.ExceptionType.Positional = $true
 
-            if ($commandParameters.Because)
-            {
-                $commandParameters.Because.Positional = $true
+                        if ($commandParameters.Because)
+                        {
+                            $commandParameters.Because.Positional = $true
+                        }
+                    }
+                }
             }
         }
 

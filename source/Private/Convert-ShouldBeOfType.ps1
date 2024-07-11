@@ -35,7 +35,7 @@
 
         Pester 6 Syntax:
             Should-HaveType [[-Actual] <Object>] [-Expected] <Type> [-Because <String>]
-            Should-NotBe [[-Actual] <Object>] [-Expected] <Object> [-Because <String>]
+            Should-NotHaveType [[-Actual] <Object>] [-Expected] <Object> [-Because <String>]
 
             Positional parameters:
                 Position 1: Expected
@@ -136,26 +136,25 @@ function Convert-ShouldBeOfType
         # Determine if named or positional parameters should be forcibly used
         if ($UseNamedParameters.IsPresent)
         {
-            if ($commandParameters.ExpectedValue)
-            {
-                $commandParameters.ExpectedValue.Positional = $false
-            }
-
-            if ($commandParameters.ActualValue)
-            {
-                $commandParameters.ActualValue.Positional = $false
-            }
+            $commandParameters.Keys.ForEach({ $commandParameters.$_.Positional = $false })
         }
         elseif ($UsePositionalParameters.IsPresent)
         {
+            # First set all to named parameters
+            $commandParameters.Keys.ForEach({ $commandParameters.$_.Positional = $false })
+
+            <#
+                If a previous positional parameter is missing then the ones behind
+                it cannot be set to positional.
+            #>
             if ($commandParameters.ExpectedValue)
             {
                 $commandParameters.ExpectedValue.Positional = $true
-            }
 
-            if ($commandParameters.ActualValue)
-            {
-                $commandParameters.ActualValue.Positional = $true
+                if ($commandParameters.ActualValue)
+                {
+                    $commandParameters.ActualValue.Positional = $true
+                }
             }
         }
 

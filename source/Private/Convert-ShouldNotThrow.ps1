@@ -97,7 +97,7 @@ function Convert-ShouldNotThrow
                 Must extract the scriptblock from the CommandAst extent, the scriptblock
                 is passed as the parameter ActualValue or passed thru the pipeline.
             #>
-            $newExtentText = '& ({0})' -f (Get-ShouldThrowScriptBlock -CommandAst $CommandAst -ParameterName 'ActualValue' -ParsePipeline)
+            $newExtentText = '$null = & ({0})' -f (Get-ShouldThrowScriptBlock -CommandAst $CommandAst -ParameterName 'ActualValue' -ParsePipeline)
         }
         else
         {

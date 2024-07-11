@@ -167,6 +167,10 @@ function Convert-PesterSyntax
 
                 foreach ($commandAst in $shouldCommandAst)
                 {
+                    # Get start and end offsets of commandAst.Extent
+                    $startOffset = $commandAst.Extent.StartOffset
+                    $endOffset = $commandAst.Extent.EndOffset
+
                     # If only one item was returned then there is no collection that has the method IndexOf.
                     $percentComplete = $shouldCommandAst.Count -gt 1 ? (($shouldCommandAst.IndexOf($commandAst) / $shouldCommandAst.Count) * 100) : 100
 
@@ -228,7 +232,9 @@ function Convert-PesterSyntax
                                 {
                                     $newExtentText = Convert-ShouldNotThrow -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
 
-                                    # TODO: $newExtentText should replace the entire commandAst.Parent.Extent.Text.
+                                    # Change start and end offsets to replace the entire commandAst.Parent.Extent.Text.
+                                    $startOffset = $commandAst.Parent.Extent.StartOffset
+                                    $endOffset = $commandAst.Parent.Extent.EndOffset
                                 }
                                 else
                                 {
@@ -269,10 +275,6 @@ function Convert-PesterSyntax
                     {
                         Write-Warning -Message ('Did not found any of the supported command operators in extent: `{0}`' -f $commandAst.Extent.Text)
                     }
-
-                    # Get start and end offsets of commandAst.Extent
-                    $startOffset = $commandAst.Extent.StartOffset
-                    $endOffset = $commandAst.Extent.EndOffset
 
                     # Replace the portion of the script.
                     $convertedScriptText = $convertedScriptText.Remove($startOffset, $endOffset - $startOffset).Insert($startOffset, $newExtentText)

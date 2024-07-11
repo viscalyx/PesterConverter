@@ -68,7 +68,7 @@ Describe 'Convert-ShouldNotThrow' {
                     $result = Convert-ShouldNotThrow -CommandAst $mockCommandAstPester5
 
                     # This need to have the blank space at the start of second and third row for it to match.
-                    $result | Should-BeString -CaseSensitive "& ({
+                    $result | Should-BeString -CaseSensitive "`$null = & ({
                             Write-Error -Message 'MockErrorMessage' -ErrorId 'MockErrorId' -Category 'InvalidOperation' -TargetObject 'MockTargetObject' -ErrorAction 'Stop'
                         })"
                 }
@@ -85,7 +85,7 @@ Describe 'Convert-ShouldNotThrow' {
                     $result = Convert-ShouldNotThrow -CommandAst $mockCommandAstPester5
 
                     # This need to have the blank space at the start of second and third row for it to match.
-                    $result | Should-BeString -CaseSensitive "& ({
+                    $result | Should-BeString -CaseSensitive "`$null = & ({
                             Write-Error -Message 'MockErrorMessage' -ErrorId 'MockErrorId' -Category 'InvalidOperation' -TargetObject 'MockTargetObject' -ErrorAction 'Stop'
                         })"
                 }
@@ -101,7 +101,7 @@ Describe 'Convert-ShouldNotThrow' {
                     $result = Convert-ShouldNotThrow -CommandAst $mockCommandAstPester5
 
                     # This need to have the blank space at the start of second and third row for it to match.
-                    $result | Should-BeString -CaseSensitive '& ($scriptBlock)'
+                    $result | Should-BeString -CaseSensitive '$null = & ($scriptBlock)'
                 }
             }
 
@@ -114,7 +114,7 @@ Describe 'Convert-ShouldNotThrow' {
                     $result = Convert-ShouldNotThrow -CommandAst $mockCommandAstPester5
 
                     # This need to have the blank space at the start of second and third row for it to match.
-                    $result | Should-BeString -CaseSensitive '& ({ throw ''myMessage'' })'
+                    $result | Should-BeString -CaseSensitive '$null = & ({ throw ''myMessage'' })'
                 }
             }
 
@@ -128,7 +128,7 @@ Describe 'Convert-ShouldNotThrow' {
                     $result = Convert-ShouldNotThrow -CommandAst $mockCommandAstPester5
 
                     # This need to have the blank space at the start of second and third row for it to match.
-                    $result | Should-BeString -CaseSensitive '& ({ throw ''myMessage'' })'
+                    $result | Should-BeString -CaseSensitive '$null = & ({ throw ''myMessage'' })'
                 }
             }
 
@@ -143,7 +143,7 @@ Describe 'Convert-ShouldNotThrow' {
                     $result = Convert-ShouldNotThrow -CommandAst $mockCommandAstPester5
 
                     # This need to have the blank space at the start of second and third row for it to match.
-                    $result | Should-BeString -CaseSensitive '& ("throw ''five''" |
+                    $result | Should-BeString -CaseSensitive '$null = & ("throw ''five''" |
                             ForEach-Object { [scriptblock]::Create($_) })'
                 }
             }
