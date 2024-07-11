@@ -75,7 +75,7 @@ function Convert-ShouldBeNullOrEmpty
     )
 
     $assertBoundParameterParameters = @{
-        BoundParameterList = $PSBoundParameters
+        BoundParameterList     = $PSBoundParameters
         MutuallyExclusiveList1 = @('UseNamedParameters')
         MutuallyExclusiveList2 = @('UsePositionalParameters')
     }
@@ -105,9 +105,9 @@ function Convert-ShouldBeNullOrEmpty
         }
 
         $getPesterCommandParameterParameters = @{
-            CommandAst = $CommandAst
-            CommandName = 'Should'
-            IgnoreParameter = 'BeNullOrEmpty', 'Not'
+            CommandAst          = $CommandAst
+            CommandName         = 'Should'
+            IgnoreParameter     = 'BeNullOrEmpty', 'Not'
             PositionalParameter = 'Because', 'ActualValue'
         }
 

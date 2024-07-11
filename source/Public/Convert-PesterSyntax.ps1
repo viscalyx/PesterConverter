@@ -82,7 +82,7 @@ function Convert-PesterSyntax
         }
 
         $assertBoundParameterParameters = @{
-            BoundParameterList = $PSBoundParameters
+            BoundParameterList     = $PSBoundParameters
             MutuallyExclusiveList1 = @('UseNamedParameters')
             MutuallyExclusiveList2 = @('UsePositionalParameters')
         }

@@ -79,7 +79,7 @@ function Convert-ShouldBeOfType
     )
 
     $assertBoundParameterParameters = @{
-        BoundParameterList = $PSBoundParameters
+        BoundParameterList     = $PSBoundParameters
         MutuallyExclusiveList1 = @('UseNamedParameters')
         MutuallyExclusiveList2 = @('UsePositionalParameters')
     }
@@ -109,9 +109,9 @@ function Convert-ShouldBeOfType
         }
 
         $getPesterCommandParameterParameters = @{
-            CommandAst = $CommandAst
-            CommandName = 'Should'
-            IgnoreParameter = @(
+            CommandAst          = $CommandAst
+            CommandName         = 'Should'
+            IgnoreParameter     = @(
                 'BeOfType'
                 'HaveType'
                 'Not'
@@ -120,7 +120,7 @@ function Convert-ShouldBeOfType
                 'ExpectedValue'
                 'Because'
             )
-            NamedParameter = @(
+            NamedParameter      = @(
                 'ActualValue'
             )
         }

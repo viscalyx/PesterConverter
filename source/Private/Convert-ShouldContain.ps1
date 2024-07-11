@@ -65,7 +65,7 @@ function Convert-ShouldContain
     )
 
     $assertBoundParameterParameters = @{
-        BoundParameterList = $PSBoundParameters
+        BoundParameterList     = $PSBoundParameters
         MutuallyExclusiveList1 = @('UseNamedParameters')
         MutuallyExclusiveList2 = @('UsePositionalParameters')
     }
@@ -95,9 +95,9 @@ function Convert-ShouldContain
         }
 
         $getPesterCommandParameterParameters = @{
-            CommandAst = $CommandAst
-            CommandName = 'Should'
-            IgnoreParameter = @(
+            CommandAst          = $CommandAst
+            CommandName         = 'Should'
+            IgnoreParameter     = @(
                 'Contain'
                 'Not'
             )
@@ -105,7 +105,7 @@ function Convert-ShouldContain
                 'ExpectedValue'
                 'Because'
             )
-            NamedParameter = @(
+            NamedParameter      = @(
                 'ActualValue'
             )
         }

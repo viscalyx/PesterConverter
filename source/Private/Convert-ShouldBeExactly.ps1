@@ -66,7 +66,7 @@ function Convert-ShouldBeExactly
     )
 
     $assertBoundParameterParameters = @{
-        BoundParameterList = $PSBoundParameters
+        BoundParameterList     = $PSBoundParameters
         MutuallyExclusiveList1 = @('UseNamedParameters')
         MutuallyExclusiveList2 = @('UsePositionalParameters')
     }
@@ -99,9 +99,9 @@ function Convert-ShouldBeExactly
         $newExtentText += ' -CaseSensitive'
 
         $getPesterCommandParameterParameters = @{
-            CommandAst = $CommandAst
-            CommandName = 'Should'
-            IgnoreParameter = @(
+            CommandAst          = $CommandAst
+            CommandName         = 'Should'
+            IgnoreParameter     = @(
                 'CEQ'
                 'BeExactly'
                 'Not'

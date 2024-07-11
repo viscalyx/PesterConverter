@@ -68,12 +68,12 @@ function Get-PesterCommandParameter
 
         # Filter out the command name from the command elements.
         $commandElement = $CommandAst.CommandElements |
-                Where-Object -FilterScript {
-                    -not (
-                        $_ -is [System.Management.Automation.Language.StringConstantExpressionAst] `
+            Where-Object -FilterScript {
+                -not (
+                    $_ -is [System.Management.Automation.Language.StringConstantExpressionAst] `
                         -and $_.Extent.Text -eq $CommandName
-                    )
-                }
+                )
+            }
 
         Write-Debug -Message "Ignoring the parameters: $($IgnoreParameter -join ', ')"
 
@@ -86,7 +86,7 @@ function Get-PesterCommandParameter
             Where-Object -FilterScript {
                 -not (
                     $_ -is [System.Management.Automation.Language.CommandParameterAst] `
-                    -and $_.ParameterName -in $IgnoreParameter
+                        -and $_.ParameterName -in $IgnoreParameter
                 )
             }
 
@@ -103,7 +103,7 @@ function Get-PesterCommandParameter
                     - ExpectedValue
                     - Because
             #>
-            $parameterElements = $commandElement.Where({$_ -is [System.Management.Automation.Language.CommandParameterAst] -and ($_.ParameterName -in $PositionalParameter -or $_.ParameterName -in $NamedParameter)})
+            $parameterElements = $commandElement.Where({ $_ -is [System.Management.Automation.Language.CommandParameterAst] -and ($_.ParameterName -in $PositionalParameter -or $_.ParameterName -in $NamedParameter) })
 
             $filterCommandElements = @()
 
@@ -117,7 +117,7 @@ function Get-PesterCommandParameter
                     $parameterName = $commandElement[$parameterIndex].ParameterName
 
                     $positionalParameterHashtable.$parameterName = @{
-                        Position = 0
+                        Position   = 0
                         Positional = $false
                         ExtentText = $commandElement[$parameterIndex + 1].Extent.Text
                     }
@@ -147,7 +147,7 @@ function Get-PesterCommandParameter
                 {
                     # Only add positional parameter if there actually a value for it.
                     $positionalParameterHashtable.$parameter = @{
-                        Position = $positionalCounter
+                        Position   = $positionalCounter
                         Positional = $true
                         ExtentText = $commandElement[$elementCounter].Extent.Text #? $commandElement.Extent.Text : $null
                     }
