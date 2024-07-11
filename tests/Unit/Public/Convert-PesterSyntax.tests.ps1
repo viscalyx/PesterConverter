@@ -789,5 +789,37 @@ Describe 'Convert-PesterSyntax' {
                 $result | Should-BeString -CaseSensitive -Expected $mockAstExtentText -TrimWhitespace
             }
         }
+
+        Context 'When saving the converted script back to the file' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Should -Be' {
+                        It 'Should -Be' {
+                            Should -Be 1
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+
+                Mock -CommandName Write-Warning
+            }
+
+            It 'Should not throw an exception' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -Be' {
+                        It 'Should -Be' {
+                            Should-Be 1
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                Convert-PesterSyntax -Path $mockScriptFilePath -Force
+
+                Get-Content -Raw -Path $mockScriptFilePath | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
     }
 }
