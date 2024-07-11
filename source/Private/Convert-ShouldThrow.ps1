@@ -30,7 +30,7 @@
             Should -Throw [[-ActualValue] <Object>] [[-ExpectedMessage] <string>] [[-ErrorId] <string>] [[-ExceptionType] <type>] [[-Because] <string>] [-Not] [-PassThru]
 
             Positional parameters:
-                Position 1: ExceptionMessage
+                Position 1: ExpectedMessage
                 Position 2: ErrorId
                 Position 3: ExceptionType
                 Position 4: Because
@@ -124,7 +124,7 @@ function Convert-ShouldThrow
                 'PassThru'
             )
             PositionalParameter = @(
-                'ExceptionMessage'
+                'ExpectedMessage'
                 'ErrorId'
                 'ExceptionType'
                 'Because'
@@ -150,9 +150,9 @@ function Convert-ShouldThrow
                 If a previous positional parameter is missing then the ones behind
                 it cannot be set to positional.
             #>
-            if ($commandParameters.ExceptionMessage)
+            if ($commandParameters.ExpectedMessage)
             {
-                $commandParameters.ExceptionMessage.Positional = $true
+                $commandParameters.ExpectedMessage.Positional = $true
 
                 if ($commandParameters.ErrorId)
                 {
@@ -171,7 +171,7 @@ function Convert-ShouldThrow
             }
         }
 
-        $newExtentText += $commandParameters.ExceptionMessage.Positional ? (' {0}' -f $commandParameters.ExceptionMessage.ExtentText) : ''
+        $newExtentText += $commandParameters.ExpectedMessage.Positional ? (' {0}' -f $commandParameters.ExpectedMessage.ExtentText) : ''
         $newExtentText += $commandParameters.ErrorId.Positional ? (' {0}' -f $commandParameters.ErrorId.ExtentText) : ''
         $newExtentText += $commandParameters.ExceptionType.Positional ? (' {0}' -f $commandParameters.ExceptionType.ExtentText) : ''
         $newExtentText += $commandParameters.Because.Positional ? (' {0}' -f $commandParameters.Because.ExtentText) : ''
@@ -188,6 +188,15 @@ function Convert-ShouldThrow
 
             switch ($currentParameter)
             {
+                'ExpectedMessage'
+                {
+                    $parameterNames += @{
+                        ExceptionMessage = 'ExpectedMessage'
+                    }
+
+                    break
+                }
+
                 'ErrorId'
                 {
                     $parameterNames += @{

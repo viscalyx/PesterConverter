@@ -117,10 +117,10 @@ Describe 'Convert-ShouldThrow' {
                 }
             }
 
-            It 'Should convert `Should -Throw -ExceptionType ([System.Exception]) -ErrorId ''MockErrorId'' -Because ''BecauseString'' -ExceptionMessage ''MockErrorMessage''` correctly' {
+            It 'Should convert `Should -Throw -ExceptionType ([System.Exception]) -ErrorId ''MockErrorId'' -Because ''BecauseString'' -ExpectedMessage ''MockErrorMessage''` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {
-                        Should -Throw -Because 'BecauseString' -ExceptionType ([System.Exception]) -ErrorId 'MockErrorId' -ExceptionMessage 'MockErrorMessage'
+                        Should -Throw -Because 'BecauseString' -ExceptionType ([System.Exception]) -ErrorId 'MockErrorId' -ExpectedMessage 'MockErrorMessage'
                     }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
                     $result = Convert-ShouldThrow -CommandAst $mockCommandAstPester5
@@ -129,10 +129,10 @@ Describe 'Convert-ShouldThrow' {
                 }
             }
 
-            It 'Should convert `Should -Throw -ExceptionType ([System.Exception]) -ErrorId ''MockErrorId'' -Because ''BecauseString'' -ExceptionMessage ''MockErrorMessage'' -ActualValue { Write-Error -Message ''MockErrorMessage'' -ErrorId ''MockErrorId'' -Category ''InvalidOperation'' -TargetObject ''MockTargetObject'' -ErrorAction ''Stop'' }` correctly' {
+            It 'Should convert `Should -Throw -ExceptionType ([System.Exception]) -ErrorId ''MockErrorId'' -Because ''BecauseString'' -ExpectedMessage ''MockErrorMessage'' -ActualValue { Write-Error -Message ''MockErrorMessage'' -ErrorId ''MockErrorId'' -Category ''InvalidOperation'' -TargetObject ''MockTargetObject'' -ErrorAction ''Stop'' }` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {
-                        Should -Throw -Because 'BecauseString' -ExceptionType ([System.Exception]) -ErrorId 'MockErrorId' -ExceptionMessage 'MockErrorMessage' -ActualValue {
+                        Should -Throw -Because 'BecauseString' -ExceptionType ([System.Exception]) -ErrorId 'MockErrorId' -ExpectedMessage 'MockErrorMessage' -ActualValue {
                             Write-Error -Message 'MockErrorMessage' -ErrorId 'MockErrorId' -Category 'InvalidOperation' -TargetObject 'MockTargetObject' -ErrorAction 'Stop'
                         }
                     }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
@@ -175,10 +175,10 @@ Describe 'Convert-ShouldThrow' {
 
         Context 'When tests should always use positional parameters' {
             Context 'When the tests are affirming' {
-                It 'Should convert `Should -Throw -Because ''BecauseString'' -ActualValue ''ActualString'' -ExceptionType ([System.Exception]) -ErrorId ''MockErrorId'' -ExceptionMessage ''MockErrorMessage''` correctly' {
+                It 'Should convert `Should -Throw -Because ''BecauseString'' -ActualValue ''ActualString'' -ExceptionType ([System.Exception]) -ErrorId ''MockErrorId'' -ExpectedMessage ''MockErrorMessage''` correctly' {
                     InModuleScope -ScriptBlock {
                         $mockCommandAstPester5 = {
-                            Should -Throw -Because 'BecauseString' -ActualValue 'ActualString' -ExceptionType ([System.Exception]) -ErrorId 'MockErrorId' -ExceptionMessage 'MockErrorMessage'
+                            Should -Throw -Because 'BecauseString' -ActualValue 'ActualString' -ExceptionType ([System.Exception]) -ErrorId 'MockErrorId' -ExpectedMessage 'MockErrorMessage'
                         }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
                         $result = Convert-ShouldThrow -CommandAst $mockCommandAstPester5 -UsePositionalParameters
