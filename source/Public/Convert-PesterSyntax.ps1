@@ -21,6 +21,15 @@
         Specifies whether to use positional parameters in the converted syntax,
         where supported.
 
+    .PARAMETER Force
+        Specifies that the file should be created without any confirmation.
+
+    .PARAMETER PassThru
+        Returns the script after converting the syntax. This parameter is most
+        useful when passing in a single file to convert. If multiple files are
+        passed in, the script of all the files will be returned as an array.
+        If PassThru is specified, no file will not be modified.
+
     .EXAMPLE
         Convert-PesterSyntax -Path "C:\Scripts\Test.ps1" -Pester6
 
@@ -54,11 +63,24 @@ function Convert-PesterSyntax
 
         [Parameter()]
         [System.Management.Automation.SwitchParameter]
-        $UsePositionalParameters
+        $UsePositionalParameters,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $PassThru
     )
 
     begin
     {
+        if (($Force.IsPresent -and -not $Confirm) -or $PassThru.IsPresent)
+        {
+            $ConfirmPreference = 'None'
+        }
+
         $assertBoundParameterParameters = @{
             BoundParameterList = $PSBoundParameters
             MutuallyExclusiveList1 = @('UseNamedParameters')
@@ -69,6 +91,8 @@ function Convert-PesterSyntax
 
         $convertParameters = @{} + $PSBoundParameters
         $convertParameters.Remove('Path')
+        $convertParameters.Remove('Force')
+        $convertParameters.Remove('PassThru')
 
         if ($PSCmdlet.ParameterSetName -eq 'Pester6' -and -not $Pester6.IsPresent)
         {
@@ -104,12 +128,24 @@ function Convert-PesterSyntax
                 Write-Progress -Id 1 -Activity 'Converting Pester syntax' -Status "Processing $filePath" -PercentComplete (($Path.IndexOf($filePath) / $Path.Count) * 100)
             }
 
+            $verboseDescriptionMessage = $script:localizedData.Convert_PesterSyntax_ShouldProcessVerboseDescription -f $filePath
+            $verboseWarningMessage = $script:localizedData.Convert_PesterSyntax__ShouldProcessVerboseWarning -f $filePath
+            $captionMessage = $script:localizedData.Convert_PesterSyntax__ShouldProcessCaption
+
+            if (-not ($PSCmdlet.ShouldProcess($verboseDescriptionMessage, $verboseWarningMessage, $captionMessage)))
+            {
+                continue
+            }
+
             if ($filePath -is [System.String])
             {
                 $filePath = Convert-Path -Path $filePath
             }
 
             $scriptBlockAst = $filePath | Get-AstDefinition -ErrorAction 'Stop'
+
+            # Get the script text from the script block AST that will be used to replace the original script text.
+            $convertedScriptText = $scriptBlockAst.Extent.Text
 
             Write-Debug -Message ('Parsing the script block AST: {0}' -f $scriptBlockAst.Extent.Text)
 
@@ -127,13 +163,14 @@ function Convert-PesterSyntax
             {
                 Write-Progress -Id 2 -ParentId 1 -Activity 'Converting Should command syntax' -Status ('Processing {0} command(s)' -f $shouldCommandAst.Count) -PercentComplete 0
 
-                #$shouldCommandAst
-
                 Write-Debug -Message ('Found {0} ''Should'' command(s) in {1}.' -f $shouldCommandAst.Count, $filePath)
 
                 foreach ($commandAst in $shouldCommandAst)
                 {
-                    Write-Progress -Id 2 -ParentId 1 -Activity 'Converting Should command syntax' -Status "Processing extent on line $($commandAst.Extent.StartLineNumber)" -PercentComplete (($shouldCommandAst.IndexOf($commandAst) / $shouldCommandAst.Count) * 100)
+                    # If only one item was returned then there is no collection that has the method IndexOf.
+                    $percentComplete = $shouldCommandAst.Count -gt 1 ? (($shouldCommandAst.IndexOf($commandAst) / $shouldCommandAst.Count) * 100) : 100
+
+                    Write-Progress -Id 2 -ParentId 1 -Activity 'Converting Should command syntax' -Status "Processing extent on line $($commandAst.Extent.StartLineNumber)" -PercentComplete $percentComplete
 
                     $operatorName = Get-ShouldCommandOperatorName -CommandAst $commandAst -ErrorAction 'Stop'
 
@@ -224,117 +261,37 @@ function Convert-PesterSyntax
 
                             default
                             {
-                                Write-Warning -Message ('Unsupported command operator ''{0}'' in extent `{1}`.' -f $operatorName, $commandAst.Extent.Text)
+                                Write-Warning -Message ('Unsupported command operator ''{0}'' in extent: `{1}`' -f $operatorName, $commandAst.Extent.Text)
                             }
                         }
-
-                        #$newExtentText
+                    }
+                    else
+                    {
+                        Write-Warning -Message ('Did not found any of the supported command operators in extent: `{0}`' -f $commandAst.Extent.Text)
                     }
 
-<#
-                    # Replace the original extent text in $scriptBlockAst.Extent with the new extent text using the offsets of the commandAst.Extent
-
-                    # Assuming $scriptBlockAst and $commandAst are already defined AST objects
-                    # And $newExtentText contains the text you want to insert
-
-                    # 1. Get start and end offsets of commandAst.Extent
+                    # Get start and end offsets of commandAst.Extent
                     $startOffset = $commandAst.Extent.StartOffset
                     $endOffset = $commandAst.Extent.EndOffset
 
-                    # 2. Assuming $newExtentText is already defined
-
-                    # 3. Get the entire script text
-                    $scriptText = $scriptBlockAst.Extent.Text
-
-                    # 4. Replace the portion of the script text
-                    $modifiedScriptText = $scriptText.Remove($startOffset, $endOffset - $startOffset).Insert($startOffset, $newExtentText)
-
-                    # 5. Optionally, re-parse the modified script text if needed
-                    $modifiedScriptBlockAst = [System.Management.Automation.Language.Parser]::ParseInput($modifiedScriptText, [ref]$null, [ref]$null)
-
-                    #$filePath | Set-FileContent -StartOffset $commandAst.Extent.StartOffset -EndOffset $commandAst.Extent.EndOffset -NewContent $newExtentText
-#>
-
-
-                    ### $commandAst.Extent:
-                    # File                : /Users/johlju/source/PesterConverter/tests/MockScripts/ShouldBe.v5.mocktest.ps1
-                    # StartScriptPosition : System.Management.Automation.Language.InternalScriptPosition
-                    # EndScriptPosition   : System.Management.Automation.Language.InternalScriptPosition
-                    # StartLineNumber     : 6
-                    # StartColumnNumber   : 17
-                    # EndLineNumber       : 6
-                    # EndColumnNumber     : 33
-                    # Text                : Should -Be $true
-                    # StartOffset         : 189
-                    # EndOffset           : 205
-
-                    #$commandParameterAst
-
-                    # $parameters = @()
-
-                    # foreach ($parameter in $commandParameterAst)
-                    # {
-                    #     switch ($parameter)
-                    #     {
-                    #         { $_ -is [System.Management.Automation.Language.VariableExpressionAst] }
-                    #         {
-                    #             # Add the value to the previously added parameter.
-                    #             $parameters[-1].ParameterValue = $parameter.Extent.Text
-                    #         }
-
-                    #         { $_ -is [System.Management.Automation.Language.CommandParameterAst] }
-                    #         {
-                    #             $newParameter = [PSCustomObject] @{
-                    #                 ParameterName = $parameter.ParameterName
-                    #                 ParameterValue = $null
-                    #             }
-
-                    #             $parameters += $newParameter
-                    #         }
-
-                    #         default
-                    #         {
-                    #             throw "Unknown parameter type $($_)."
-                    #         }
-                    #     }
-                    # }
-
-                    #$parameters
-
-                    # $commandParameterAst = $commandAst.CommandElements[1]
-
-                    # $syntaxConversion = @()
-
-                    # switch ($commandParameterAst.ParameterName)
-                    # {
-                    #     <#
-                    #         Pester 5 Syntax:
-                    #         Should [[-ActualValue] <Object>] [-Be] [-Not] [-ExpectedValue <Object>] [-Because <Object>]
-                    #     #>
-                    #     'Be'
-                    #     {
-                    #         $syntaxConversion += [PSCustomObject] @{
-                    #             OriginalExtent = $commandParameterAst.Parent.Extent.Text
-                    #         }
-
-                    #         # $shouldCommandAst.CommandElements[0].Value = 'Should'
-                    #         # $shouldCommandAst.CommandElements[0].Extent.Text = 'Should'
-
-                    #         # $shouldCommandAst.CommandElements[1].ParameterName = 'Be'
-                    #         # $shouldCommandAst.CommandElements[1].Extent.Text = '-Be'
-
-                    #         # $shouldCommandAst.CommandElements[2].Extent.Text = '$true'
-                    #     }
-                    # }
+                    # Replace the portion of the script.
+                    $convertedScriptText = $convertedScriptText.Remove($startOffset, $endOffset - $startOffset).Insert($startOffset, $newExtentText)
                 }
 
                 Write-Progress -Id 2 -ParentId 1 -Activity 'Converting Should command syntax' -Status 'Completed' -PercentComplete 100 -Completed
-
-                #$syntaxConversion
             }
             else
             {
                 Write-Verbose -Message "No 'Should' command found in $filePath."
+            }
+
+            if ($PassThru)
+            {
+                $convertedScriptText
+            }
+            else
+            {
+                #$filePath | Set-Content -Value $convertedScriptText
             }
         }
     }

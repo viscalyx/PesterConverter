@@ -46,10 +46,11 @@ Describe 'Get-CommandAst' {
     It 'Should return the correct CommandAst for Should -Be $true' {
         InModuleScope -ScriptBlock {
             $mockAst = {
-                Describe 'ShouldBe' [
+                Describe 'ShouldBe' {
                     It 'Should be true' {
                         $true | Should -Be $true
                     }
+                }
             }.Ast
 
             $result = Get-CommandAst -Ast $mockAst -CommandName 'Should'
@@ -68,10 +69,11 @@ Describe 'Get-CommandAst' {
     It 'Should return the correct CommandAst for Should -BeTrue' {
         InModuleScope -ScriptBlock {
             $mockAst = {
-                Describe 'ShouldBe' [
+                Describe 'ShouldBe' {
                     It 'Should be true' {
                         $true | Should -BeTrue
                     }
+                }
             }.Ast
 
             $result = Get-CommandAst -Ast $mockAst -CommandName 'Should'
@@ -90,7 +92,7 @@ Describe 'Get-CommandAst' {
     It 'Should return the correct CommandAst''s when there are multiple Should' {
         InModuleScope -ScriptBlock {
             $mockAst = {
-                Describe 'ShouldBe' [
+                Describe 'ShouldBe' {
                     It 'Should be true' {
                         $true | Should -BeTrue
                     }
@@ -98,6 +100,7 @@ Describe 'Get-CommandAst' {
                     It 'Should be false' {
                         $true | Should -BeFalse
                     }
+                }
             }.Ast
 
             $result = Get-CommandAst -Ast $mockAst -CommandName 'Should'
