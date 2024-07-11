@@ -183,7 +183,7 @@ Describe 'Convert-ShouldThrow' {
 
                         $result = Convert-ShouldThrow -CommandAst $mockCommandAstPester5 -UsePositionalParameters
 
-                        $result | Should-BeString -CaseSensitive 'Should-Throw ''MockErrorMessage'' ''MockErrorId'' ([System.Exception]) ''BecauseString'' ''ActualString'''
+                        $result | Should-BeString -CaseSensitive 'Should-Throw ''MockErrorMessage'' ''MockErrorId'' ([System.Exception]) ''BecauseString'' -ScriptBlock ''ActualString'''
                     }
                 }
             }
