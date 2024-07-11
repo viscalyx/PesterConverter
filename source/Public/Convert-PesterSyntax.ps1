@@ -129,8 +129,8 @@ function Convert-PesterSyntax
             }
 
             $verboseDescriptionMessage = $script:localizedData.Convert_PesterSyntax_ShouldProcessVerboseDescription -f $filePath
-            $verboseWarningMessage = $script:localizedData.Convert_PesterSyntax__ShouldProcessVerboseWarning -f $filePath
-            $captionMessage = $script:localizedData.Convert_PesterSyntax__ShouldProcessCaption
+            $verboseWarningMessage = $script:localizedData.Convert_PesterSyntax_ShouldProcessVerboseWarning -f $filePath
+            $captionMessage = $script:localizedData.Convert_PesterSyntax_ShouldProcessCaption
 
             if (-not ($PSCmdlet.ShouldProcess($verboseDescriptionMessage, $verboseWarningMessage, $captionMessage)))
             {
