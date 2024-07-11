@@ -25,7 +25,8 @@
 
         Returns the syntax version for the 'Should -BeExactly' command.
 #>
-function Get-PesterCommandSyntaxVersion {
+function Get-PesterCommandSyntaxVersion
+{
     [CmdletBinding()]
     [OutputType([System.Int32])]
     param

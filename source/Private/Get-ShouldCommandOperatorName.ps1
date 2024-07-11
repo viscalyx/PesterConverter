@@ -79,7 +79,12 @@ function Get-ShouldCommandOperatorName
         }
 
         $shouldOperatorAsts = $CommandAst.Find({
-            param($node)
+            param
+            (
+                [Parameter()]
+                $node
+            )
+
             return $node -is [System.Management.Automation.Language.CommandParameterAst] -and ($node.ParameterName -in $possibleShouldOperator -or $node.ParameterName -in $possibleShouldOperatorAlias.Keys)
         }, $true)
 
