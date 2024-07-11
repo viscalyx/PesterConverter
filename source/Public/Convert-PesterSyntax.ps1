@@ -167,6 +167,8 @@ function Convert-PesterSyntax
 
                 foreach ($commandAst in $shouldCommandAst)
                 {
+                    $apply = $true
+
                     # Get start and end offsets of commandAst.Extent
                     $startOffset = $commandAst.Extent.StartOffset
                     $endOffset = $commandAst.Extent.EndOffset
@@ -268,6 +270,8 @@ function Convert-PesterSyntax
                             default
                             {
                                 Write-Warning -Message ('Unsupported command operator ''{0}'' in extent: `{1}`' -f $operatorName, $commandAst.Extent.Text)
+
+                                $apply = $false
                             }
                         }
                     }
@@ -276,8 +280,11 @@ function Convert-PesterSyntax
                         Write-Warning -Message ('Did not found any of the supported command operators in extent: `{0}`' -f $commandAst.Extent.Text)
                     }
 
-                    # Replace the portion of the script.
-                    $convertedScriptText = $convertedScriptText.Remove($startOffset, $endOffset - $startOffset).Insert($startOffset, $newExtentText)
+                    if ($apply)
+                    {
+                        # Replace the portion of the script.
+                        $convertedScriptText = $convertedScriptText.Remove($startOffset, $endOffset - $startOffset).Insert($startOffset, $newExtentText)
+                    }
                 }
 
                 Write-Progress -Id 2 -ParentId 1 -Activity 'Converting Should command syntax' -Status 'Completed' -PercentComplete 100 -Completed
@@ -293,7 +300,7 @@ function Convert-PesterSyntax
             }
             else
             {
-                #$filePath | Set-Content -Value $convertedScriptText
+                Set-Content -Path $filePath -Value $convertedScriptText -NoNewLine -ErrorAction 'Stop'
             }
         }
     }
