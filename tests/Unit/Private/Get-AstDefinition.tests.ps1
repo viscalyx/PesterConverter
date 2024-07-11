@@ -53,7 +53,6 @@ Describe 'Get-AstDefinition' {
         Set-Content -Path $mockValidScriptPath2 -Value 'Write-Host "Hello, world!"'
 
         $mockUnparsableScriptPath = Join-Path -Path $TestDrive -ChildPath 'UnparsableScript.ps1'
-        # TODO: Change comment if ParseException is not thrown.
         # This script is missing a closing brace, so it will throw a ParseException when parsed.
         Set-Content -Path $mockUnparsableScriptPath -Value 'function a { Write-Host "Hello, world!"'
 
@@ -81,7 +80,6 @@ Describe 'Get-AstDefinition' {
     # Test if the function throws an error when given an invalid file path
     It 'Should throw an exception for an invalid file path' {
         InModuleScope -ScriptBlock {
-            # TODO: Make sure it throws the expected error message.
             { Get-AstDefinition -Path "$TestDrive/MissingScript.ps1" } | Should-Throw -ExceptionMessage 'Failed to parse the script.*Could not find file*'
         }
     }

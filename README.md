@@ -1,6 +1,6 @@
 # PesterConverter
 
-Commands ta convert Pester tests syntax.
+Commands ta convert Pester tests.
 
 [![Build Status](https://dev.azure.com/viscalyx/PesterConverter/_apis/build/status/viscalyx.PesterConverter?branchName=main)](https://dev.azure.com/viscalyx/PesterConverter/_build/latest?definitionId=33&branchName=main)
 ![Azure DevOps coverage (branch)](https://img.shields.io/azure-devops/coverage/viscalyx/PesterConverter/33/main)
