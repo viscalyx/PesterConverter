@@ -89,7 +89,7 @@ stages:
             inputs:
               filePath: './build.ps1'
               arguments: '-Tasks hqrmtest'
-              pwsh: false
+              pwsh: true
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
             condition: succeededOrFailed()
@@ -258,15 +258,9 @@ stages:
       #       WIN2019_PWSH:
       #         JOB_VMIMAGE: 'windows-2019'
       #         PWSH: true
-      #       WIN2019:
-      #         JOB_VMIMAGE: 'windows-2019'
-      #         PWSH: false
       #       WIN2022_PWSH:
       #         JOB_VMIMAGE: 'windows-2022'
       #         PWSH: true
-      #       WIN2022:
-      #         JOB_VMIMAGE: 'windows-2022'
-      #         PWSH: false
       #       UBUNTU:
       #         JOB_VMIMAGE: 'ubuntu-latest'
       #         PWSH: true
