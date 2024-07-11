@@ -1,0 +1,24 @@
+TOPIC
+    about_PesterConverter
+
+SHORT DESCRIPTION
+    Commands ta convert Pester tests.
+
+LONG DESCRIPTION
+    Commands ta convert Pester tests.
+
+EXAMPLES
+    PS C:\> Get-Commands -Module PesterConverter
+
+NOTE:
+    Thank you to all those who contributed to this module, by writing code, sharing opinions, and provided feedback.
+
+TROUBLESHOOTING NOTE:
+    Go to the Github repository for read about issues, submit a new issue, and read
+    about new releases. https://github.com/viscalyx/PesterConverter
+
+SEE ALSO
+    - https://github.com/viscalyx/PesterConverter
+
+KEYWORDS
+    Pester, Converter
