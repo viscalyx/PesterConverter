@@ -6,7 +6,8 @@
 #>
 
 ConvertFrom-StringData @'
-    TODO: Fix the localization strings
+    # TODO: Fix the localization strings
+
     ## Get-AstDefinition
     FailedParseScriptAst = Failed to parse the script. Error: "{0}"
 
