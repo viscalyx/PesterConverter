@@ -72,7 +72,7 @@ function Convert-ShouldNotThrow
     )
 
     $assertBoundParameterParameters = @{
-        BoundParameterList = $PSBoundParameters
+        BoundParameterList     = $PSBoundParameters
         MutuallyExclusiveList1 = @('UseNamedParameters')
         MutuallyExclusiveList2 = @('UsePositionalParameters')
     }

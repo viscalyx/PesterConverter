@@ -66,7 +66,7 @@ function Convert-ShouldBe
     )
 
     $assertBoundParameterParameters = @{
-        BoundParameterList = $PSBoundParameters
+        BoundParameterList     = $PSBoundParameters
         MutuallyExclusiveList1 = @('UseNamedParameters')
         MutuallyExclusiveList2 = @('UsePositionalParameters')
     }
@@ -96,9 +96,9 @@ function Convert-ShouldBe
         }
 
         $getPesterCommandParameterParameters = @{
-            CommandAst = $CommandAst
-            CommandName = 'Should'
-            IgnoreParameter = @(
+            CommandAst          = $CommandAst
+            CommandName         = 'Should'
+            IgnoreParameter     = @(
                 'Be'
                 'EQ'
                 'Not'
