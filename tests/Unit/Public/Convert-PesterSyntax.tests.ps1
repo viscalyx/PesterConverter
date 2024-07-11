@@ -43,68 +43,765 @@ AfterAll {
 }
 
 Describe 'Convert-PesterSyntax' {
-    BeforeAll {
-        $mockAstExtentText = {
-            Describe 'Should -Be' {
-                It 'Should -Be using pipeline' {
-                    $true | Should -Be $true -Because 'BecauseString'
-                }
+    Context 'When converting v5 to v6' {
+        Context 'When converting Should -Be' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Should -Be' {
+                        It 'Should -Be' {
+                            $true | Should -Be $true -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+
+                # Save current ProgressPreference and then set it to SilentlyContinue
+                $script:originalProgressPreference = $ProgressPreference
+                $script:ProgressPreference = 'SilentlyContinue'
             }
-        }.Ast.GetScriptBlock().ToString()
 
-        $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
-
-        Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
-
-        # Save current ProgressPreference and then set it to SilentlyContinue
-        $script:originalProgressPreference = $ProgressPreference
-        $script:ProgressPreference = 'SilentlyContinue'
-    }
-
-    AfterAll {
-        # Restore the original ProgressPreference
-        $script:ProgressPreference = $script:originalProgressPreference
-    }
-
-    It 'Should return the correct converted script' {
-        $mockExpectedConvertedScript = {
-            Describe 'Should -Be' {
-                It 'Should -Be using pipeline' {
-                    $true | Should-Be $true -Because 'BecauseString'
-                }
+            AfterAll {
+                # Restore the original ProgressPreference
+                $script:ProgressPreference = $script:originalProgressPreference
             }
-        }.Ast.GetScriptBlock().ToString()
 
-        $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+            It 'Should return the correct converted script' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -Be' {
+                        It 'Should -Be' {
+                            $true | Should-Be $true -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
 
-        $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
-    }
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
 
-    It 'Should return the correct converted script using named parameters' {
-        $mockExpectedConvertedScript = {
-            Describe 'Should -Be' {
-                It 'Should -Be using pipeline' {
-                    $true | Should-Be -Because 'BecauseString' -Expected $true
-                }
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
             }
-        }.Ast.GetScriptBlock().ToString()
 
-        $result = Convert-PesterSyntax -Path $mockScriptFilePath -UseNamedParameters -PassThru
+            It 'Should return the correct converted script using named parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -Be' {
+                        It 'Should -Be' {
+                            $true | Should-Be -Because 'BecauseString' -Expected $true
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
 
-        $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
-    }
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UseNamedParameters -PassThru
 
-    It 'Should return the correct converted script using positional parameters' {
-        $mockExpectedConvertedScript = {
-            Describe 'Should -Be' {
-                It 'Should -Be using pipeline' {
-                    $true | Should-Be $true -Because 'BecauseString'
-                }
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
             }
-        }.Ast.GetScriptBlock().ToString()
 
-        $result = Convert-PesterSyntax -Path $mockScriptFilePath -UsePositionalParameters -PassThru
+            It 'Should return the correct converted script using positional parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -Be' {
+                        It 'Should -Be' {
+                            $true | Should-Be $true -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
 
-        $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UsePositionalParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
+
+        Context 'When converting Should -BeExactly' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Should -BeExactly' {
+                        It 'Should -BeExactly' {
+                            $true | Should -BeExactly $true -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+
+                # Save current ProgressPreference and then set it to SilentlyContinue
+                $script:originalProgressPreference = $ProgressPreference
+                $script:ProgressPreference = 'SilentlyContinue'
+            }
+
+            AfterAll {
+                # Restore the original ProgressPreference
+                $script:ProgressPreference = $script:originalProgressPreference
+            }
+
+            It 'Should return the correct converted script' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeExactly' {
+                        It 'Should -BeExactly' {
+                            $true | Should-BeString -CaseSensitive $true -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using named parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeExactly' {
+                        It 'Should -BeExactly' {
+                            $true | Should-BeString -CaseSensitive -Because 'BecauseString' -Expected $true
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UseNamedParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using positional parameters' {
+                $mockExpectedConvertedScript = {
+
+                    Describe 'Should -BeExactly' {
+                        It 'Should -BeExactly' {
+                            $true | Should-BeString -CaseSensitive $true -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UsePositionalParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
+
+        Context 'When converting Should -BeFalse' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Should -BeFalse' {
+                        It 'Should -BeFalse' {
+                            $true | Should -BeFalse -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+
+                # Save current ProgressPreference and then set it to SilentlyContinue
+                $script:originalProgressPreference = $ProgressPreference
+                $script:ProgressPreference = 'SilentlyContinue'
+            }
+
+            AfterAll {
+                # Restore the original ProgressPreference
+                $script:ProgressPreference = $script:originalProgressPreference
+            }
+
+            It 'Should return the correct converted script' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeFalse' {
+                        It 'Should -BeFalse' {
+                            $true | Should-BeFalse -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using named parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeFalse' {
+                        It 'Should -BeFalse' {
+                            $true | Should-BeFalse -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UseNamedParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using positional parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeFalse' {
+                        It 'Should -BeFalse' {
+                            $true | Should-BeFalse -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UsePositionalParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
+
+        Context 'When converting Should -BeTrue' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Should -BeTrue' {
+                        It 'Should -BeTrue' {
+                            $true | Should -BeTrue -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+
+                # Save current ProgressPreference and then set it to SilentlyContinue
+                $script:originalProgressPreference = $ProgressPreference
+                $script:ProgressPreference = 'SilentlyContinue'
+            }
+
+            AfterAll {
+                # Restore the original ProgressPreference
+                $script:ProgressPreference = $script:originalProgressPreference
+            }
+
+            It 'Should return the correct converted script' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeTrue' {
+                        It 'Should -BeTrue' {
+                            $true | Should-BeTrue -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using named parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeTrue' {
+                        It 'Should -BeTrue' {
+                            $true | Should-BeTrue -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UseNamedParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using positional parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeTrue' {
+                        It 'Should -BeTrue' {
+                            $true | Should-BeTrue -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UsePositionalParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
+
+        Context 'When converting Should -BeNullOrEmpty' {
+            BeforeAll {
+                $mockAstExtentText = {
+
+                    Describe 'Should -BeNullOrEmpty' {
+                        It 'Should -BeNullOrEmpty' {
+                            'ActualValue' | Should -BeNullOrEmpty -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+
+                # Save current ProgressPreference and then set it to SilentlyContinue
+                $script:originalProgressPreference = $ProgressPreference
+                $script:ProgressPreference = 'SilentlyContinue'
+            }
+
+            AfterAll {
+                # Restore the original ProgressPreference
+                $script:ProgressPreference = $script:originalProgressPreference
+            }
+
+            It 'Should return the correct converted script' {
+                $mockExpectedConvertedScript = {
+
+                    Describe 'Should -BeNullOrEmpty' {
+                        It 'Should -BeNullOrEmpty' {
+                            'ActualValue' | Should-BeFalsy -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using named parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeNullOrEmpty' {
+                        It 'Should -BeNullOrEmpty' {
+                            'ActualValue' | Should-BeFalsy -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UseNamedParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using positional parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeNullOrEmpty' {
+                        It 'Should -BeNullOrEmpty' {
+                            'ActualValue' | Should-BeFalsy -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UsePositionalParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
+
+        Context 'When converting Should -BeOfType' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Should -BeOfType' {
+                        It 'Should -BeOfType' {
+                            'ActualValue' | Should -BeOfType [System.String] -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+
+                # Save current ProgressPreference and then set it to SilentlyContinue
+                $script:originalProgressPreference = $ProgressPreference
+                $script:ProgressPreference = 'SilentlyContinue'
+            }
+
+            AfterAll {
+                # Restore the original ProgressPreference
+                $script:ProgressPreference = $script:originalProgressPreference
+            }
+
+            It 'Should return the correct converted script' {
+                $mockExpectedConvertedScript = {
+
+                    Describe 'Should -BeOfType' {
+                        It 'Should -BeOfType' {
+                            'ActualValue' | Should-HaveType ([System.String]) -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using named parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeOfType' {
+                        It 'Should -BeOfType' {
+                            'ActualValue' | Should-HaveType -Because 'BecauseString' -Expected ([System.String])
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UseNamedParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using positional parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeOfType' {
+                        It 'Should -BeOfType' {
+                            'ActualValue' | Should-HaveType ([System.String]) -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UsePositionalParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
+
+        Context 'When converting Should -Contain' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Should -Contain' {
+                        It 'Should -Contain' {
+                            @('a','b') | Should -Contain 'a' -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+
+                # Save current ProgressPreference and then set it to SilentlyContinue
+                $script:originalProgressPreference = $ProgressPreference
+                $script:ProgressPreference = 'SilentlyContinue'
+            }
+
+            AfterAll {
+                # Restore the original ProgressPreference
+                $script:ProgressPreference = $script:originalProgressPreference
+            }
+
+            It 'Should return the correct converted script' {
+                $mockExpectedConvertedScript = {
+
+                    Describe 'Should -Contain' {
+                        It 'Should -Contain' {
+                            @('a','b') | Should-ContainCollection 'a' -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using named parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -Contain' {
+                        It 'Should -Contain' {
+                            @('a','b') | Should-ContainCollection -Because 'BecauseString' -Expected 'a'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UseNamedParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using positional parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -Contain' {
+                        It 'Should -Contain' {
+                            @('a','b') | Should-ContainCollection 'a' -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UsePositionalParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
+
+        Context 'When converting Should -Match' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Should -Match' {
+                        It 'Should -Match' {
+                            '[Value]' | Should -Match '^\[.+\]$' -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+
+                # Save current ProgressPreference and then set it to SilentlyContinue
+                $script:originalProgressPreference = $ProgressPreference
+                $script:ProgressPreference = 'SilentlyContinue'
+            }
+
+            AfterAll {
+                # Restore the original ProgressPreference
+                $script:ProgressPreference = $script:originalProgressPreference
+            }
+
+            It 'Should return the correct converted script' {
+                $mockExpectedConvertedScript = {
+
+                    Describe 'Should -Match' {
+                        It 'Should -Match' {
+                            '[Value]' | Should-MatchString '^\[.+\]$' -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using named parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -Match' {
+                        It 'Should -Match' {
+                            '[Value]' | Should-MatchString -Because 'BecauseString' -Expected '^\[.+\]$'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UseNamedParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using positional parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -Match' {
+                        It 'Should -Match' {
+                            '[Value]' | Should-MatchString '^\[.+\]$' -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UsePositionalParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
+
+        Context 'When converting Should -MatchExactly' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Should -MatchExactly' {
+                        It 'Should -MatchExactly' {
+                            '[Value]' | Should -MatchExactly '^\[.+\]$' -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+
+                # Save current ProgressPreference and then set it to SilentlyContinue
+                $script:originalProgressPreference = $ProgressPreference
+                $script:ProgressPreference = 'SilentlyContinue'
+            }
+
+            AfterAll {
+                # Restore the original ProgressPreference
+                $script:ProgressPreference = $script:originalProgressPreference
+            }
+
+            It 'Should return the correct converted script' {
+                $mockExpectedConvertedScript = {
+
+                    Describe 'Should -MatchExactly' {
+                        It 'Should -MatchExactly' {
+                            '[Value]' | Should-MatchString -CaseSensitive '^\[.+\]$' -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using named parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -MatchExactly' {
+                        It 'Should -MatchExactly' {
+                            '[Value]' | Should-MatchString -CaseSensitive -Because 'BecauseString' -Expected '^\[.+\]$'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UseNamedParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using positional parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -MatchExactly' {
+                        It 'Should -MatchExactly' {
+                            '[Value]' | Should-MatchString -CaseSensitive '^\[.+\]$' -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UsePositionalParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
+
+        Context 'When converting Should -Not -Throw' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Should -Not -Throw' {
+                        It 'Should -Not -Throw' {
+                            {
+                                throw
+                            } | Should -Not -Throw -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+
+                # Save current ProgressPreference and then set it to SilentlyContinue
+                $script:originalProgressPreference = $ProgressPreference
+                $script:ProgressPreference = 'SilentlyContinue'
+            }
+
+            AfterAll {
+                # Restore the original ProgressPreference
+                $script:ProgressPreference = $script:originalProgressPreference
+            }
+
+            It 'Should return the correct converted script' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -Not -Throw' {
+                        It 'Should -Not -Throw' {
+                            $null = & ({
+                                throw
+                            })
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using named parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -Not -Throw' {
+                        It 'Should -Not -Throw' {
+                            $null = & ({
+                                throw
+                            })
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UseNamedParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using positional parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -Not -Throw' {
+                        It 'Should -Not -Throw' {
+                            $null = & ({
+                                throw
+                            })
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UsePositionalParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
+
+        Context 'When converting Should -Throw' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Should -Throw' {
+                        It 'Should -Throw' {
+                            {
+                                throw
+                            } | Should -Throw 'ExpectedMessage' -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+
+                # Save current ProgressPreference and then set it to SilentlyContinue
+                $script:originalProgressPreference = $ProgressPreference
+                $script:ProgressPreference = 'SilentlyContinue'
+            }
+
+            AfterAll {
+                # Restore the original ProgressPreference
+                $script:ProgressPreference = $script:originalProgressPreference
+            }
+
+            It 'Should return the correct converted script' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -Throw' {
+                        It 'Should -Throw' {
+                            {
+                                throw
+                            } | Should-Throw 'ExpectedMessage' -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using named parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -Throw' {
+                        It 'Should -Throw' {
+                            {
+                                throw
+                            } | Should-Throw -Because 'BecauseString' -ExceptionMessage 'ExpectedMessage'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UseNamedParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using positional parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -Throw' {
+                        It 'Should -Throw' {
+                            {
+                                throw
+                            } | Should-Throw 'ExpectedMessage' -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UsePositionalParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
     }
 }
