@@ -43,6 +43,17 @@ AfterAll {
 }
 
 Describe 'Convert-PesterSyntax' {
+    BeforeAll {
+        # Save current ProgressPreference and then set it to SilentlyContinue
+        $script:originalProgressPreference = $ProgressPreference
+        $script:ProgressPreference = 'SilentlyContinue'
+    }
+
+    AfterAll {
+        # Restore the original ProgressPreference
+        $script:ProgressPreference = $script:originalProgressPreference
+    }
+
     Context 'When converting v5 to v6' {
         Context 'When converting Should -Be' {
             BeforeAll {
@@ -57,15 +68,6 @@ Describe 'Convert-PesterSyntax' {
                 $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
 
                 Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
-
-                # Save current ProgressPreference and then set it to SilentlyContinue
-                $script:originalProgressPreference = $ProgressPreference
-                $script:ProgressPreference = 'SilentlyContinue'
-            }
-
-            AfterAll {
-                # Restore the original ProgressPreference
-                $script:ProgressPreference = $script:originalProgressPreference
             }
 
             It 'Should return the correct converted script' {
@@ -124,15 +126,6 @@ Describe 'Convert-PesterSyntax' {
                 $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
 
                 Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
-
-                # Save current ProgressPreference and then set it to SilentlyContinue
-                $script:originalProgressPreference = $ProgressPreference
-                $script:ProgressPreference = 'SilentlyContinue'
-            }
-
-            AfterAll {
-                # Restore the original ProgressPreference
-                $script:ProgressPreference = $script:originalProgressPreference
             }
 
             It 'Should return the correct converted script' {
@@ -192,15 +185,6 @@ Describe 'Convert-PesterSyntax' {
                 $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
 
                 Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
-
-                # Save current ProgressPreference and then set it to SilentlyContinue
-                $script:originalProgressPreference = $ProgressPreference
-                $script:ProgressPreference = 'SilentlyContinue'
-            }
-
-            AfterAll {
-                # Restore the original ProgressPreference
-                $script:ProgressPreference = $script:originalProgressPreference
             }
 
             It 'Should return the correct converted script' {
@@ -259,15 +243,6 @@ Describe 'Convert-PesterSyntax' {
                 $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
 
                 Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
-
-                # Save current ProgressPreference and then set it to SilentlyContinue
-                $script:originalProgressPreference = $ProgressPreference
-                $script:ProgressPreference = 'SilentlyContinue'
-            }
-
-            AfterAll {
-                # Restore the original ProgressPreference
-                $script:ProgressPreference = $script:originalProgressPreference
             }
 
             It 'Should return the correct converted script' {
@@ -327,15 +302,6 @@ Describe 'Convert-PesterSyntax' {
                 $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
 
                 Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
-
-                # Save current ProgressPreference and then set it to SilentlyContinue
-                $script:originalProgressPreference = $ProgressPreference
-                $script:ProgressPreference = 'SilentlyContinue'
-            }
-
-            AfterAll {
-                # Restore the original ProgressPreference
-                $script:ProgressPreference = $script:originalProgressPreference
             }
 
             It 'Should return the correct converted script' {
@@ -395,15 +361,6 @@ Describe 'Convert-PesterSyntax' {
                 $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
 
                 Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
-
-                # Save current ProgressPreference and then set it to SilentlyContinue
-                $script:originalProgressPreference = $ProgressPreference
-                $script:ProgressPreference = 'SilentlyContinue'
-            }
-
-            AfterAll {
-                # Restore the original ProgressPreference
-                $script:ProgressPreference = $script:originalProgressPreference
             }
 
             It 'Should return the correct converted script' {
@@ -463,15 +420,6 @@ Describe 'Convert-PesterSyntax' {
                 $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
 
                 Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
-
-                # Save current ProgressPreference and then set it to SilentlyContinue
-                $script:originalProgressPreference = $ProgressPreference
-                $script:ProgressPreference = 'SilentlyContinue'
-            }
-
-            AfterAll {
-                # Restore the original ProgressPreference
-                $script:ProgressPreference = $script:originalProgressPreference
             }
 
             It 'Should return the correct converted script' {
@@ -531,15 +479,6 @@ Describe 'Convert-PesterSyntax' {
                 $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
 
                 Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
-
-                # Save current ProgressPreference and then set it to SilentlyContinue
-                $script:originalProgressPreference = $ProgressPreference
-                $script:ProgressPreference = 'SilentlyContinue'
-            }
-
-            AfterAll {
-                # Restore the original ProgressPreference
-                $script:ProgressPreference = $script:originalProgressPreference
             }
 
             It 'Should return the correct converted script' {
@@ -599,15 +538,6 @@ Describe 'Convert-PesterSyntax' {
                 $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
 
                 Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
-
-                # Save current ProgressPreference and then set it to SilentlyContinue
-                $script:originalProgressPreference = $ProgressPreference
-                $script:ProgressPreference = 'SilentlyContinue'
-            }
-
-            AfterAll {
-                # Restore the original ProgressPreference
-                $script:ProgressPreference = $script:originalProgressPreference
             }
 
             It 'Should return the correct converted script' {
@@ -669,15 +599,6 @@ Describe 'Convert-PesterSyntax' {
                 $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
 
                 Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
-
-                # Save current ProgressPreference and then set it to SilentlyContinue
-                $script:originalProgressPreference = $ProgressPreference
-                $script:ProgressPreference = 'SilentlyContinue'
-            }
-
-            AfterAll {
-                # Restore the original ProgressPreference
-                $script:ProgressPreference = $script:originalProgressPreference
             }
 
             It 'Should return the correct converted script' {
@@ -744,15 +665,6 @@ Describe 'Convert-PesterSyntax' {
                 $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
 
                 Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
-
-                # Save current ProgressPreference and then set it to SilentlyContinue
-                $script:originalProgressPreference = $ProgressPreference
-                $script:ProgressPreference = 'SilentlyContinue'
-            }
-
-            AfterAll {
-                # Restore the original ProgressPreference
-                $script:ProgressPreference = $script:originalProgressPreference
             }
 
             It 'Should return the correct converted script' {
@@ -801,6 +713,80 @@ Describe 'Convert-PesterSyntax' {
                 $result = Convert-PesterSyntax -Path $mockScriptFilePath -UsePositionalParameters -PassThru
 
                 $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
+
+        Context 'When converting several files' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Should -Be' {
+                        It 'Should -Be' {
+                            $true | Should -Be $true -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath1 = Join-Path -Path $TestDrive -ChildPath 'Mock1.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath1 -Value $mockAstExtentText -Encoding 'utf8'
+
+                $mockScriptFilePath2 = Join-Path -Path $TestDrive -ChildPath 'Mock2.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath2 -Value $mockAstExtentText -Encoding 'utf8'
+            }
+
+            Context 'When passing files through parameter' {
+                It 'Should not throw an exception' {
+                    $null = Convert-PesterSyntax -Path $mockScriptFilePath1, $mockScriptFilePath2 -PassThru
+                }
+            }
+
+            Context 'When passing files through pipeline' {
+                It 'Should not throw an exception' {
+                    $null = $mockScriptFilePath1, $mockScriptFilePath2 | Convert-PesterSyntax -PassThru
+                }
+            }
+        }
+
+        Context 'When passing unknown operator for Should command' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Unknown operator' {
+                        It 'Should -Unknown' {
+                            Should -Unknown
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+
+                Mock -CommandName Write-Warning
+            }
+
+            It 'Should not throw an exception' {
+                $null = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+
+                Should -Invoke -CommandName Write-Warning -Exactly -Times 1 -Scope It -ParameterFilter { $Message -like '*not found*supported command operators*' }
+            }
+        }
+
+        Context 'When there are no Pester commands' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    $a = 1 + 1
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+            }
+
+            It 'Should not throw an exception' {
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockAstExtentText -TrimWhitespace
             }
         }
     }
