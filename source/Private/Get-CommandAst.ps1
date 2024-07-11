@@ -48,14 +48,14 @@ function Get-CommandAst
         Write-Verbose -Message "Retrieving the AST of the command: $CommandName"
 
         $commandAsts = $Ast.FindAll({
-            param
-            (
-                [Parameter()]
-                $node
-            )
+                param
+                (
+                    [Parameter()]
+                    $node
+                )
 
-            return $node -is [System.Management.Automation.Language.CommandAst] -and $node.GetCommandName() -eq $CommandName
-        }, $true)
+                return $node -is [System.Management.Automation.Language.CommandAst] -and $node.GetCommandName() -eq $CommandName
+            }, $true)
 
         return $commandAsts
     }

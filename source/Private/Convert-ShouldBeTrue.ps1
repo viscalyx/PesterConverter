@@ -70,7 +70,7 @@ function Convert-ShouldBeTrue
     )
 
     $assertBoundParameterParameters = @{
-        BoundParameterList = $PSBoundParameters
+        BoundParameterList     = $PSBoundParameters
         MutuallyExclusiveList1 = @('UseNamedParameters')
         MutuallyExclusiveList2 = @('UsePositionalParameters')
     }
@@ -100,9 +100,9 @@ function Convert-ShouldBeTrue
         }
 
         $getPesterCommandParameterParameters = @{
-            CommandAst = $CommandAst
-            CommandName = 'Should'
-            IgnoreParameter = 'BeTrue', 'Not'
+            CommandAst          = $CommandAst
+            CommandName         = 'Should'
+            IgnoreParameter     = 'BeTrue', 'Not'
             PositionalParameter = 'Because', 'ActualValue'
         }
 

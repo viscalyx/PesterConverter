@@ -9,9 +9,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Public commands:
   - `Convert-PesterSyntax`
-- GitHub templates.
-
-### Fixed
-
-- `Convert-ShouldThrow`
-  - Correctly convert parameter `ExpectedMessage`.

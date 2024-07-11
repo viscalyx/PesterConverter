@@ -68,25 +68,25 @@ function Get-ShouldCommandOperatorName
 
         # Operator aliases. Output from Pester's command Get-ShouldOperator.
         $possibleShouldOperatorAlias = @{
-            'EQ' = 'Be'
-            'CEQ' = 'BeExactly'
-            'GT' = 'BeGreaterThan'
-            'LE' = 'BeLessOrEqual'
-            'LT' = 'BeLessThan'
-            'GE' = 'BeGreaterOrEqual'
+            'EQ'       = 'Be'
+            'CEQ'      = 'BeExactly'
+            'GT'       = 'BeGreaterThan'
+            'LE'       = 'BeLessOrEqual'
+            'LT'       = 'BeLessThan'
+            'GE'       = 'BeGreaterOrEqual'
             'HaveType' = 'BeOfType'
-            'CMATCH' = 'MatchExactly'
+            'CMATCH'   = 'MatchExactly'
         }
 
         $shouldOperatorAsts = $CommandAst.Find({
-            param
-            (
-                [Parameter()]
-                $node
-            )
+                param
+                (
+                    [Parameter()]
+                    $node
+                )
 
-            return $node -is [System.Management.Automation.Language.CommandParameterAst] -and ($node.ParameterName -in $possibleShouldOperator -or $node.ParameterName -in $possibleShouldOperatorAlias.Keys)
-        }, $true)
+                return $node -is [System.Management.Automation.Language.CommandParameterAst] -and ($node.ParameterName -in $possibleShouldOperator -or $node.ParameterName -in $possibleShouldOperatorAlias.Keys)
+            }, $true)
 
         if ($shouldOperatorAsts.ParameterName -in $possibleShouldOperatorAlias.Keys)
         {
