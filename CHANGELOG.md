@@ -9,11 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Public commands:
   - `Convert-PesterSyntax`
-- Add support for additional Should operators:
-  - `Should-BeGreaterThan`
-  - `Should-BeGreaterOrEqual`
-  - `Should-BeLessThan`
-  - `Should-BeLessOrEqual`.
+- Add support for Should operators:
+  - Be
+  - BeExactly
+  - BeFalse
+  - BeGreaterOrEqual
+  - BeGreaterThan
+  - BeLessOrEqual
+  - BeLessThan
+  - BeLike
+  - BeLikeExactly
+  - BeNullOrEmpty
+  - BeOfType
+  - BeTrue
+  - Contain
+  - Match
+  - MatchExactly
+  - Throw
 
 ### Fixed
 
