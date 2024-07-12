@@ -45,6 +45,8 @@ function Get-CommandAst
 
     process
     {
+        Write-Debug -Message ($script:localizedData.Get_CommandAst_Debug_RetrievingCommandAsts -f $CommandName)
+
         $commandAsts = $Ast.FindAll({
                 param
                 (

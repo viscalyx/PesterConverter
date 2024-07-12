@@ -44,4 +44,6 @@ ConvertFrom-StringData @'
     Get_PesterCommandParameter_Debug_NamedParameters = Parsing named parameters: {0}
     Get_PesterCommandParameter_Debug_PositionalParameters = Parsing positional parameters: {0}
 
+    # Get-CommandAst
+    Get_CommandAst_Debug_RetrievingCommandAsts = Retrieving AST's for command '{0}'.
 '@
