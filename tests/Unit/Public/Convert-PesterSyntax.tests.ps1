@@ -716,6 +716,242 @@ Describe 'Convert-PesterSyntax' {
             }
         }
 
+        Context 'When converting Should -BeGreaterThan' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Should -BeGreaterThan' {
+                        It 'Should -BeGreaterThan' {
+                            3 | Should -BeGreaterThan 2 -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+            }
+
+            It 'Should return the correct converted script' {
+                $mockExpectedConvertedScript = {
+
+                    Describe 'Should -BeGreaterThan' {
+                        It 'Should -BeGreaterThan' {
+                            3 | Should-BeGreaterThan 2 -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using named parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeGreaterThan' {
+                        It 'Should -BeGreaterThan' {
+                            3 | Should-BeGreaterThan -Because 'BecauseString' -Expected 2
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UseNamedParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using positional parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeGreaterThan' {
+                        It 'Should -BeGreaterThan' {
+                            3 | Should-BeGreaterThan 2 -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UsePositionalParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
+
+        Context 'When converting Should -BeLessThan' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Should -BeLessThan' {
+                        It 'Should -BeLessThan' {
+                            3 | Should -BeLessThan 2 -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+            }
+
+            It 'Should return the correct converted script' {
+                $mockExpectedConvertedScript = {
+
+                    Describe 'Should -BeLessThan' {
+                        It 'Should -BeLessThan' {
+                            3 | Should-BeLessThan 2 -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using named parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeLessThan' {
+                        It 'Should -BeLessThan' {
+                            3 | Should-BeLessThan -Because 'BecauseString' -Expected 2
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UseNamedParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using positional parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeLessThan' {
+                        It 'Should -BeLessThan' {
+                            3 | Should-BeLessThan 2 -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UsePositionalParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
+
+        Context 'When converting Should -BeGreaterOrEqual' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Should -BeGreaterOrEqual' {
+                        It 'Should -BeGreaterOrEqual' {
+                            3 | Should -BeGreaterOrEqual 2 -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+            }
+
+            It 'Should return the correct converted script' {
+                $mockExpectedConvertedScript = {
+
+                    Describe 'Should -BeGreaterOrEqual' {
+                        It 'Should -BeGreaterOrEqual' {
+                            3 | Should-BeGreaterThanOrEqual 2 -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using named parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeGreaterOrEqual' {
+                        It 'Should -BeGreaterOrEqual' {
+                            3 | Should-BeGreaterThanOrEqual -Because 'BecauseString' -Expected 2
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UseNamedParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using positional parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeGreaterOrEqual' {
+                        It 'Should -BeGreaterOrEqual' {
+                            3 | Should-BeGreaterThanOrEqual 2 -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UsePositionalParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
+
+        Context 'When converting Should -BeLessOrEqual' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Should -BeLessOrEqual' {
+                        It 'Should -BeLessOrEqual' {
+                            3 | Should -BeLessOrEqual 2 -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+            }
+
+            It 'Should return the correct converted script' {
+                $mockExpectedConvertedScript = {
+
+                    Describe 'Should -BeLessOrEqual' {
+                        It 'Should -BeLessOrEqual' {
+                            3 | Should-BeLessThanOrEqual 2 -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using named parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeLessOrEqual' {
+                        It 'Should -BeLessOrEqual' {
+                            3 | Should-BeLessThanOrEqual -Because 'BecauseString' -Expected 2
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UseNamedParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using positional parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeLessOrEqual' {
+                        It 'Should -BeLessOrEqual' {
+                            3 | Should-BeLessThanOrEqual 2 -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UsePositionalParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
+
         Context 'When converting several files' {
             BeforeAll {
                 $mockAstExtentText = {

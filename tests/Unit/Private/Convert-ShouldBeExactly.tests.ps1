@@ -252,7 +252,7 @@ Describe 'Convert-ShouldBeExactly' {
         }
 
         Context 'When the tests are negated' {
-            It 'Should convert `Should -Not -Be ''ExpectedString''` correctly' {
+            It 'Should convert `Should -Not -BeExactly ''ExpectedString''` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {
                         Should -Not -BeExactly 'ExpectedString'
