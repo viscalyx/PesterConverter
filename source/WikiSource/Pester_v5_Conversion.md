@@ -24,6 +24,8 @@ BeGreaterOrEqual | `Should-BeGreaterThanOrEqual` | `Should-BeLessThanOrEqual` |
 BeGreaterThan | `Should-BeGreaterThan` | `Should-BeLessThan` | -
 BeLessOrEqual | `Should-BeLessThanOrEqual` | `Should-BeGreaterThanOrEqual` | -
 BeLessThan | `Should-BeLessThan` | `Should-BeGreaterThan` | -
+BeLike | `Should-BeLikeString` | `Should-NotBeLikeString` | -
+BeLikeExactly | `Should-BeLikeString -CaseSensitive` | `Should-NotBeLikeString -CaseSensitive` | -
 BeNullOrEmpty | `Should-BeFalsy` | `Should-BeTruthy` | See 2)
 BeOfType | `Should-HaveType` | `Should-NotHaveType` | -
 BeTrue | `Should-BeTrue` | `Should-BeFalse` | -
