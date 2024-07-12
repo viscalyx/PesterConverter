@@ -20,6 +20,10 @@ Should operator name | Affirm | Negate | Notes
 Be | `Should-Be` | `Should-NotBe` | -
 BeExactly | `Should-Be -CaseSensitive` | `Should-NotBe -CaseSensitive` | -
 BeFalse | `Should-BeFalse` | `Should-BeTrue` | -
+BeGreaterOrEqual | `Should-BeGreaterThanOrEqual` | `Should-BeLessThanOrEqual` | -
+BeGreaterThan | `Should-BeGreaterThan` | `Should-BeLessThan` | -
+BeLessOrEqual | `Should-BeLessThanOrEqual` | `Should-BeGreaterThanOrEqual` | -
+BeLessThan | `Should-BeLessThan` | `Should-BeGreaterThan` | -
 BeNullOrEmpty | `Should-BeFalsy` | `Should-BeTruthy` | See 2)
 BeOfType | `Should-HaveType` | `Should-NotHaveType` | -
 BeTrue | `Should-BeTrue` | `Should-BeFalse` | -

@@ -285,6 +285,34 @@ function Convert-PesterSyntax
                                 break
                             }
 
+                            'BeGreaterThan'
+                            {
+                                $newExtentText = Convert-ShouldBeGreaterThan -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
+
+                                break
+                            }
+
+                            'BeLessThan'
+                            {
+                                $newExtentText = Convert-ShouldBeLessThan -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
+
+                                break
+                            }
+
+                            'BeGreaterOrEqual'
+                            {
+                                $newExtentText = Convert-ShouldBeGreaterOrEqual -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
+
+                                break
+                            }
+
+                            'BeLessOrEqual'
+                            {
+                                $newExtentText = Convert-ShouldBeLessOrEqual -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
+
+                                break
+                            }
+
                             default
                             {
                                 Write-Warning -Message ($script:localizedData.Convert_PesterSyntax_Warning_UnsupportedCommandOperator -f $operatorName, $commandAst.Extent.Text)
