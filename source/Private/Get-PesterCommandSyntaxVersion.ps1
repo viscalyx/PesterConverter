@@ -21,7 +21,7 @@
 
     .EXAMPLE
         $ast = [System.Management.Automation.Language.Parser]::ParseInput('Should -BeExactly "value"', [ref]$null, [ref]$null)
-        Get-PesterCommandSyntaxVersion -CommandAst $ast -CommandName 'Should' -ParameterName 'BeExactly'
+        Get-PesterCommandSyntaxVersion -CommandAst $ast
 
         Returns the syntax version for the 'Should -BeExactly' command.
 #>

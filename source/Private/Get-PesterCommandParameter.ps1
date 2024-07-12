@@ -30,7 +30,7 @@
 
     .EXAMPLE
         $commandAst = [System.Management.Automation.Language.Parser]::ParseInput('Should -Be "ExpectedString" "BecauseString" "ActualString"')
-        Get-PesterCommandParameter -CommandAst $commandAst -IgnoreParameter 'Be', 'Not' -PositionalParameter 'ExpectedValue', 'Because', 'ActualValue'
+        Get-PesterCommandParameter -CommandAst $commandAst -CommandName 'Should' -IgnoreParameter @('Be', 'Not') -PositionalParameter @('ExpectedValue', 'Because', 'ActualValue')
 
         Returns a hashtable with the parameters.
 #>

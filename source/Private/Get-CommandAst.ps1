@@ -14,7 +14,7 @@
         Specifies the PowerShell command for which to retrieve the AST.
 
     .EXAMPLE
-        Get-CommandAst -Command 'Should'
+        Get-CommandAst -CommandName 'Should'
 
         This example retrieves the AST of the 'Should' command.
 
