@@ -26,7 +26,7 @@ BeTrue | `Should-BeTrue` | `Should-BeFalse` | -
 Contain | `Should-ContainCollection` | `Should-NotContainCollection` | -
 Match | `Should-MatchString` | `Should-NotMatchString` | -
 MatchExactly | `Should-MatchString -CaseSensitive` | `Should-NotMatchString -CaseSensitive` | -
-Throw | `Should-Throw` | `$null = &(<ActualValue>)` | See 1)
+Throw | `Should-Throw` | `$null = & (<ActualValue>)` | See 1)
 
 1) There is not a command that `Should -Not -Throw` can be converted to.
 In Pester 6 the `It`-block catch any exception if one occurs, that means
