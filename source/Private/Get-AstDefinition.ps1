@@ -53,8 +53,6 @@ function Get-AstDefinition
         {
             $tokens, $parseErrors = $null
 
-            Write-Verbose -Message "Parsing the script file: $filePath"
-
             [System.Management.Automation.Language.Parser]::ParseFile($filePath, [ref] $tokens, [ref] $parseErrors)
 
             if ($parseErrors)

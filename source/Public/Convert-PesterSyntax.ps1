@@ -100,32 +100,44 @@ function Convert-PesterSyntax
             $convertParameters.Pester6 = $true
         }
 
-        if ($Pester6)
+        if ($Pester6.IsPresent)
         {
-            Write-Verbose 'Converting to Pester 6 syntax.'
+            Write-Verbose -Message $script:localizedData.Convert_PesterSyntax_StartPester6Conversion
         }
         else
         {
-            throw 'No version syntax specified. Please specify a format to convert to.'
+            $PSCmdlet.ThrowTerminatingError(
+                [System.Management.Automation.ErrorRecord]::new(
+                    $script:localizedData.Convert_PesterSyntax_NoVersionSpecified,
+                    'CPS0001', # cSpell: disable-line
+                    [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                    $null
+                )
+            )
         }
     }
 
     process
     {
+        $writeProgressId1Parameters = @{
+            Id       = 1
+            Activity = $script:localizedData.Convert_PesterSyntax_WriteProgress_Id1_Activity
+        }
+
         if ($Path.Count -gt 1)
         {
-            Write-Progress -Id 1 -Activity 'Converting Pester syntax' -Status ('Processing {0} file(s)' -f $Path.Count) -PercentComplete 0
+            Write-Progress @writeProgressId1Parameters -PercentComplete 0 -Status ($script:localizedData.Convert_PesterSyntax_WriteProgress_Id1_Status_ProcessingFiles -f $Path.Count)
         }
         else
         {
-            Write-Progress -Id 1 -Activity 'Converting Pester syntax' -Status ('Processing file {0}' -f (Split-Path -Path $Path -Leaf)) -PercentComplete 0
+            Write-Progress @writeProgressId1Parameters -PercentComplete 0 -Status ($script:localizedData.Convert_PesterSyntax_WriteProgress_Id1_Status_ProcessingFile -f (Split-Path -Path $Path -Leaf))
         }
 
         foreach ($filePath in $Path)
         {
             if ($Path.Count -gt 1)
             {
-                Write-Progress -Id 1 -Activity 'Converting Pester syntax' -Status "Processing $filePath" -PercentComplete (($Path.IndexOf($filePath) / $Path.Count) * 100)
+                Write-Progress @writeProgressId1Parameters -PercentComplete (($Path.IndexOf($filePath) / $Path.Count) * 100) -Status ($script:localizedData.Convert_PesterSyntax_WriteProgress_Id1_Status_ProcessingFile -f (Split-Path -Path $filePath -Leaf))
             }
 
             $verboseDescriptionMessage = $script:localizedData.Convert_PesterSyntax_ShouldProcessVerboseDescription -f $filePath
@@ -147,7 +159,7 @@ function Convert-PesterSyntax
             # Get the script text from the script block AST that will be used to replace the original script text.
             $convertedScriptText = $scriptBlockAst.Extent.Text
 
-            Write-Debug -Message ('Parsing the script block AST: {0}' -f $scriptBlockAst.Extent.Text)
+            Write-Debug -Message ($script:localizedData.Convert_PesterSyntax_Debug_ScriptBlockAst -f $scriptBlockAst.Extent.Text)
 
             <#
                 Get all the Should command AST's in the script block AST, and sort
@@ -161,9 +173,15 @@ function Convert-PesterSyntax
 
             if ($shouldCommandAst)
             {
-                Write-Progress -Id 2 -ParentId 1 -Activity 'Converting Should command syntax' -Status ('Processing {0} command(s)' -f $shouldCommandAst.Count) -PercentComplete 0
+                $writeProgressId2Parameters = @{
+                    Id       = 2
+                    ParentId = 1
+                    Activity = $script:localizedData.Convert_PesterSyntax_WriteProgress_Id2_Activity
+                }
 
-                Write-Debug -Message ('Found {0} ''Should'' command(s) in {1}.' -f $shouldCommandAst.Count, $filePath)
+                Write-Progress @writeProgressId2Parameters -PercentComplete 0 -Status ($script:localizedData.Convert_PesterSyntax_WriteProgress_Id2_Status_ProcessingCommands -f $shouldCommandAst.Count)
+
+                Write-Debug -Message ($script:localizedData.Convert_PesterSyntax_Debug_FoundShouldCommand -f $shouldCommandAst.Count, $filePath)
 
                 foreach ($commandAst in $shouldCommandAst)
                 {
@@ -176,7 +194,7 @@ function Convert-PesterSyntax
                     # If only one item was returned then there is no collection that has the method IndexOf.
                     $percentComplete = $shouldCommandAst.Count -gt 1 ? (($shouldCommandAst.IndexOf($commandAst) / $shouldCommandAst.Count) * 100) : 100
 
-                    Write-Progress -Id 2 -ParentId 1 -Activity 'Converting Should command syntax' -Status "Processing extent on line $($commandAst.Extent.StartLineNumber)" -PercentComplete $percentComplete
+                    Write-Progress @writeProgressId2Parameters -PercentComplete $percentComplete -Status ($script:localizedData.Convert_PesterSyntax_WriteProgress_Id2_Status_ProcessingLine -f $commandAst.Extent.StartLineNumber)
 
                     $operatorName = Get-ShouldCommandOperatorName -CommandAst $commandAst -ErrorAction 'Stop'
 
@@ -269,7 +287,7 @@ function Convert-PesterSyntax
 
                             default
                             {
-                                Write-Warning -Message ('Unsupported command operator ''{0}'' in extent: `{1}`' -f $operatorName, $commandAst.Extent.Text)
+                                Write-Warning -Message ($script:localizedData.Convert_PesterSyntax_Warning_UnsupportedCommandOperator -f $operatorName, $commandAst.Extent.Text)
 
                                 $apply = $false
                             }
@@ -277,7 +295,7 @@ function Convert-PesterSyntax
                     }
                     else
                     {
-                        Write-Warning -Message ('Did not found any of the supported command operators in extent: `{0}`' -f $commandAst.Extent.Text)
+                        Write-Warning -Message ($script:localizedData.Convert_PesterSyntax_MissingSupportedCommandOperator -f $commandAst.Extent.Text)
                     }
 
                     if ($apply)
@@ -287,11 +305,11 @@ function Convert-PesterSyntax
                     }
                 }
 
-                Write-Progress -Id 2 -ParentId 1 -Activity 'Converting Should command syntax' -Status 'Completed' -PercentComplete 100 -Completed
+                Write-Progress @writeProgressId2Parameters -Completed -PercentComplete 100 -Status $script:localizedData.Convert_PesterSyntax_WriteProgress_Id2_Status_Completed
             }
             else
             {
-                Write-Verbose -Message "No 'Should' command found in $filePath."
+                Write-Verbose -Message ($script:localizedData.Convert_PesterSyntax_NoShouldCommand -f $filePath)
             }
 
             if ($PassThru)
@@ -307,6 +325,6 @@ function Convert-PesterSyntax
 
     end
     {
-        Write-Progress -Id 1 -Activity 'Converting Pester syntax' -Status 'Completed' -PercentComplete 100 -Completed
+        Write-Progress @writeProgressId1Parameters -Completed -PercentComplete 100 -Status $script:localizedData.Convert_PesterSyntax_WriteProgress_Id1_Status_Completed
     }
 }

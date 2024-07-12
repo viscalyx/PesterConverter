@@ -9,3 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Public commands:
   - `Convert-PesterSyntax`
+
+### Fixed
+
+- Improve code to resolve ScriptAnalyzer warnings and errors.
+- Localize all the strings.

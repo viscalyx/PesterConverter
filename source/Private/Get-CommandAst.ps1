@@ -45,8 +45,6 @@ function Get-CommandAst
 
     process
     {
-        Write-Verbose -Message "Retrieving the AST of the command: $CommandName"
-
         $commandAsts = $Ast.FindAll({
                 param
                 (
