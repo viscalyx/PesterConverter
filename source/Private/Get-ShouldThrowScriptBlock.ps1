@@ -71,11 +71,6 @@ function Get-ShouldThrowScriptBlock
 
                 # Retrieve the argument
                 $scriptBlock = $argumentAst.Extent.Text
-
-                # if ($argumentAst -and $argumentAst -is [System.Management.Automation.Language.ScriptBlockExpressionAst])
-                # {
-                #     $scriptBlock = $argumentAst.ScriptBlock
-                # }
             }
         }
 

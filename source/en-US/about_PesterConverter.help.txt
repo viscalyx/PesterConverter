@@ -2,10 +2,10 @@ TOPIC
     about_PesterConverter
 
 SHORT DESCRIPTION
-    Commands ta convert Pester tests.
+    Commands to convert Pester tests.
 
 LONG DESCRIPTION
-    Commands ta convert Pester tests.
+    Commands to convert Pester tests.
 
 EXAMPLES
     PS C:\> Get-Commands -Module PesterConverter

@@ -23,13 +23,7 @@
         Retrieves the ScriptBlockAst definition of the 'Script.ps1' file.
 
     .EXAMPLE
-        'C:\Scripts\Script.ps1' | Get-AstDefinition
-
-        Retrieves the ScriptBlockAst definition of the 'Script.ps1' file using
-        pipeline input.
-
-    .EXAMPLE
-        Get-ChildItem -Path './scripts' | Get-AstDefinition
+        Get-AstDefinition -Path (Get-ChildItem -Path './scripts')
 
         Retrieves the ScriptBlockAst definition of all the files in the path pass
         as pipeline input.
@@ -52,8 +46,6 @@ function Get-AstDefinition
         foreach ($filePath in $Path)
         {
             $tokens, $parseErrors = $null
-
-            Write-Verbose -Message "Parsing the script file: $filePath"
 
             [System.Management.Automation.Language.Parser]::ParseFile($filePath, [ref] $tokens, [ref] $parseErrors)
 

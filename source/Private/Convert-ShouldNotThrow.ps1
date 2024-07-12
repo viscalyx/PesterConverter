@@ -79,7 +79,7 @@ function Convert-ShouldNotThrow
 
     Assert-BoundParameter @assertBoundParameterParameters
 
-    Write-Debug -Message ('Parsing the command AST: {0}' -f $CommandAst.Extent.Text)
+    Write-Debug -Message ($script:localizedData.Convert_Should_Debug_ParsingCommandAst -f $CommandAst.Extent.Text)
 
     # Determine if the command is negated
     $isNegated = Test-PesterCommandNegated -CommandAst $CommandAst
@@ -89,7 +89,7 @@ function Convert-ShouldNotThrow
     # Parse the command elements and convert them to Pester 6 syntax
     if ($PSCmdlet.ParameterSetName -eq 'Pester6')
     {
-        Write-Debug -Message ('Converting from Pester v{0} to Pester v6 syntax.' -f $sourceSyntaxVersion)
+        Write-Debug -Message ($script:localizedData.Convert_Should_Debug_ConvertingFromTo -f $sourceSyntaxVersion, '6')
 
         if ($isNegated)
         {
@@ -114,7 +114,7 @@ function Convert-ShouldNotThrow
         }
     }
 
-    Write-Debug -Message ('Converted the command `{0}` to `{1}`.' -f $CommandAst.Extent.Text, $newExtentText)
+    Write-Debug -Message ($script:localizedData.Convert_Should_Debug_ConvertedCommand -f $CommandAst.Extent.Text, $newExtentText)
 
     return $newExtentText
 }

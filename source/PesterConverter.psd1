@@ -18,7 +18,7 @@
     Copyright            = 'Copyright the PesterConverter contributors. All rights reserved.'
 
     # Description of the functionality provided by this module
-    Description          = 'Commands ta convert Pester tests.'
+    Description          = 'Commands to convert Pester tests.'
 
     # Minimum version of the PowerShell engine required by this module
     PowerShellVersion    = '7.0'

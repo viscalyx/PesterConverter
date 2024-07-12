@@ -14,7 +14,7 @@
         Specifies the PowerShell command for which to retrieve the AST.
 
     .EXAMPLE
-        Get-CommandAst -Command 'Should'
+        Get-CommandAst -CommandName 'Should'
 
         This example retrieves the AST of the 'Should' command.
 
@@ -45,7 +45,7 @@ function Get-CommandAst
 
     process
     {
-        Write-Verbose -Message "Retrieving the AST of the command: $CommandName"
+        Write-Debug -Message ($script:localizedData.Get_CommandAst_Debug_RetrievingCommandAsts -f $CommandName)
 
         $commandAsts = $Ast.FindAll({
                 param

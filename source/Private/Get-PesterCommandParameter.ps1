@@ -30,7 +30,7 @@
 
     .EXAMPLE
         $commandAst = [System.Management.Automation.Language.Parser]::ParseInput('Should -Be "ExpectedString" "BecauseString" "ActualString"')
-        Get-PesterCommandParameter -CommandAst $commandAst -IgnoreParameter 'Be', 'Not' -PositionalParameter 'ExpectedValue', 'Because', 'ActualValue'
+        Get-PesterCommandParameter -CommandAst $commandAst -CommandName 'Should' -IgnoreParameter @('Be', 'Not') -PositionalParameter @('ExpectedValue', 'Because', 'ActualValue')
 
         Returns a hashtable with the parameters.
 #>
@@ -63,8 +63,8 @@ function Get-PesterCommandParameter
 
     process
     {
-        Write-Debug -Message "Retrieving the parameters of the extent: $($CommandAst.Extent.Text)"
-        Write-Debug -Message "Command name: $CommandName"
+        Write-Debug -Message ($script:localizedData.Get_PesterCommandParameter_Debug_RetrievingParameters -f $CommandAst.Extent.Text)
+        Write-Debug -Message ($script:localizedData.Get_PesterCommandParameter_Debug_RetrievingCommandName -f $CommandName)
 
         # Filter out the command name from the command elements.
         $commandElement = $CommandAst.CommandElements |
@@ -75,7 +75,7 @@ function Get-PesterCommandParameter
                 )
             }
 
-        Write-Debug -Message "Ignoring the parameters: $($IgnoreParameter -join ', ')"
+        Write-Debug -Message ($script:localizedData.Get_PesterCommandParameter_Debug_IgnoreParameters -f ($IgnoreParameter -join ', '))
 
         <#
             Filter out the parameters to ignore from the command elements, e.g.:
@@ -95,7 +95,7 @@ function Get-PesterCommandParameter
 
         if ($commandElement.Count -gt 0)
         {
-            Write-Debug -Message "Named parameters: $($NamedParameter -join ', ')"
+            Write-Debug -Message ($script:localizedData.Get_PesterCommandParameter_Debug_NamedParameters -f ($NamedParameter -join ', '))
 
             <#
                 Filter out the value parameters including its values from the command elements, e.g.:
@@ -135,7 +135,7 @@ function Get-PesterCommandParameter
         # Get the positional parameters extent text that are left (if any).
         if ($commandElement.Count -gt 0)
         {
-            Write-Debug -Message "Positional parameters: $($PositionalParameter -join ', ')"
+            Write-Debug -Message ($script:localizedData.Get_PesterCommandParameter_Debug_PositionalParameters -f ($PositionalParameter -join ', '))
 
             $elementCounter = 0
             $positionalCounter = 1
