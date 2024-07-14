@@ -149,7 +149,7 @@ function Get-PesterCommandParameter
                     $positionalParameterHashtable.$parameter = @{
                         Position   = $positionalCounter
                         Positional = $true
-                        ExtentText = $commandElement[$elementCounter].Extent.Text #? $commandElement.Extent.Text : $null
+                        ExtentText = $commandElement[$elementCounter].Extent.Text
                     }
 
                     # Increment the positional counter.

@@ -313,6 +313,20 @@ function Convert-PesterSyntax
                                 break
                             }
 
+                            'BeIn'
+                            {
+                                $newExtentText = Convert-ShouldBeIn -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
+
+                                if ((Test-IsPipelinePart -CommandAst $commandAst -ErrorAction 'Stop'))
+                                {
+                                    # Change start and end offsets to replace the entire commandAst.Parent.Extent.Text.
+                                    $startOffset = $commandAst.Parent.Extent.StartOffset
+                                    $endOffset = $commandAst.Parent.Extent.EndOffset
+                                }
+
+                                break
+                            }
+
                             default
                             {
                                 Write-Warning -Message ($script:localizedData.Convert_PesterSyntax_Warning_UnsupportedCommandOperator -f $operatorName, $commandAst.Extent.Text)

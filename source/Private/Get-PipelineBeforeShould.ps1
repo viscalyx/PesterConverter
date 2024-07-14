@@ -3,7 +3,7 @@
         Retrieves the script block associated with a pipeline or parameter.
 
     .DESCRIPTION
-        The Get-ShouldThrowScriptBlock function is used to retrieve the script block
+        The Get-PipelineBeforeShould function is used to retrieve the script block
         associated with a pipeline or parameter. It can be used to extract the script
         block from a pipeline or from a specific parameter.
 
@@ -23,12 +23,12 @@
         The function returns the text of the script block if found, otherwise it returns $null.
 
     .EXAMPLE
-        Get-ShouldThrowScriptBlock -CommandAst $commandAst -ParameterName 'ActualValue' -ParsePipeline
+        Get-PipelineBeforeShould -CommandAst $commandAst -ParameterName 'ActualValue' -ParsePipeline
 
         Retrieves the script block associated with the specified command AST and
         parameter name, parsing the pipeline if necessary.
 #>
-function Get-ShouldThrowScriptBlock
+function Get-PipelineBeforeShould
 {
     [CmdletBinding()]
     [OutputType([System.String])]

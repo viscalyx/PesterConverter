@@ -42,7 +42,7 @@ AfterAll {
     Get-Module -Name $script:dscModuleName -All | Remove-Module -Force
 }
 
-Describe 'Get-ShouldThrowScriptBlock' {
+Describe 'Get-PipelineBeforeShould' {
     It 'Should return the correct script block from a parameter' {
         InModuleScope -ScriptBlock {
             $mockCommandAst = {
@@ -51,7 +51,7 @@ Describe 'Get-ShouldThrowScriptBlock' {
                 }
             }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
-            $result = Get-ShouldThrowScriptBlock -CommandAst $mockCommandAst -ParameterName 'ActualValue' -ParsePipeline
+            $result = Get-PipelineBeforeShould -CommandAst $mockCommandAst -ParameterName 'ActualValue' -ParsePipeline
 
             $result | Should-BeString -CaseSensitive "{
                     Write-Error -Message 'MockErrorMessage' -ErrorId 'MockErrorId' -Category 'InvalidOperation' -TargetObject 'MockTargetObject' -ErrorAction 'Stop'
@@ -69,7 +69,7 @@ Describe 'Get-ShouldThrowScriptBlock' {
                 Should -Not -Throw 'MockErrorMessage' -ActualValue $mockScriptBlock
             }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
-            $result = Get-ShouldThrowScriptBlock -CommandAst $mockCommandAst -ParameterName 'ActualValue' -ParsePipeline
+            $result = Get-PipelineBeforeShould -CommandAst $mockCommandAst -ParameterName 'ActualValue' -ParsePipeline
 
             $result | Should-BeString -CaseSensitive '$mockScriptBlock'
         }
@@ -83,7 +83,7 @@ Describe 'Get-ShouldThrowScriptBlock' {
                 } | Should -Not -Throw 'MockErrorMessage'
             }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
-            $result = Get-ShouldThrowScriptBlock -CommandAst $mockCommandAst -ParameterName 'ActualValue' -ParsePipeline
+            $result = Get-PipelineBeforeShould -CommandAst $mockCommandAst -ParameterName 'ActualValue' -ParsePipeline
 
             $result | Should-BeString -CaseSensitive "{
                     Write-Error -Message 'MockErrorMessage' -ErrorId 'MockErrorId' -Category 'InvalidOperation' -TargetObject 'MockTargetObject' -ErrorAction 'Stop'
@@ -101,7 +101,7 @@ Describe 'Get-ShouldThrowScriptBlock' {
                 $mockScriptBlock | Should -Not -Throw 'MockErrorMessage'
             }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
-            $result = Get-ShouldThrowScriptBlock -CommandAst $mockCommandAst -ParameterName 'ActualValue' -ParsePipeline
+            $result = Get-PipelineBeforeShould -CommandAst $mockCommandAst -ParameterName 'ActualValue' -ParsePipeline
 
             $result | Should-BeString -CaseSensitive '$mockScriptBlock'
         }
@@ -113,7 +113,7 @@ Describe 'Get-ShouldThrowScriptBlock' {
                 Get-Something | Get-ScriptBlock | Should -Not -Throw 'MockErrorMessage'
             }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
-            $result = Get-ShouldThrowScriptBlock -CommandAst $mockCommandAst -ParameterName 'ActualValue' -ParsePipeline
+            $result = Get-PipelineBeforeShould -CommandAst $mockCommandAst -ParameterName 'ActualValue' -ParsePipeline
 
             $result | Should-BeString -CaseSensitive 'Get-Something | Get-ScriptBlock'
         }
@@ -127,7 +127,7 @@ Describe 'Get-ShouldThrowScriptBlock' {
                         Should -Not -Throw 'MockErrorMessage'
             }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
-            $result = Get-ShouldThrowScriptBlock -CommandAst $mockCommandAst -ParameterName 'ActualValue' -ParsePipeline
+            $result = Get-PipelineBeforeShould -CommandAst $mockCommandAst -ParameterName 'ActualValue' -ParsePipeline
 
             $result | Should-BeString -CaseSensitive 'Get-Something |
                     Get-ScriptBlock'
@@ -140,7 +140,7 @@ Describe 'Get-ShouldThrowScriptBlock' {
                 Should -Not -Throw
             }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
-            $result = Get-ShouldThrowScriptBlock -CommandAst $mockCommandAst -ParameterName 'ActualValue' -ParsePipeline
+            $result = Get-PipelineBeforeShould -CommandAst $mockCommandAst -ParameterName 'ActualValue' -ParsePipeline
 
             $result | Should-BeNull
         }
