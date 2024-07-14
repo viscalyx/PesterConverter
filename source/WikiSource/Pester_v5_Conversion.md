@@ -19,16 +19,17 @@ Should operator name | Affirm | Negate | Notes
 --- | --- | --- | ---
 Be | `Should-Be` | `Should-NotBe` | -
 BeExactly | `Should-Be -CaseSensitive` | `Should-NotBe -CaseSensitive` | -
-BeFalse | `Should-BeFalse` | `Should-BeTrue` | -
+BeFalse | `Should-BeFalse` | `Should-BeTrue` | See 4)
 BeGreaterOrEqual | `Should-BeGreaterThanOrEqual` | `Should-BeLessThanOrEqual` | -
 BeGreaterThan | `Should-BeGreaterThan` | `Should-BeLessThan` | -
+BeIn | `Should-ContainCollection` | `Should-NotContainCollection` | See 3)
 BeLessOrEqual | `Should-BeLessThanOrEqual` | `Should-BeGreaterThanOrEqual` | -
 BeLessThan | `Should-BeLessThan` | `Should-BeGreaterThan` | -
 BeLike | `Should-BeLikeString` | `Should-NotBeLikeString` | -
 BeLikeExactly | `Should-BeLikeString -CaseSensitive` | `Should-NotBeLikeString -CaseSensitive` | -
 BeNullOrEmpty | `Should-BeFalsy` | `Should-BeTruthy` | See 2)
 BeOfType | `Should-HaveType` | `Should-NotHaveType` | -
-BeTrue | `Should-BeTrue` | `Should-BeFalse` | -
+BeTrue | `Should-BeTrue` | `Should-BeFalse` | See 4)
 Contain | `Should-ContainCollection` | `Should-NotContainCollection` | -
 Match | `Should-MatchString` | `Should-NotMatchString` | -
 MatchExactly | `Should-MatchString -CaseSensitive` | `Should-NotMatchString -CaseSensitive` | -
@@ -41,8 +42,16 @@ The conversion will parse the actual value, normally a scriptblock passed
 as parameter or through the pipeline, and convert it to be executed using
 the call operator (`&`) inside the `It`-block. Any output is passed to `$null`
 so that no output affects the Pester test object.
-1) There are no exact command to convert to, but `Should-BeFalsy` and
+2) There are no exact command to convert to, but `Should-BeFalsy` and
 `Should-BeTruthy` is similar. But there might be scenarios where the commands
 `Should-BeNull` or `Should-BeEmptyString` are better suited. But since the
 conversion has no way of knowing if those command are better suitable
 based on the AST the `Should-BeFalsy` and `Should-BeTruthy` are used.
+3) This will switch the expected and actual values on the parameters and/or
+the pipeline to be able to convert to `Should-ContainCollection` or
+`Should-NotContainCollection`.
+4) `BeTrue` and `BeFalse` does not work as they did in Pester 5, there it
+was also possible to pass `$null` to `BeFalse` for it to pass which is not
+allowed in Pester 6. If this happens then either the code being tested need
+to be changed to always return boolean value `$true` or `$false`, or change
+the test to use the Pester 6 commands `Should-BeFalsy` or `Should-BeTruthy`.
