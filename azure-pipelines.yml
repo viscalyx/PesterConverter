@@ -279,7 +279,7 @@ stages:
             displayName: 'Validate CurrentUser Module Path'
           - pwsh: |
               & ([ScriptBlock]::Create((iwr 'bit.ly/psresourceget'))) -Force -Verbose
-              Get-ChildItem -Path './ConversionTest/Modules'
+              Get-Module -Name Microsoft.PowerShell.PSResourceGet -ListAvailable
             name: bootstrapPSResourceGet
             displayName: 'Bootstrap PSResourceGet'
           - pwsh: |
