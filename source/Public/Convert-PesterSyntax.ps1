@@ -36,10 +36,12 @@
 
     .EXAMPLE
         Convert-PesterSyntax -Path "C:\Scripts\Test.ps1" -Pester6
+
         Converts the syntax of the Test.ps1 file to Pester 6 syntax.
 
     .EXAMPLE
         Get-ChildItem -Path "C:\Scripts" -Recurse -Filter "*.ps1" | Convert-PesterSyntax -Pester6
+
         Converts the syntax of all PowerShell files in the C:\Scripts directory and
         its subdirectories to the default (newest) Pester syntax.
 #>
