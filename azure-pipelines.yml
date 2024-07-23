@@ -292,7 +292,7 @@ stages:
               ./build.ps1 -Tasks noop
               Import-Module -Name PesterConverter
               New-Item -ItemType Directory -Path './ConversionTest/v6' -Force
-              Convert-PesterSyntax -Path 'tests/Integration/Syntax/v5' -OutputPath './ConversionTest/v6' -Force -Verbose
+              Convert-PesterSyntax -Path './tests/Integration/Syntax/v5' -OutputPath './ConversionTest/v6' -Force -Verbose
             name: convert_v5_to_v6
             displayName: 'Convert v5 syntax to v6'
           - pwsh: |
