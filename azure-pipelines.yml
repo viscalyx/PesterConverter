@@ -46,7 +46,7 @@ stages:
               arguments: '-ResolveDependency -tasks pack'
               pwsh: true
             env:
-              ModuleVersion: $(NuGetVersionV2)
+              ModuleVersion: $(SemVer)
           - task: PublishPipelineArtifact@1
             displayName: 'Publish Build Artifact'
             inputs:
