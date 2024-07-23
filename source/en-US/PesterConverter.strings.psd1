@@ -31,6 +31,8 @@ ConvertFrom-StringData @'
     Convert_PesterSyntax_Warning_UnsupportedCommandOperator = Unsupported command operator '{0}' in extent: `{1}`
     Convert_PesterSyntax_MissingSupportedCommandOperator = Did not found any of the supported command operators in extent: `{0}`
     Convert_PesterSyntax_NoShouldCommand = "No 'Should' command found in '{0}'.
+    Convert_PesterSyntax_OutputPathDoesNotExist = The output path '{0}' does not exist. Please specify an existing path.
+    Convert_PesterSyntax_OutputPathIsNotDirectory = The output path '{0}' is not a directory. Please specify a directory path.
 
     # Common for all Convert-Should* functions
     Convert_Should_Debug_ParsingCommandAst = Parsing the command AST: `{0}`
