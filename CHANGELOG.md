@@ -32,3 +32,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Improve code to resolve ScriptAnalyzer warnings and errors.
 - Localize all the strings.
+- Pipeline supports GitVersion v6.0.0.
