@@ -1,3 +1,48 @@
+<#
+    .SYNOPSIS
+        Converts the syntax of a file to the syntax of a newer Pester version.
+
+    .DESCRIPTION
+        The Convert-PesterSyntax command is used to convert the syntax of a file to
+        the syntax of a newer Pester version.. It supports converting to Pester 6 format.
+
+    .PARAMETER Path
+        Specifies the path of the file(s) to be converted. This parameter is mandatory
+        and accepts a string or a FileInfo object.
+
+    .PARAMETER Pester6
+        Specifies that the syntax to convert to is Pester 6. This parameter is
+        mandatory to convert to Pester 6 syntax.
+
+    .PARAMETER UseNamedParameters
+        Specifies whether to use named parameters in the converted syntax.
+
+    .PARAMETER UsePositionalParameters
+        Specifies whether to use positional parameters in the converted syntax,
+        where supported.
+
+    .PARAMETER Force
+        Specifies that the file should be created without any confirmation.
+
+    .PARAMETER PassThru
+        Returns the script after converting the syntax. This parameter is most
+        useful when passing in a single file to convert. If multiple files are
+        passed in, the script of all the files will be returned as an array.
+        If PassThru is specified, no file will not be modified.
+
+    .PARAMETER OutputPath
+        Specifies the path to save the converted file(s). If this parameter is
+        not specified, the original file(s) will be overwritten.
+
+    .EXAMPLE
+        Convert-PesterSyntax -Path "C:\Scripts\Test.ps1" -Pester6
+        Converts the syntax of the Test.ps1 file to Pester 6 syntax.
+
+    .EXAMPLE
+        Get-ChildItem -Path "C:\Scripts" -Recurse -Filter "*.ps1" | Convert-PesterSyntax -Pester6
+        Converts the syntax of all PowerShell files in the C:\Scripts directory and
+        its subdirectories to the default (newest) Pester syntax.
+#>
 function Convert-PesterSyntax
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidMultipleTypeAttributes', '', Justification = 'We want to pass in both strings and FileInfo objects to parameter Path.')]
