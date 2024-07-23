@@ -274,7 +274,7 @@ stages:
               targetPath: '$(Build.SourcesDirectory)/$(buildFolderName)'
           - pwsh: |
             ./build.ps1 -Tasks noop
-              New-Item -ItemType Directory -Path (Get-PSModulePath -Scope CurrentUser) -Force
+            New-Item -ItemType Directory -Path (Get-PSModulePath -Scope CurrentUser) -Force
             name: currentUserModulePath
             displayName: 'Validate CurrentUser Module Path'
           - pwsh: |
