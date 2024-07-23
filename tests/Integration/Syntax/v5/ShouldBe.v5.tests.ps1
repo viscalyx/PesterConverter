@@ -101,9 +101,10 @@ Describe 'ShouldBe' {
         Should -Be $false -Because 'mock should test correct value' $false
     }
 
-    It 'Should be false' {
-        Should $false 'mock should test correct value' $false -Be
-    }
+    # Not supported in in Pester 5 having -Be at the end
+    # It 'Should be false' {
+    #     Should $false 'mock should test correct value' $false -Be
+    # }
 
     It 'Should be false' {
         Should -BeExactly 'ExpectedString' 'mock should test correct value' 'ExpectedString'
@@ -111,27 +112,6 @@ Describe 'ShouldBe' {
 
     It 'Should be false' {
         Should -Be 'ExpectedString' 'mock should test correct value' 'ExpectedString'
-    }
-
-    # This is not allowed syntax, it generates an array of values 'a' and 'b' that cannot be compared to a single value
-    # It 'Should be false' {
-    #     Should -Be @('a', 'b') 'because mock should test correct value' 'a' 'b'
-    # }
-
-    It 'Should be true (v6)' {
-        Should-Be 'a' 'a'
-    }
-
-    It 'Should be true (v6)' {
-        Should-Be 'a' 'a' -Because 'a should equal a'
-    }
-
-    It 'Should be true (v6)' {
-        Should-Be 'a' -Because 'a should equal a' 'a'
-    }
-
-    It 'Should be true (v6)' {
-        Should-Be -Because 'a should equal a' 'a' 'a'
     }
 
     It 'Should throw' {
@@ -217,13 +197,15 @@ Describe 'ShouldBe' {
     #     Should [System.String] 'ActualValue' 'mock must have correct type' -BeOfType
     # }
 
-    It 'Should BeOfType' {
-        Should [System.String] 'mock must have correct type' -ActualValue 'ActualValue' -BeOfType
-    }
+    # Not supported in in Pester 5 having -BeOfType at the end
+    # It 'Should BeOfType' {
+    #     Should [System.String] 'mock must have correct type' -ActualValue 'ActualValue' -BeOfType
+    # }
 
-    It 'Should BeOfType' {
-        'ActualValue' | Should [System.String] 'mock must have correct type' -BeOfType
-    }
+    # Not supported in in Pester 5 having -BeOfType at the end
+    # It 'Should BeOfType' {
+    #     'ActualValue' | Should [System.String] 'mock must have correct type' -BeOfType
+    # }
 
     It 'Should Match' {
          Should -Match '^\[.+\]$' 'must match regex' '[Actual]'
@@ -246,8 +228,8 @@ Describe 'ShouldBe' {
         Should -BeGreaterThan 2 'must be higher' 3
     }
 
-    It 'Should BeGreaterThan' {
-        Should -BeLike 'ExpectedString*' 'must be part of the string' 'ExpectedStringActualString'
+    It 'Should BeLike' {
+        Should -BeLike 'ExpectedString' 'must be part of the string' 'ExpectedString'
     }
 
     It 'Should BeIn' {

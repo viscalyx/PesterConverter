@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       - Throw
     - Added new parameter `OutputPath` to write the resulting file to
       a separate path.
+- Add integration tests.
 
 ### Fixed
 
