@@ -275,8 +275,8 @@ stages:
           - pwsh: |
               ./build.ps1 -Tasks noop
               New-Item -ItemType Directory -Path (Get-PSModulePath -Scope CurrentUser) -Force
-              name: currentUserModulePath
-              displayName: 'Validate CurrentUser Module Path'
+            name: currentUserModulePath
+            displayName: 'Validate CurrentUser Module Path'
           - pwsh: |
               & ([ScriptBlock]::Create((iwr 'bit.ly/psresourceget'))) -Verbose
               Get-ChildItem -Path './ConversionTest/Modules'
