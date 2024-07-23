@@ -30,7 +30,7 @@ stages:
           vmImage: 'windows-latest'
         steps:
           - pwsh: |
-              dotnet tool install --global GitVersion.Tool
+              dotnet tool install --global GitVersion.Tool --version 5.12.0
               dotnet-gitversion
               $gitVersionObject = dotnet-gitversion | ConvertFrom-Json
               $gitVersionObject.PSObject.Properties.ForEach{
