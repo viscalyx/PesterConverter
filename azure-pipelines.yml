@@ -285,7 +285,7 @@ stages:
           - pwsh: |
               Install-PSResource -Name 'Pester' -Version '[5.0,6.0)' -TrustRepository -ErrorAction 'Stop' -Confirm:$false -PassThru
               Import-Module -Name Pester -MaximumVersion '5.*' -ErrorAction 'Stop' -PassThru
-              Invoke-Pester -Path ''.\tests\Integration\Syntax\v5' -Output Detailed
+              Invoke-Pester -Path '.\tests\Integration\Syntax\v5' -Output Detailed
             name: validatePesterSyntax_v5
             displayName: 'Validate Pester 5 Syntax'
           - pwsh: |
