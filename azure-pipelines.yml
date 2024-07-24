@@ -299,7 +299,7 @@ stages:
             displayName: 'Publish Converted v6 Artifact'
             inputs:
               targetPath: './ConversionTest/v6'
-              artifact: 'ConvertedTests_v6'
+              artifact: 'ConvertedTests_v6_$(System.JobName)_Attempt_$(System.JobAttempt)'
               publishLocation: 'pipeline'
               parallel: true
           - pwsh: |
