@@ -295,6 +295,13 @@ stages:
               Convert-PesterSyntax -Path (Get-ChildItem -Path './tests/Integration/Syntax/v5') -OutputPath './ConversionTest/v6' -Force -Verbose
             name: convert_v5_to_v6
             displayName: 'Convert v5 syntax to v6'
+          - task: PublishPipelineArtifact@1
+            displayName: 'Publish Converted v6 Artifact'
+            inputs:
+              targetPath: './ConversionTest/v6'
+              artifact: 'ConvertedTests_v6'
+              publishLocation: 'pipeline'
+              parallel: true
           - pwsh: |
               Install-PSResource -Name 'Pester' -Prerelease -TrustRepository -ErrorAction 'Stop' -Confirm:$false -PassThru
               Import-Module -Name Pester -MaximumVersion '6.*' -ErrorAction 'Stop' -PassThru
