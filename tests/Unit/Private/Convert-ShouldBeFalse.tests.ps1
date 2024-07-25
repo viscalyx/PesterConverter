@@ -93,6 +93,19 @@ Describe 'Convert-ShouldBeFalse' {
                 }
             }
 
+            # Test intentionally uses abbreviated parameter name for -ActualValue.
+            It 'Should convert `Should -BeFalse -Actual $true -Because ''BecauseMockString''` correctly' {
+                InModuleScope -ScriptBlock {
+                    $mockCommandAstPester5 = {
+                        Should -BeFalse -Actual $true -Because 'BecauseMockString'
+                    }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
+
+                    $result = Convert-ShouldBeFalse -CommandAst $mockCommandAstPester5
+
+                    $result | Should-BeString -CaseSensitive 'Should-BeFalse -Actual $true -Because ''BecauseMockString'''
+                }
+            }
+
             It 'Should convert `Should -BeFalse ''BecauseMockString''` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {

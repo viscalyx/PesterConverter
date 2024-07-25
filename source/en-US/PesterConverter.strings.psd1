@@ -34,18 +34,22 @@ ConvertFrom-StringData @'
     Convert_PesterSyntax_OutputPathDoesNotExist = The output path '{0}' does not exist. Please specify an existing path.
     Convert_PesterSyntax_OutputPathIsNotDirectory = The output path '{0}' is not a directory. Please specify a directory path.
 
-    # Common for all Convert-Should* functions
+    ## Common for all Convert-Should* functions
     Convert_Should_Debug_ParsingCommandAst = Parsing the command AST: `{0}`
     Convert_Should_Debug_ConvertingFromTo = Converting from Pester v{0} to Pester v{1} syntax.
     Convert_Should_Debug_ConvertedCommand = Converted the command `{0}` to `{1}`.
 
-    # Get-PesterCommandParameter
+    ## Get-PesterCommandParameter
     Get_PesterCommandParameter_Debug_RetrievingParameters = Retrieving the parameters of the extent: {0}
     Get_PesterCommandParameter_Debug_RetrievingCommandName = Retrieving parameters for the command name: {0}
     Get_PesterCommandParameter_Debug_IgnoreParameters = Ignoring (filtering out) the parameters: {0}
     Get_PesterCommandParameter_Debug_NamedParameters = Parsing named parameters: {0}
     Get_PesterCommandParameter_Debug_PositionalParameters = Parsing positional parameters: {0}
 
-    # Get-CommandAst
+    ## Get-CommandAst
     Get_CommandAst_Debug_RetrievingCommandAsts = Retrieving AST's for command '{0}'.
+
+    ## ConvertTo-ActualParameterName
+    AmbiguousNamedParameter = The named parameter '{0}' is ambiguous for command '{1}'. Please specify a unique named parameter.
+    UnknownNamedParameter = The named parameter '{0}' is unknown for command '{1}'. Please specify a valid named parameter.
 '@
