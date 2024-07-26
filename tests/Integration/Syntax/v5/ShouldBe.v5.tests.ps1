@@ -1,238 +1,188 @@
-Describe 'ShouldBe' {
-    # It 'Should be true' {
-    #     $true | Should -Be $true
-    # }
+Describe 'Should -Be' {
+    Context 'When the tests are affirming' {
+        It 'Should convert `Should -Be 1` correctly' {
+            1 | Should -Be 1
+        }
 
-    # It 'Should be false' {
-    #     $false | Should -Be $false
-    # }
+        It 'Should convert `Should -Be "AnyString"` correctly' {
+            'AnyString' | Should -Be 'AnyString'
+        }
 
-    It 'Should be true' {
-        $true | Should -BeTrue
+        It 'Should convert `Should -Be ''AnyString''` correctly' {
+            'AnyString' | Should -Be 'AnyString'
+        }
+
+        It 'Should convert `Should -Be $true` correctly' {
+            $true | Should -Be $true
+        }
+
+        It 'Should convert `Should -Be $anyValue` correctly' {
+            $anyValue = 1
+
+            1 | Should -Be $anyValue
+        }
+
+        It 'Should convert `Should -ActualValue $true -Be $true` correctly' {
+            Should -ActualValue $true -Be $true
+        }
+
+        It 'Should convert `Should -Be $true -ActualValue $true` correctly' {
+            Should -Be $true -ActualValue $true
+        }
+
+        It 'Should convert `Should -ActualValue $true -Be -ExpectedValue $true` correctly' {
+            Should -ActualValue $true -Be -ExpectedValue $true
+        }
+
+        It 'Should convert `Should -Be -ActualValue $true -ExpectedValue $true` correctly' {
+            Should -Be -ActualValue $true -ExpectedValue $true
+        }
+
+        It 'Should convert `Should -Be -ExpectedValue $false -ActualValue $false` correctly' {
+            Should -Be -ExpectedValue $false -ActualValue $false
+        }
+
+        It 'Should convert `Should -ExpectedValue $false -Be -ActualValue $false` correctly' {
+            Should -ExpectedValue $false -Be -ActualValue $false
+        }
+
+        It 'Should convert `Should -ExpectedValue $true -ActualValue $true -Be` correctly' {
+            Should -ExpectedValue $true -ActualValue $true -Be
+        }
+
+        It 'Should convert `Should -Not:$false -Be $false` correctly' {
+            $false | Should -Not:$false -Be $false
+        }
+
+        It 'Should convert `Should -Be (Get-Something)` correctly' {
+            function Get-Something
+            {
+                return 'AnyString'
+            }
+
+            'AnyString' | Should -Be (Get-Something)
+        }
+
+        It 'Should convert `Should -Be $false -Because ''mock should test correct value'' $false` correctly' {
+            Should -Be $false -Because 'mock should test correct value' $false
+        }
+
+        It 'Should convert `Should -Be ''ExpectedString'' ''mock should test correct value'' ''ExpectedString''` correctly' {
+            Should -Be 'ExpectedString' 'mock should test correct value' 'ExpectedString'
+        }
+
+        It 'Should convert `Should ''ExpectedString'' ''mock should test correct value'' ''ExpectedString'' -Be` correctly' {
+            Should 'ExpectedString' 'mock should test correct value' 'ExpectedString' -Be
+        }
     }
 
-    It 'Should be false' {
-        $false | Should -BeFalse
+    Context 'When the tests are negated' {
+        It 'Should convert `Should -Not -Be 1` correctly' {
+            2 | Should -Not -Be 1
+        }
+
+        It 'Should convert `Should -Be 1 -Not` correctly' {
+            2 | Should -Be 1 -Not
+        }
+
+        It 'Should convert `Should -Not -Be "AnyString"` correctly' {
+            'OtherString' | Should -Not -Be 'AnyString'
+        }
+
+        It 'Should convert `Should -Not -Be ''AnyString''` correctly' {
+            'OtherString' | Should -Not -Be 'AnyString'
+        }
+
+        It 'Should convert `Should -Not -Be $true` correctly' {
+            $false | Should -Not -Be $true
+        }
+
+        It 'Should convert `Should -Not -Be $anyValue` correctly' {
+            $anyValue = 2
+
+            1 | Should -Not -Be $anyValue
+        }
+
+        It 'Should convert `Should -Be $true -Not` correctly' {
+            $false | Should -Be $true -Not
+        }
+
+        It 'Should convert `Should -Not:$true -Be $true` correctly' {
+            $false | Should -Not:$true -Be $true
+        }
+
+        It 'Should convert `Should -Not -ActualValue $true -Be $false` correctly' {
+            Should -Not -ActualValue $true -Be $false
+        }
+
+        It 'Should convert `Should -ActualValue $true -Not -Be $false` correctly' {
+            Should -ActualValue $true -Not -Be $false
+        }
+
+        It 'Should convert `Should -ActualValue $true -Be $false -Not` correctly' {
+            Should -ActualValue $true -Be $false -Not
+        }
+
+        It 'Should convert `Should -Be $false -ActualValue $true -Not` correctly' {
+            Should -Be $false -ActualValue $true -Not
+        }
+
+        It 'Should convert `Should -Be $false -Not -ActualValue $true` correctly' {
+            Should -Be $false -Not -ActualValue $true
+        }
+
+        It 'Should convert `Should -Not -Be $false -ActualValue $true` correctly' {
+            Should -Not -Be $false -ActualValue $true
+        }
+
+        It 'Should convert `Should -ActualValue $true -Be -Not -ExpectedValue $false` correctly' {
+            Should -ActualValue $true -Be -Not -ExpectedValue $false
+        }
+
+        It 'Should convert `Should -ActualValue $true -Not -Be -ExpectedValue $false` correctly' {
+            Should -ActualValue $true -Not -Be -ExpectedValue $false
+        }
+
+        It 'Should convert `Should -ActualValue $true -Be -ExpectedValue $false -Not` correctly' {
+            Should -ActualValue $true -Be -ExpectedValue $false -Not
+        }
     }
 
-    It 'Should be false' {
-        Should -BeFalse 'because mock should test correct value' $false
+    Context 'When tests should always use named parameters' {
+        It 'Should convert `Should -Be $true -ActualValue $true` correctly' {
+            Should -Be $true -ActualValue $true
+        }
     }
 
-    It 'Should be false' {
-        Should -BeFalse -Because 'because mock should test correct value' $false
+    Context 'When alias operator name is used' {
+        It 'Should convert `Should -EQ $true -ActualValue $true` correctly' {
+            Should -EQ $true -ActualValue $true
+        }
     }
 
-    It 'Should be false' {
-        Should -BeFalse $false -Because 'because mock should test correct value'
-    }
+    Context 'When tests should always use positional parameters' {
+        Context 'When the tests are affirming' {
+            It 'Should convert `Should -Be ''ExpectedString'' -ActualValue ''ExpectedString''` correctly' {
+                Should -Be 'ExpectedString' -ActualValue 'ExpectedString'
+            }
 
-    It 'Should be false' {
-        Should -BeFalse -Actual $false 'because mock should test correct value'
-    }
+            It 'Should convert `Should -Be $true -ActualValue $true -Because "this must return true"` correctly' {
+                Should -Be $true -ActualValue $true -Because 'this must return true'
+            }
 
-    It 'Should be false' {
-        Should -BeFalse 'because mock should test correct value' -Actual $false
-    }
+            It 'Should convert `Should -Be $true -Because "this must return true" -ActualValue $true` correctly' {
+                Should -Be $true -Because 'this must return true' -ActualValue $true
+            }
 
-    # It 'Should be true' {
-    #     $false | Should -Not -Be $true
-    # }
+            It 'Should convert `Should -Because "this must return true" -ActualValue $true -Be $true` correctly' {
+                Should -Because 'this must return true' -ActualValue $true -Be $true
+            }
+        }
 
-    # It 'Should be false' {
-    #     $true | Should -Be $false -Not
-    # }
-
-    # It 'Should be true' {
-    #     $false | Should -Not:$true -Be $true
-    # }
-
-    It 'Should be true' {
-        $false | Should -Not:$true -BeTrue
-    }
-
-    It 'Should be false' {
-        $false | Should -Not:$false -BeFalse
-    }
-
-    # It 'Should be true' {
-    #     Should -ActualValue $true -Be $true
-    # }
-
-    It 'Should be true' {
-        Should -ActualValue $true -BeTrue
-    }
-
-    # It 'Should be false' {
-    #     Should -Not -ActualValue $true -Be $false
-    # }
-
-    # It 'Should be false' {
-    #     Should -Be $false -ActualValue $true -Not
-    # }
-
-    It 'Should be false' {
-        Should -ActualValue $true -BeFalse -Not
-    }
-
-    It 'Should be false' {
-        Should -ActualValue $true -Be -Not -ExpectedValue $false
-    }
-
-    # It 'Should be false' {
-    #     Should -ActualValue $true -Be -Not $false
-    # }
-
-    # This is not allowed syntax
-    # It 'Should be true' {
-    #     Should $true -Be $true
-    # }
-
-    # This is not allowed syntax
-    # It 'Should be true' {
-    #     Should $true -BeTrue
-    # }
-
-    It 'Should be false' {
-        Should -Be $false 'mock should test correct value' $false
-    }
-
-    It 'Should be false (with -Because)' {
-        Should -Be $false -Because 'mock should test correct value' $false
-    }
-
-    # Not supported in in Pester 5 having -Be at the end
-    # It 'Should be false' {
-    #     Should $false 'mock should test correct value' $false -Be
-    # }
-
-    It 'Should be false' {
-        Should -BeExactly 'ExpectedString' 'mock should test correct value' 'ExpectedString'
-    }
-
-    It 'Should be false' {
-        Should -Be 'ExpectedString' 'mock should test correct value' 'ExpectedString'
-    }
-
-    It 'Should throw' {
-        { throw 'hej' } | Should -Throw
-    }
-
-    It 'Should throw' {
-        { throw 'hej' } | Should -Throw -Because 'Expected to throw'
-    }
-
-    It 'Should throw' {
-        { throw 'hej' } | Should -Throw -Because 'Expected to throw' -ErrorId 'hej'
-    }
-
-    It 'Should throw' {
-        { throw 'hej' } | Should -Throw -Because 'Expected to throw' -ErrorId 'hej' -ExpectedMessage 'hej'
-    }
-
-    It 'Should throw' {
-        { throw 'hej' } | Should -Throw -Because 'Expected to throw' -ErrorId 'hej' -ExpectedMessage 'hej' -ExceptionType ([Exception])
-    }
-
-    It 'Should throw' {
-        {
-            Write-Error -Message 'MockErrorMessage' -ErrorId 'MockErrorId' -Category 'InvalidOperation' -TargetObject 'MockTargetObject' -ErrorAction 'Stop'
-        } | Should -Throw 'MockErrorMessage'
-    }
-
-    It 'Should throw' {
-        {
-            Write-Error -Message 'MockErrorMessage' -ErrorId 'MockErrorId' -Category 'InvalidOperation' -TargetObject 'MockTargetObject' -ErrorAction 'Stop'
-        } | Should -Throw 'MockErrorMessage' 'MockErrorId'
-    }
-
-    It 'Should throw' {
-        {
-            Write-Error -Message 'MockErrorMessage' -ErrorId 'MockErrorId' -Category 'InvalidOperation' -TargetObject 'MockTargetObject' -ErrorAction 'Stop'
-        } | Should -Throw 'MockErrorMessage' 'MockErrorId' ([System.Exception])
-    }
-
-    It 'Should throw' {
-        {
-            Write-Error -Message 'MockErrorMessage' -ErrorId 'MockErrorId' -Category 'InvalidOperation' -TargetObject 'MockTargetObject' -ErrorAction 'Stop'
-        } | Should -Throw 'MockErrorMessage' 'MockErrorId' ([System.Exception]) 'BecauseString'
-    }
-
-
-    # It 'Should throw' {
-    #     { 1+1 } | Should -Throw -Because 'Expected to throw' -ErrorId 'hej' -ExpectedMessage 'hej' -ExceptionType ([Exception]) -Not
-    # }
-
-    It 'Should throw' {
-        $errorPassThru = ({ throw 'hej' } | Should -Throw -Because 'Expected to throw' -ErrorId 'hej' -ExpectedMessage 'hej' -ExceptionType ([Exception]) -PassThru)
-        $errorPassThru.Exception.Message | Should -Be 'hej'
-    }
-
-    It 'Should throw' {
-        { throw 'hej' } | Should -Throw 'hej'
-    }
-
-    It 'Should throw with actual value' {
-         Should -Throw 'hej' -ActualValue { throw 'hej' }
-    }
-
-    It 'Should throw using only positional parameters' {
-        {
-            Write-Error -Message 'MockErrorMessage' -ErrorId 'MockErrorId' -Category 'InvalidOperation' -TargetObject 'MockTargetObject' -ErrorAction 'Stop'
-        } | Should -Throw 'MockErrorMessage' 'MockErrorId' ([Microsoft.PowerShell.Commands.WriteErrorException]) 'MockBecauseString'
-    }
-
-    # Not possible without curly braces (script block)
-    # It 'Should throw using only named parameters' {
-    #     (1 + 1) | Should -Not -Throw -ExpectedMessage 'MockErrorMessage' -ErrorId 'MockErrorId' -ExceptionType ([Microsoft.PowerShell.Commands.WriteErrorException]) -Because 'MockBecauseString'
-    # }
-
-    # Not supported in Pester 5
-    # It 'Should BeOfType' {
-    #     Should [System.String] $null 'ActualValue' -BeOfType
-    # }
-
-    # Not supported in Pester 5
-    # It 'Should BeOfType' {
-    #     Should [System.String] 'ActualValue' 'mock must have correct type' -BeOfType
-    # }
-
-    # Not supported in in Pester 5 having -BeOfType at the end
-    # It 'Should BeOfType' {
-    #     Should [System.String] 'mock must have correct type' -ActualValue 'ActualValue' -BeOfType
-    # }
-
-    # Not supported in in Pester 5 having -BeOfType at the end
-    # It 'Should BeOfType' {
-    #     'ActualValue' | Should [System.String] 'mock must have correct type' -BeOfType
-    # }
-
-    It 'Should Match' {
-         Should -Match '^\[.+\]$' 'must match regex' '[Actual]'
-    }
-
-    It 'Should MatchExactly' {
-         Should -MatchExactly '^\[.+\]$' 'must match regex' '[Actual]'
-    }
-
-    It 'Should Contain' {
-        @('a', 'Expected') | Should -Contain 'Expected' 'must contain correct value'
-    }
-
-    # This does not work. It is not possible to use the -ActualValue positional parameter with the -Contain parameter
-    # It 'Should Contain' {
-    #     Should -Contain 'Expected' 'must contain correct value' @('a', 'Expected')
-    # }
-
-    It 'Should BeGreaterThan' {
-        Should -BeGreaterThan 2 'must be higher' 3
-    }
-
-    It 'Should BeLike' {
-        Should -BeLike 'ExpectedString' 'must be part of the string' 'ExpectedString'
-    }
-
-    It 'Should BeIn' {
-        Should -BeIn @('ExpectedString1', 'ExpectedString2') 'must be part of the collection' 'ExpectedString2'
+        Context 'When the tests are negated' {
+            It 'Should convert `Should -Be $true -ActualValue $true -Because "this must return true" -Not` correctly' {
+                Should -Be $true -ActualValue $false -Because 'this must return true' -Not
+            }
+        }
     }
 }
