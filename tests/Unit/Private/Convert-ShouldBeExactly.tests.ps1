@@ -434,7 +434,7 @@ Describe 'Convert-ShouldBeExactly' {
         }
 
         Context 'When alias operator name is used' {
-            It 'Should convert `Should -EQ $true -ActualValue $true` correctly' {
+            It 'Should convert `Should -CEQ ''ExpectedString'' -ActualValue ''ActualString''` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {
                         Should -CEQ 'ExpectedString' -ActualValue 'ActualString'
