@@ -952,6 +952,124 @@ Describe 'Convert-PesterSyntax' {
             }
         }
 
+        Context 'When converting Should -BeLike' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Should -BeLike' {
+                        It 'Should -BeLike' {
+                            'ExpectedString' | Should -BeLike 'Expected*' -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+            }
+
+            It 'Should return the correct converted script' {
+                $mockExpectedConvertedScript = {
+
+                    Describe 'Should -BeLike' {
+                        It 'Should -BeLike' {
+                            'ExpectedString' | Should-BeLikeString 'Expected*' -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using named parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeLike' {
+                        It 'Should -BeLike' {
+                            'ExpectedString' | Should-BeLikeString -Because 'BecauseString' -Expected 'Expected*'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UseNamedParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using positional parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeLike' {
+                        It 'Should -BeLike' {
+                            'ExpectedString' | Should-BeLikeString 'Expected*' -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UsePositionalParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
+
+        Context 'When converting Should -BeLikeExactly' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Should -BeLikeExactly' {
+                        It 'Should -BeLikeExactly' {
+                            'ExpectedString' | Should -BeLikeExactly 'Expected*' -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+            }
+
+            It 'Should return the correct converted script' {
+                $mockExpectedConvertedScript = {
+
+                    Describe 'Should -BeLikeExactly' {
+                        It 'Should -BeLikeExactly' {
+                            'ExpectedString' | Should-BeLikeString -CaseSensitive 'Expected*' -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using named parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeLikeExactly' {
+                        It 'Should -BeLikeExactly' {
+                            'ExpectedString' | Should-BeLikeString -CaseSensitive -Because 'BecauseString' -Expected 'Expected*'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UseNamedParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using positional parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeLikeExactly' {
+                        It 'Should -BeLikeExactly' {
+                            'ExpectedString' | Should-BeLikeString -CaseSensitive 'Expected*' -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UsePositionalParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
+
         Context 'When converting Should -BeIn without a pipeline' {
             BeforeAll {
                 $mockAstExtentText = {
