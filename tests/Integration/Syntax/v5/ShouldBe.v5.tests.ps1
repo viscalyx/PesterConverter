@@ -77,7 +77,6 @@ Describe 'Should -Be' {
 
             RuntimeException: Legacy Should syntax (without dashes) is not supported in Pester 5.Please refer to migration guide at: https://pester.dev/docs/migrations/v3-to-v4
             ParameterBindingException: Cannot retrieve the dynamic parameters for the cmdlet. Legacy Should syntax (without dashes) is not supported in Pester 5. Please refer to migration guide at: https://pester.dev/docs/migrations/v3-to-v4
-
         #>
         # It 'Should convert `Should ''ExpectedString'' -Be ''mock should test correct value'' ''ExpectedString''` correctly' {
         #     Should 'ExpectedString' -Be 'mock should test correct value' 'ExpectedString'
@@ -88,7 +87,6 @@ Describe 'Should -Be' {
 
             RuntimeException: Legacy Should syntax (without dashes) is not supported in Pester 5.Please refer to migration guide at: https://pester.dev/docs/migrations/v3-to-v4
             ParameterBindingException: Cannot retrieve the dynamic parameters for the cmdlet. Legacy Should syntax (without dashes) is not supported in Pester 5. Please refer to migration guide at: https://pester.dev/docs/migrations/v3-to-v4
-
         #>
         # It 'Should convert `Should ''ExpectedString'' ''mock should test correct value'' -Be ''ExpectedString''` correctly' {
         #     Should  'ExpectedString' 'mock should test correct value' -Be 'ExpectedString'
@@ -99,7 +97,6 @@ Describe 'Should -Be' {
 
             RuntimeException: Legacy Should syntax (without dashes) is not supported in Pester 5.Please refer to migration guide at: https://pester.dev/docs/migrations/v3-to-v4
             ParameterBindingException: Cannot retrieve the dynamic parameters for the cmdlet. Legacy Should syntax (without dashes) is not supported in Pester 5. Please refer to migration guide at: https://pester.dev/docs/migrations/v3-to-v4
-
         #>
         # It 'Should convert `Should ''ExpectedString'' ''mock should test correct value'' ''ExpectedString'' -Be` correctly' {
         #     Should 'ExpectedString' 'mock should test correct value' 'ActualString' -Be

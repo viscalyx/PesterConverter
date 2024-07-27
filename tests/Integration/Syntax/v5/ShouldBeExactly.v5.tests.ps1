@@ -42,9 +42,15 @@ Describe 'Should -BeExactly' {
             Should -ExpectedValue 'ExpectedString' -BeExactly -ActualValue 'ExpectedString'
         }
 
-        It 'Should convert `Should -ExpectedValue ''ExpectedString'' -ActualValue ''ExpectedString'' -BeExactly` correctly' {
-            Should -ExpectedValue 'ExpectedString' -ActualValue 'ExpectedString' -BeExactly
-        }
+        <#
+            This was not supported in Pester 5.6.1. There it gave the error message:
+
+            RuntimeException: Legacy Should syntax (without dashes) is not supported in Pester 5.Please refer to migration guide at: https://pester.dev/docs/migrations/v3-to-v4
+            ParameterBindingException: Cannot retrieve the dynamic parameters for the cmdlet. Legacy Should syntax (without dashes) is not supported in Pester 5. Please refer to migration guide at: https://pester.dev/docs/migrations/v3-to-v4
+        #>
+        # It 'Should convert `Should -ExpectedValue ''ExpectedString'' -ActualValue ''ExpectedString'' -BeExactly` correctly' {
+        #     Should -ExpectedValue 'ExpectedString' -ActualValue 'ExpectedString' -BeExactly
+        # }
 
         It 'Should convert `Should -Not:$false -BeExactly ''ExpectedString''` correctly' {
             'ExpectedString' | Should -Not:$false -BeExactly 'ExpectedString'
