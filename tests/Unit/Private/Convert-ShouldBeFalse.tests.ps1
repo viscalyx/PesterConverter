@@ -181,7 +181,7 @@ Describe 'Convert-ShouldBeFalse' {
             It 'Should convert `Should -BeFalse $true -Because ''BecauseMockString''` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {
-                        Should -BeFalse -Because 'BecauseMockString' $true
+                        Should -BeFalse $true -Because 'BecauseMockString'
                     }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
                     $result = Convert-ShouldBeFalse -CommandAst $mockCommandAstPester5
