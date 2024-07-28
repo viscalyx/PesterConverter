@@ -308,13 +308,14 @@ stages:
               Invoke-Pester -Path './ConversionTest/v6' -Output Detailed
             name: validatePesterSyntax_v6
             displayName: 'Validate Pester 6 Syntax'
-          - task: PublishTestResults@2
-            displayName: 'Publish Test Results'
-            condition: succeededOrFailed()
-            inputs:
-              testResultsFormat: 'NUnit'
-              testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
-              testRunTitle: 'Integration ($(Agent.JobName))'
+          ## Currently there are no test result to upload since we are not using the normal test pipeline.
+          # - task: PublishTestResults@2
+          #   displayName: 'Publish Test Results'
+          #   condition: succeededOrFailed()
+          #   inputs:
+          #     testResultsFormat: 'NUnit'
+          #     testResultsFiles: '$(buildFolderName)/$(testResultFolderName)/NUnit*.xml'
+          #     testRunTitle: 'Integration ($(Agent.JobName))'
 
   - stage: Deploy
     dependsOn: Test
