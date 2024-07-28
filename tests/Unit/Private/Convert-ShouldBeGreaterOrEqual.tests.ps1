@@ -168,7 +168,7 @@ Describe 'Convert-ShouldBeGreaterOrEqual' {
             It 'Should convert `Should -Not:$false -BeGreaterOrEqual 2` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {
-                        $false | Should -Not:$false -BeGreaterOrEqual 2
+                        3 | Should -Not:$false -BeGreaterOrEqual 2
                     }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
                     $result = Convert-ShouldBeGreaterOrEqual -CommandAst $mockCommandAstPester5
@@ -279,7 +279,7 @@ Describe 'Convert-ShouldBeGreaterOrEqual' {
             It 'Should convert `Should -Not:$true -BeGreaterOrEqual 2` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {
-                        $false | Should -Not:$true -BeGreaterOrEqual 2
+                        1 | Should -Not:$true -BeGreaterOrEqual 2
                     }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
                     $result = Convert-ShouldBeGreaterOrEqual -CommandAst $mockCommandAstPester5
