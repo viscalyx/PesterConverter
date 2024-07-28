@@ -39,3 +39,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - The `Should` operators `BeLike` and `BeLikeExactly` was mistakenly not
     calling their respectively conversion function.
   - Correctly handle abbreviated named parameters.
+- `-BeFalse` and `-BeTrue` now correctly converts when Because is the only
+  positional parameter.
