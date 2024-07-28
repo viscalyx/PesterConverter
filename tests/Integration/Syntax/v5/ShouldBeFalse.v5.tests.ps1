@@ -18,7 +18,7 @@ Describe 'Should -BeFalse' {
         }
 
         It 'Should convert `Should -BeFalse ''BecauseMockString''` correctly' {
-            $true | Should -BeFalse 'BecauseMockString'
+            $false | Should -BeFalse 'BecauseMockString'
         }
 
         It 'Should convert `Should -BeFalse ''BecauseMockString'' $false` correctly' {
