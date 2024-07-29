@@ -92,7 +92,7 @@ Describe 'Should -BeGreaterOrEqual' {
         }
 
         It 'Should convert `Should -Not:$true -BeGreaterOrEqual 2` correctly' {
-            2 | Should -Not:$true -BeGreaterOrEqual 2
+            1 | Should -Not:$true -BeGreaterOrEqual 2
         }
 
         It 'Should convert `Should -Not -ActualValue 3 -BeGreaterOrEqual 2` correctly' {
