@@ -59,9 +59,15 @@ Describe 'Should -BeGreaterOrEqual' {
             Should -BeGreaterOrEqual 2 'mock should test correct value' 3
         }
 
-        It 'Should convert `Should 2 ''mock should test correct value'' 3 -BeGreaterOrEqual` correctly' {
-            Should 2 'mock should test correct value' 3 -BeGreaterOrEqual
-        }
+        <#
+            This was not supported in Pester 5.6.1. There it gave the error message:
+
+            RuntimeException: Legacy Should syntax (without dashes) is not supported in Pester 5.Please refer to migration guide at: https://pester.dev/docs/migrations/v3-to-v4
+            ParameterBindingException: Cannot retrieve the dynamic parameters for the cmdlet. Legacy Should syntax (without dashes) is not supported in Pester 5. Please refer to migration guide at: https://pester.dev/docs/migrations/v3-to-v4
+        #>
+        # It 'Should convert `Should 2 ''mock should test correct value'' 3 -BeGreaterOrEqual` correctly' {
+        #     Should 2 'mock should test correct value' 3 -BeGreaterOrEqual
+        # }
     }
 
     Context 'When the tests are negated' {
