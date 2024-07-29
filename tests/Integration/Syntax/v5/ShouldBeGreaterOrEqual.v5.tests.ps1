@@ -165,7 +165,7 @@ Describe 'Should -BeGreaterOrEqual' {
 
         Context 'When the tests are negated' {
             It 'Should convert `Should -BeGreaterOrEqual 2 -ActualValue 3 -Because "this must return true" -Not` correctly' {
-                Should -BeGreaterOrEqual 2 -ActualValue 3 -Because 'this must return true' -Not
+                Should -BeGreaterOrEqual 2 -ActualValue 1 -Because 'this must return true' -Not
             }
         }
     }
