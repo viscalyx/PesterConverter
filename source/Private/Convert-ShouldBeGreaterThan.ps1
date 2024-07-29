@@ -44,9 +44,9 @@
 
         Conversion notes:
             If the command is negated, the `Should-BeLessThanOrEqual` command is used.
-            Assume the actual value is 2 and the expected value should not be greater than 2
-            then we need to use the `Should-BeLessThanOrEqual` command for the logic
-            to be the same:
+            Assume the actual value is 2 and the expected value should not be greater
+            than 2, then we need to use the `Should-BeLessThanOrEqual` command for
+            the logic to be the same:
                 Pester 5: 2 | Should -Not -BeGreaterThan 2
                 Pester 6: 2 | Should-BeLessThanOrEqual 2
 #>
