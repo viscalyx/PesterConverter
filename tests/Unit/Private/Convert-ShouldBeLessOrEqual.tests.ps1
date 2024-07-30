@@ -210,7 +210,7 @@ Describe 'Convert-ShouldBeLessOrEqual' {
 
                     $result = Convert-ShouldBeLessOrEqual -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeLessThanOrEqual 2 3 -Because ''mock should test correct value'''
+                    $result | Should-BeString -CaseSensitive 'Should-BeLessThanOrEqual 2 1 -Because ''mock should test correct value'''
                 }
             }
 
@@ -222,7 +222,7 @@ Describe 'Convert-ShouldBeLessOrEqual' {
 
                     $result = Convert-ShouldBeLessOrEqual -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeLessThanOrEqual 2 3 -Because ''mock should test correct value'''
+                    $result | Should-BeString -CaseSensitive 'Should-BeLessThanOrEqual 2 1 -Because ''mock should test correct value'''
                 }
             }
         }
