@@ -63,9 +63,15 @@ Describe 'Should -BeLike' {
             Should -BeLike 'Test*' 'mock should test correct value' 'TestValue'
         }
 
-        It 'Should convert `Should ''Test*'' ''mock should test correct value'' ''TestValue'' -BeLike` correctly' {
-            Should 'Test*' 'mock should test correct value' 'TestValue' -BeLike
-        }
+        <#
+            This was not supported in Pester 5.6.1. There it gave the error message:
+
+            RuntimeException: Legacy Should syntax (without dashes) is not supported in Pester 5.Please refer to migration guide at: https://pester.dev/docs/migrations/v3-to-v4
+            ParameterBindingException: Cannot retrieve the dynamic parameters for the cmdlet. Legacy Should syntax (without dashes) is not supported in Pester 5. Please refer to migration guide at: https://pester.dev/docs/migrations/v3-to-v4
+        #>
+        # It 'Should convert `Should ''Test*'' ''mock should test correct value'' ''TestValue'' -BeLike` correctly' {
+        #     Should 'Test*' 'mock should test correct value' 'TestValue' -BeLike
+        # }
     }
 
     Context 'When the tests are negated' {
