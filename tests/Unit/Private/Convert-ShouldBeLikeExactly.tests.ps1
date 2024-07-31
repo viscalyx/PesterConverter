@@ -192,7 +192,7 @@ Describe 'Convert-ShouldBeLikeExactly' {
             It 'Should convert `Should -Not:$false -BeLikeExactly ''ExpectedString*''` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {
-                        $false | Should -Not:$false -BeLikeExactly 'ExpectedString*'
+                        'TestValue' | Should -Not:$false -BeLikeExactly 'ExpectedString*'
                     }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
                     $result = Convert-ShouldBeLikeExactly -CommandAst $mockCommandAstPester5
@@ -315,7 +315,7 @@ Describe 'Convert-ShouldBeLikeExactly' {
             It 'Should convert `Should -Not:$true -BeLikeExactly ''ExpectedString*''` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {
-                        $false | Should -Not:$true -BeLikeExactly 'ExpectedString*'
+                        'TestValue' | Should -Not:$true -BeLikeExactly 'ExpectedString*'
                     }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
                     $result = Convert-ShouldBeLikeExactly -CommandAst $mockCommandAstPester5
