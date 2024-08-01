@@ -1,4 +1,5 @@
-Describe 'Should -Match' {
+# TODO: When Pester 6 supports `Should-MatchString` and `Should-NotMatchString` this test should be activated.
+Describe 'Should -Match' -Skip:$true {
     Context 'When the tests are affirming' {
         It 'Should convert `Should -Match ''Test''` correctly' {
             'Test' | Should -Match 'Test'
