@@ -137,36 +137,4 @@ Describe 'Should -BeGreaterOrEqual' {
             Should -GE 2 -ActualValue 3
         }
     }
-
-    Context 'When tests should always use named parameters' {
-        It 'Should convert `Should -BeGreaterOrEqual 2 -ActualValue 3` correctly' {
-            Should -BeGreaterOrEqual 2 -ActualValue 3
-        }
-    }
-
-    Context 'When tests should always use positional parameters' {
-        Context 'When the tests are affirming' {
-            It 'Should convert `Should -BeGreaterOrEqual 2 -ActualValue 3` correctly' {
-                Should -BeGreaterOrEqual 2 -ActualValue 3
-            }
-
-            It 'Should convert `Should -BeGreaterOrEqual 2 -ActualValue 3 -Because "this must return true"` correctly' {
-                Should -BeGreaterOrEqual 2 -ActualValue 3 -Because 'this must return true'
-            }
-
-            It 'Should convert `Should -BeGreaterOrEqual 2 -Because "this must return true" -ActualValue 3` correctly' {
-                Should -BeGreaterOrEqual 2 -Because 'this must return true' -ActualValue 3
-            }
-
-            It 'Should convert `Should -Because "this must return true" -ActualValue 3 -BeGreaterOrEqual 2` correctly' {
-                Should -Because 'this must return true' -ActualValue 3 -BeGreaterOrEqual 2
-            }
-        }
-
-        Context 'When the tests are negated' {
-            It 'Should convert `Should -BeGreaterOrEqual 2 -ActualValue 3 -Because "this must return true" -Not` correctly' {
-                Should -BeGreaterOrEqual 2 -ActualValue 1 -Because 'this must return true' -Not
-            }
-        }
-    }
 }

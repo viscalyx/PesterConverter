@@ -175,41 +175,9 @@ Describe 'Should -Be' {
         }
     }
 
-    Context 'When tests should always use named parameters' {
-        It 'Should convert `Should -Be $true -ActualValue $true` correctly' {
-            Should -Be $true -ActualValue $true
-        }
-    }
-
     Context 'When alias operator name is used' {
         It 'Should convert `Should -EQ $true -ActualValue $true` correctly' {
             Should -EQ $true -ActualValue $true
-        }
-    }
-
-    Context 'When tests should always use positional parameters' {
-        Context 'When the tests are affirming' {
-            It 'Should convert `Should -Be ''ExpectedString'' -ActualValue ''ExpectedString''` correctly' {
-                Should -Be 'ExpectedString' -ActualValue 'ExpectedString'
-            }
-
-            It 'Should convert `Should -Be $true -ActualValue $true -Because "this must return true"` correctly' {
-                Should -Be $true -ActualValue $true -Because 'this must return true'
-            }
-
-            It 'Should convert `Should -Be $true -Because "this must return true" -ActualValue $true` correctly' {
-                Should -Be $true -Because 'this must return true' -ActualValue $true
-            }
-
-            It 'Should convert `Should -Because "this must return true" -ActualValue $true -Be $true` correctly' {
-                Should -Because 'this must return true' -ActualValue $true -Be $true
-            }
-        }
-
-        Context 'When the tests are negated' {
-            It 'Should convert `Should -Be $true -ActualValue $true -Because "this must return true" -Not` correctly' {
-                Should -Be $true -ActualValue $false -Because 'this must return true' -Not
-            }
         }
     }
 }

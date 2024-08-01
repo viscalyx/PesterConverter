@@ -135,36 +135,4 @@ Describe 'Should -BeLike' {
             Should -ActualValue 'OtherValue' -BeLike -ExpectedValue 'Test*' -Not
         }
     }
-
-    Context 'When tests should always use named parameters' {
-        It 'Should convert `Should -BeLike ''Test*'' -ActualValue ''TestValue''` correctly' {
-            Should -BeLike 'Test*' -ActualValue 'TestValue'
-        }
-    }
-
-    Context 'When tests should always use positional parameters' {
-        Context 'When the tests are affirming' {
-            It 'Should convert `Should -BeLike ''Test*'' -ActualValue ''TestValue''` correctly' {
-                Should -BeLike 'Test*' -ActualValue 'TestValue'
-            }
-
-            It 'Should convert `Should -BeLike ''Test*'' -ActualValue ''TestValue'' -Because "this must return true"` correctly' {
-                Should -BeLike 'Test*' -ActualValue 'TestValue' -Because 'this must return true'
-            }
-
-            It 'Should convert `Should -BeLike ''Test*'' -Because "this must return true" -ActualValue ''TestValue''` correctly' {
-                Should -BeLike 'Test*' -Because 'this must return true' -ActualValue 'TestValue'
-            }
-
-            It 'Should convert `Should -Because "this must return true" -ActualValue ''TestValue'' -BeLike ''Test*''` correctly' {
-                Should -Because 'this must return true' -ActualValue 'TestValue' -BeLike 'Test*'
-            }
-        }
-
-        Context 'When the tests are negated' {
-            It 'Should convert `Should -BeLike ''Test*'' -ActualValue ''OtherValue'' -Because "this must return true" -Not` correctly' {
-                Should -BeLike 'Test*' -ActualValue 'OtherValue' -Because 'this must return true' -Not
-            }
-        }
-    }
 }

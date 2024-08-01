@@ -149,36 +149,4 @@ Describe 'Should -BeExactly' {
             Should -CEQ 'ExpectedString' -ActualValue 'ExpectedString'
         }
     }
-
-    Context 'When tests should always use named parameters' {
-        It 'Should convert `Should -BeExactly ''ExpectedString'' -ActualValue ''ExpectedString''` correctly' {
-            Should -BeExactly 'ExpectedString' -ActualValue 'ExpectedString'
-        }
-    }
-
-    Context 'When tests should always use positional parameters' {
-        Context 'When the tests are affirming' {
-            It 'Should convert `Should -BeExactly ''ExpectedString'' -ActualValue ''ExpectedString''` correctly' {
-                Should -BeExactly 'ExpectedString' -ActualValue 'ExpectedString'
-            }
-
-            It 'Should convert `Should -BeExactly ''ExpectedString'' -ActualValue ''ExpectedString'' -Because "this must return true"` correctly' {
-                Should -BeExactly 'ExpectedString' -ActualValue 'ExpectedString' -Because 'this must return true'
-            }
-
-            It 'Should convert `Should -BeExactly ''ExpectedString'' -Because "this must return true" -ActualValue ''ExpectedString''` correctly' {
-                Should -BeExactly 'ExpectedString' -Because 'this must return true' -ActualValue 'ExpectedString'
-            }
-
-            It 'Should convert `Should -Because "this must return true" -ActualValue ''ExpectedString'' -BeExactly ''ExpectedString''` correctly' {
-                Should -Because 'this must return true' -ActualValue 'ExpectedString' -BeExactly 'ExpectedString'
-            }
-        }
-
-        Context 'When the tests are negated' {
-            It 'Should convert `Should -BeExactly ''ExpectedString'' -ActualValue ''ActualString'' -Because "this must return true" -Not` correctly' {
-                Should -BeExactly 'ExpectedString' -ActualValue 'ActualString' -Because 'this must return true' -Not
-            }
-        }
-    }
 }

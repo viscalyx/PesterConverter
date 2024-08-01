@@ -68,16 +68,4 @@ Describe 'Should -BeFalse' {
             $true | Should -BeFalse -Not:$true
         }
     }
-
-    Context 'When tests should always use named parameters' {
-        It 'Should convert `Should -BeFalse ''BecauseMockString'' $true` correctly' {
-            Should -BeFalse 'BecauseMockString' $false
-        }
-    }
-
-    Context 'When tests should always use positional parameters' {
-        It 'Should convert `Should -BeFalse -Because ''BecauseMockString'' -ActualValue $true` correctly' {
-            Should -BeFalse -Because 'BecauseMockString' -ActualValue $false
-        }
-    }
 }

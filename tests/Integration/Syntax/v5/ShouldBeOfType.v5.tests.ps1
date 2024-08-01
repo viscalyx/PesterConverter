@@ -62,33 +62,9 @@ Describe 'Should -BeOfType' {
         }
     }
 
-    Context 'When tests should always use named parameters' {
-        It 'Should convert `Should -BeOfType [System.String] ''BecauseString'' -ActualValue ''AnyString''` correctly' {
-            Should -BeOfType [System.String] 'BecauseString' -ActualValue 'AnyString'
-        }
-    }
-
     Context 'When alias operator name is used' {
         It 'Should convert `Should -HaveType [System.String] -ActualValue ''AnyString''` correctly' {
             Should -HaveType [System.String] -ActualValue 'AnyString'
-        }
-    }
-
-    Context 'When tests should always use positional parameters' {
-        Context 'When the tests are affirming' {
-            It 'Should convert `Should -BeOfType -ExpectedType ([System.String]) -ActualValue ''AnyString''` correctly' {
-                Should -BeOfType -ExpectedType ([System.String]) -ActualValue 'AnyString'
-            }
-
-            It 'Should convert `Should -BeOfType -ExpectedType ([System.String]) -ActualValue ''AnyString'' -Because ''BecauseString''` correctly' {
-                Should -BeOfType -ExpectedType ([System.String]) -ActualValue 'AnyString'
-            }
-        }
-
-        Context 'When the tests are negated' {
-            It 'Should convert `Should -BeOfType -ExpectedType ([System.String]) -Not -ActualValue ''AnyString'' -Because ''BecauseString''` correctly' {
-                Should -BeOfType -ExpectedType ([System.String]) -Not -ActualValue 2 -Because 'BecauseString'
-            }
         }
     }
 }

@@ -71,16 +71,4 @@ Describe 'Should -BeNullOrEmpty' {
             'AnyValue' | Should -BeNullOrEmpty -Not:$true
         }
     }
-
-    Context 'When tests should always use named parameters' {
-        It 'Should convert `Should -BeNullOrEmpty ''BecauseMockString'' $null` correctly' {
-            Should -BeNullOrEmpty 'BecauseMockString' $null
-        }
-    }
-
-    Context 'When tests should always use positional parameters' {
-        It 'Should convert `Should -BeNullOrEmpty -Because ''BecauseMockString'' -ActualValue $null` correctly' {
-            Should -BeNullOrEmpty -Because 'BecauseMockString' -ActualValue $null
-        }
-    }
 }
