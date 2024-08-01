@@ -101,7 +101,7 @@ Describe 'Convert-ShouldBeNullOrEmpty' {
 
                     $result = Convert-ShouldBeNullOrEmpty -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeFalsy ''BecauseMockString'''
+                    $result | Should-BeString -CaseSensitive 'Should-BeFalsy -Because ''BecauseMockString'''
                 }
             }
 
@@ -137,7 +137,7 @@ Describe 'Convert-ShouldBeNullOrEmpty' {
 
                     $result = Convert-ShouldBeNullOrEmpty -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeFalsy ''BecauseMockString'' -Actual $true'
+                    $result | Should-BeString -CaseSensitive 'Should-BeFalsy -Actual $true -Because ''BecauseMockString'''
                 }
             }
 
@@ -149,7 +149,7 @@ Describe 'Convert-ShouldBeNullOrEmpty' {
 
                     $result = Convert-ShouldBeNullOrEmpty -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeFalsy ''BecauseMockString'' -Actual $true'
+                    $result | Should-BeString -CaseSensitive 'Should-BeFalsy -Actual $true -Because ''BecauseMockString'''
                 }
             }
 

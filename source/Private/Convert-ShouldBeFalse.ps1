@@ -132,15 +132,16 @@ function Convert-ShouldBeFalse
 
         $newExtentText += $commandParameters.ActualValue.Positional ? (' {0}' -f $commandParameters.ActualValue.ExtentText) : ''
 
-        if ($commandParameters.Because)
+        if ($commandParameters.Because -and $commandParameters.Because.Positional)
         {
             # Only add second positional if the first positional was present.
             if ($commandParameters.ActualValue.Positional)
             {
-                $newExtentText += $commandParameters.Because.Positional ? (' {0}' -f $commandParameters.Because.ExtentText) : ''
+                $newExtentText += ' {0}' -f $commandParameters.Because.ExtentText
             }
             else
             {
+                # First positional parameter was not present, so set the second to named parameter.
                 $commandParameters.Because.Positional = $false
             }
         }
