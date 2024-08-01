@@ -64,11 +64,11 @@ Describe 'Should -BeNullOrEmpty' {
 
     Context 'When the tests are negated' {
         It 'Should convert `Should -Not -BeNullOrEmpty` correctly' {
-            $null | Should -Not -BeNullOrEmpty
+            'AnyValue' | Should -Not -BeNullOrEmpty
         }
 
         It 'Should convert `Should -BeNullOrEmpty -Not:$true` correctly' {
-            $null | Should -BeNullOrEmpty -Not:$true
+            'AnyValue' | Should -BeNullOrEmpty -Not:$true
         }
     }
 
