@@ -30,7 +30,7 @@
             Should -BeOfType [[-ActualValue] <Object>] [[-ExpectedType] <Object>] [[-Because] <string>] [-Not]
 
             Positional parameters:
-                Position 1: ExpectedValue
+                Position 1: ExpectedType
                 Position 2: Because
 
         Pester 6 Syntax:
@@ -117,7 +117,7 @@ function Convert-ShouldBeOfType
                 'Not'
             )
             PositionalParameter = @(
-                'ExpectedValue'
+                'ExpectedType'
                 'Because'
             )
             NamedParameter      = @(
@@ -147,9 +147,9 @@ function Convert-ShouldBeOfType
                 If a previous positional parameter is missing then the ones behind
                 it cannot be set to positional.
             #>
-            if ($commandParameters.ExpectedValue)
+            if ($commandParameters.ExpectedType)
             {
-                $commandParameters.ExpectedValue.Positional = $true
+                $commandParameters.ExpectedType.Positional = $true
 
                 if ($commandParameters.ActualValue)
                 {
@@ -159,11 +159,11 @@ function Convert-ShouldBeOfType
         }
 
         # '[System.String]' -match '^\[.+\]$'
-        if ($commandParameters.ExpectedValue.Positional)
+        if ($commandParameters.ExpectedType.Positional)
         {
             # Add the expected value in parenthesis only if the extent text is a type defined in square brackets.
-            $extentTextFormat = $commandParameters.ExpectedValue.ExtentText -match '^\[.+\]$' ? ' ({0})' : ' {0}'
-            $newExtentText += $extentTextFormat -f $commandParameters.ExpectedValue.ExtentText
+            $extentTextFormat = $commandParameters.ExpectedType.ExtentText -match '^\[.+\]$' ? ' ({0})' : ' {0}'
+            $newExtentText += $extentTextFormat -f $commandParameters.ExpectedType.ExtentText
         }
 
         $newExtentText += $commandParameters.ActualValue.Positional ? (' {0}' -f $commandParameters.ActualValue.ExtentText) : ''
@@ -189,10 +189,10 @@ function Convert-ShouldBeOfType
                     break
                 }
 
-                'ExpectedValue'
+                'ExpectedType'
                 {
                     $parameterNames += @{
-                        Expected = 'ExpectedValue'
+                        Expected = 'ExpectedType'
                     }
 
                     break
@@ -215,7 +215,7 @@ function Convert-ShouldBeOfType
             $originalParameterName = $parameterNames.$currentParameter
 
             # Add the expected value in parenthesis only if the extent text is a type defined in square brackets.
-            $extentTextFormat = $originalParameterName -eq 'ExpectedValue' -and $commandParameters.$originalParameterName.ExtentText -match '^\[.+\]$' ? '({1})' : '{1}'
+            $extentTextFormat = $originalParameterName -eq 'ExpectedType' -and $commandParameters.$originalParameterName.ExtentText -match '^\[.+\]$' ? '({1})' : '{1}'
 
             $newExtentText += " -{0} $extentTextFormat" -f $currentParameter, $commandParameters.$originalParameterName.ExtentText
         }
