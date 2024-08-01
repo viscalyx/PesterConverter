@@ -68,7 +68,7 @@ Describe 'Should -BeNullOrEmpty' {
         }
 
         It 'Should convert `Should -BeNullOrEmpty -Not:$true` correctly' {
-            $null | Should -BeNullOrEmpty -Not:$true
+            $null | Should -BeNullOrEmpty -Not:$true
         }
     }
 
