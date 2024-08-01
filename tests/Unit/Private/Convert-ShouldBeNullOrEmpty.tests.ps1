@@ -168,7 +168,7 @@ Describe 'Convert-ShouldBeNullOrEmpty' {
             It 'Should convert `Should -BeNullOrEmpty $true -Because ''BecauseMockString''` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {
-                        Should -BeNullOrEmpty -Because 'BecauseMockString' $true
+                        Should -BeNullOrEmpty $true -Because 'BecauseMockString'
                     }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
                     $result = Convert-ShouldBeNullOrEmpty -CommandAst $mockCommandAstPester5
