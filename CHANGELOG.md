@@ -46,3 +46,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Negated `Should -Not -BeGreaterThan` now converts to `Should-BeLessThanOrEqual`
   to correctly handle scenario when actual value and expected value are the same.
 - Fix parameter name in `Convert-ShouldBeOfType`
+- Minor change to `Get-AstDefinition` to handle when a file is not correctly
+  parsed.
