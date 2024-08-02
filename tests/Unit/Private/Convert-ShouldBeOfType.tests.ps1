@@ -118,10 +118,10 @@ Describe 'Convert-ShouldBeOfType' {
                 }
             }
 
-            It 'Should convert `Should -ActualValue ''AnyString'' -ExpectedValue [System.String] -BeOfType -Because ''BecauseString''` correctly' {
+            It 'Should convert `Should -ActualValue ''AnyString'' -ExpectedType [System.String] -BeOfType -Because ''BecauseString''` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {
-                        Should -ActualValue 'AnyString' -ExpectedValue [System.String] -BeOfType -Because 'BecauseString'
+                        Should -ActualValue 'AnyString' -ExpectedType [System.String] -BeOfType -Because 'BecauseString'
                     }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
                     $result = Convert-ShouldBeOfType -CommandAst $mockCommandAstPester5
@@ -142,10 +142,10 @@ Describe 'Convert-ShouldBeOfType' {
                 }
             }
 
-            It 'Should convert `Should -ExpectedValue [System.String] -ActualValue ''AnyString'' -BeOfType` correctly' {
+            It 'Should convert `Should -ExpectedType [System.String] -ActualValue ''AnyString'' -BeOfType` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {
-                        Should -ExpectedValue [System.String] -ActualValue 'AnyString' -BeOfType
+                        Should -ExpectedType [System.String] -ActualValue 'AnyString' -BeOfType
                     }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
                     $result = Convert-ShouldBeOfType -CommandAst $mockCommandAstPester5
@@ -154,10 +154,10 @@ Describe 'Convert-ShouldBeOfType' {
                 }
             }
 
-            It 'Should convert `Should -Not:$false -ExpectedValue [System.String] -ActualValue ''AnyString'' -BeOfType` correctly' {
+            It 'Should convert `Should -Not:$false -ExpectedType [System.String] -ActualValue ''AnyString'' -BeOfType` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {
-                        Should -BeOfType -Not:$false -ExpectedValue [System.String] -ActualValue 'AnyString' -BeOfType
+                        Should -Not:$false -ExpectedType [System.String] -ActualValue 'AnyString' -BeOfType
                     }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
                     $result = Convert-ShouldBeOfType -CommandAst $mockCommandAstPester5
@@ -248,10 +248,10 @@ Describe 'Convert-ShouldBeOfType' {
 
         Context 'When tests should always use positional parameters' {
             Context 'When the tests are affirming' {
-                It 'Should convert `Should -HaveType -ExpectedValue ([System.String]) -ActualValue ''AnyString''` correctly' {
+                It 'Should convert `Should -BeOfType -ExpectedType ([System.String]) -ActualValue ''AnyString''` correctly' {
                     InModuleScope -ScriptBlock {
                         $mockCommandAstPester5 = {
-                            Should -HaveType -ExpectedValue ([System.String]) -ActualValue 'AnyString'
+                            Should -BeOfType -ExpectedType ([System.String]) -ActualValue 'AnyString'
                         }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
                         $result = Convert-ShouldBeOfType -CommandAst $mockCommandAstPester5 -UsePositionalParameters
@@ -260,10 +260,10 @@ Describe 'Convert-ShouldBeOfType' {
                     }
                 }
 
-                It 'Should convert `Should -HaveType -ExpectedValue ([System.String]) -ActualValue ''AnyString'' -Because ''BecauseString''` correctly' {
+                It 'Should convert `Should -BeOfType -ExpectedType ([System.String]) -ActualValue ''AnyString'' -Because ''BecauseString''` correctly' {
                     InModuleScope -ScriptBlock {
                         $mockCommandAstPester5 = {
-                            Should -HaveType -ExpectedValue ([System.String]) -ActualValue 'AnyString'
+                            Should -BeOfType -ExpectedType ([System.String]) -ActualValue 'AnyString'
                         }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
                         $result = Convert-ShouldBeOfType -CommandAst $mockCommandAstPester5 -UsePositionalParameters
@@ -274,10 +274,10 @@ Describe 'Convert-ShouldBeOfType' {
             }
 
             Context 'When the tests are negated' {
-                It 'Should convert `Should -HaveType -ExpectedValue ([System.String]) -Not -ActualValue ''AnyString'' -Because ''BecauseString''` correctly' {
+                It 'Should convert `Should -BeOfType -ExpectedType ([System.String]) -Not -ActualValue ''AnyString'' -Because ''BecauseString''` correctly' {
                     InModuleScope -ScriptBlock {
                         $mockCommandAstPester5 = {
-                            Should -HaveType -ExpectedValue ([System.String]) -Not -ActualValue 'AnyString' -Because 'BecauseString'
+                            Should -BeOfType -ExpectedType ([System.String]) -Not -ActualValue 'AnyString' -Because 'BecauseString'
                         }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
                         $result = Convert-ShouldBeOfType -CommandAst $mockCommandAstPester5 -UsePositionalParameters

@@ -30,6 +30,10 @@
         passed in, the script of all the files will be returned as an array.
         If PassThru is specified, no file will not be modified.
 
+    .PARAMETER OutputPath
+        Specifies the path to save the converted file(s). If this parameter is
+        not specified, the original file(s) will be overwritten.
+
     .EXAMPLE
         Convert-PesterSyntax -Path "C:\Scripts\Test.ps1" -Pester6
 
@@ -39,9 +43,14 @@
         Get-ChildItem -Path "C:\Scripts" -Recurse -Filter "*.ps1" | Convert-PesterSyntax -Pester6
 
         Converts the syntax of all PowerShell files in the C:\Scripts directory and
-        its subdirectories to the default (newest) Pester syntax.
-#>
+        its subdirectories to Pester 6 syntax.
 
+    .EXAMPLE
+        Convert-PesterSyntax -Path (Get-ChildItem -Path "C:\Scripts" -Recurse -Filter "*.ps1") -Pester6
+
+        Converts the syntax of all PowerShell files in the C:\Scripts directory and
+        its subdirectories to Pester 6 syntax.
+#>
 function Convert-PesterSyntax
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidMultipleTypeAttributes', '', Justification = 'We want to pass in both strings and FileInfo objects to parameter Path.')]
@@ -71,7 +80,12 @@ function Convert-PesterSyntax
 
         [Parameter()]
         [System.Management.Automation.SwitchParameter]
-        $PassThru
+        $PassThru,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $OutputPath
     )
 
     begin
@@ -89,10 +103,46 @@ function Convert-PesterSyntax
 
         Assert-BoundParameter @assertBoundParameterParameters
 
+        $assertBoundParameterParameters = @{
+            BoundParameterList     = $PSBoundParameters
+            MutuallyExclusiveList1 = @('PassThru')
+            MutuallyExclusiveList2 = @('OutputPath')
+        }
+
+        Assert-BoundParameter @assertBoundParameterParameters
+
+        if ($OutputPath)
+        {
+            if (-not (Test-Path -Path $OutputPath))
+            {
+                $PSCmdlet.ThrowTerminatingError(
+                    [System.Management.Automation.ErrorRecord]::new(
+                        $script:localizedData.Convert_PesterSyntax_OutputPathDoesNotExist -f $OutputPath,
+                        'CPS0002', # cSpell: disable-line
+                        [System.Management.Automation.ErrorCategory]::InvalidArgument,
+                        $OutputPath
+                    )
+                )
+            }
+
+            if ((Test-Path -Path $OutputPath) -and (Get-Item -Path $OutputPath).PSIsContainer -eq $false)
+            {
+                $PSCmdlet.ThrowTerminatingError(
+                    [System.Management.Automation.ErrorRecord]::new(
+                        $script:localizedData.Convert_PesterSyntax_OutputPathIsNotDirectory -f $OutputPath,
+                        'CPS0003', # cSpell: disable-line
+                        [System.Management.Automation.ErrorCategory]::InvalidArgument,
+                        $OutputPath
+                    )
+                )
+            }
+        }
+
         $convertParameters = @{} + $PSBoundParameters
         $convertParameters.Remove('Path')
         $convertParameters.Remove('Force')
         $convertParameters.Remove('PassThru')
+        $convertParameters.Remove('OutputPath')
 
         if ($PSCmdlet.ParameterSetName -eq 'Pester6' -and -not $Pester6.IsPresent)
         {
@@ -216,19 +266,69 @@ function Convert-PesterSyntax
                                 break
                             }
 
-                            'BeTrue'
-                            {
-                                $newExtentText = Convert-ShouldBeTrue -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
-
-                                break
-                            }
-
                             'BeFalse'
                             {
                                 $newExtentText = Convert-ShouldBeFalse -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
 
                                 break
                             }
+
+                            'BeGreaterOrEqual'
+                            {
+                                $newExtentText = Convert-ShouldBeGreaterOrEqual -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
+
+                                break
+                            }
+
+                            'BeGreaterThan'
+                            {
+                                $newExtentText = Convert-ShouldBeGreaterThan -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
+
+                                break
+                            }
+
+                            'BeIn'
+                            {
+                                $newExtentText = Convert-ShouldBeIn -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
+
+                                if ((Test-IsPipelinePart -CommandAst $commandAst -ErrorAction 'Stop'))
+                                {
+                                    # Change start and end offsets to replace the entire commandAst.Parent.Extent.Text.
+                                    $startOffset = $commandAst.Parent.Extent.StartOffset
+                                    $endOffset = $commandAst.Parent.Extent.EndOffset
+                                }
+
+                                break
+                            }
+
+                            'BeLessOrEqual'
+                            {
+                                $newExtentText = Convert-ShouldBeLessOrEqual -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
+
+                                break
+                            }
+
+                            'BeLessThan'
+                            {
+                                $newExtentText = Convert-ShouldBeLessThan -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
+
+                                break
+                            }
+
+                            'BeLike'
+                            {
+                                $newExtentText = Convert-ShouldBeLike -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
+
+                                break
+                            }
+
+                            'BeLikeExactly'
+                            {
+                                $newExtentText = Convert-ShouldBeLikeExactly -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
+
+                                break
+                            }
+
 
                             'BeNullOrEmpty'
                             {
@@ -240,6 +340,34 @@ function Convert-PesterSyntax
                             'BeOfType'
                             {
                                 $newExtentText = Convert-ShouldBeOfType -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
+
+                                break
+                            }
+
+                            'BeTrue'
+                            {
+                                $newExtentText = Convert-ShouldBeTrue -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
+
+                                break
+                            }
+
+                            'Contain'
+                            {
+                                $newExtentText = Convert-ShouldContain -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
+
+                                break
+                            }
+
+                            'Match'
+                            {
+                                $newExtentText = Convert-ShouldMatch -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
+
+                                break
+                            }
+
+                            'MatchExactly'
+                            {
+                                $newExtentText = Convert-ShouldMatchExactly -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
 
                                 break
                             }
@@ -259,69 +387,6 @@ function Convert-PesterSyntax
                                 else
                                 {
                                     $newExtentText = Convert-ShouldThrow -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
-                                }
-
-                                break
-                            }
-
-                            'Match'
-                            {
-                                $newExtentText = Convert-ShouldMatch -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
-
-                                break
-                            }
-
-                            'MatchExactly'
-                            {
-                                $newExtentText = Convert-ShouldMatchExactly -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
-
-                                break
-                            }
-
-                            'Contain'
-                            {
-                                $newExtentText = Convert-ShouldContain -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
-
-                                break
-                            }
-
-                            'BeGreaterThan'
-                            {
-                                $newExtentText = Convert-ShouldBeGreaterThan -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
-
-                                break
-                            }
-
-                            'BeLessThan'
-                            {
-                                $newExtentText = Convert-ShouldBeLessThan -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
-
-                                break
-                            }
-
-                            'BeGreaterOrEqual'
-                            {
-                                $newExtentText = Convert-ShouldBeGreaterOrEqual -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
-
-                                break
-                            }
-
-                            'BeLessOrEqual'
-                            {
-                                $newExtentText = Convert-ShouldBeLessOrEqual -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
-
-                                break
-                            }
-
-                            'BeIn'
-                            {
-                                $newExtentText = Convert-ShouldBeIn -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
-
-                                if ((Test-IsPipelinePart -CommandAst $commandAst -ErrorAction 'Stop'))
-                                {
-                                    # Change start and end offsets to replace the entire commandAst.Parent.Extent.Text.
-                                    $startOffset = $commandAst.Parent.Extent.StartOffset
-                                    $endOffset = $commandAst.Parent.Extent.EndOffset
                                 }
 
                                 break
@@ -360,7 +425,16 @@ function Convert-PesterSyntax
             }
             else
             {
-                Set-Content -Path $filePath -Value $convertedScriptText -NoNewLine -ErrorAction 'Stop'
+                if ($OutputPath)
+                {
+                    $newFilePath = Join-Path -Path $OutputPath -ChildPath (Split-Path -Path $filePath -Leaf)
+
+                    Set-Content -Path $newFilePath -Value $convertedScriptText -NoNewLine -ErrorAction 'Stop'
+                }
+                else
+                {
+                    Set-Content -Path $filePath -Value $convertedScriptText -NoNewLine -ErrorAction 'Stop'
+                }
             }
         }
     }

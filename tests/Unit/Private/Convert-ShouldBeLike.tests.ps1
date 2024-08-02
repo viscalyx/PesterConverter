@@ -192,7 +192,7 @@ Describe 'Convert-ShouldBeLike' {
             It 'Should convert `Should -Not:$false -BeLike ''ExpectedString*''` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {
-                        $false | Should -Not:$false -BeLike 'ExpectedString*'
+                        'TestValue' | Should -Not:$false -BeLike 'ExpectedString*'
                     }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
                     $result = Convert-ShouldBeLike -CommandAst $mockCommandAstPester5
@@ -315,7 +315,7 @@ Describe 'Convert-ShouldBeLike' {
             It 'Should convert `Should -Not:$true -BeLike ''ExpectedString*''` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {
-                        $false | Should -Not:$true -BeLike 'ExpectedString*'
+                        'TestValue' | Should -Not:$true -BeLike 'ExpectedString*'
                     }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
                     $result = Convert-ShouldBeLike -CommandAst $mockCommandAstPester5

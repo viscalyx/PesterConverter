@@ -952,6 +952,124 @@ Describe 'Convert-PesterSyntax' {
             }
         }
 
+        Context 'When converting Should -BeLike' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Should -BeLike' {
+                        It 'Should -BeLike' {
+                            'ExpectedString' | Should -BeLike 'Expected*' -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+            }
+
+            It 'Should return the correct converted script' {
+                $mockExpectedConvertedScript = {
+
+                    Describe 'Should -BeLike' {
+                        It 'Should -BeLike' {
+                            'ExpectedString' | Should-BeLikeString 'Expected*' -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using named parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeLike' {
+                        It 'Should -BeLike' {
+                            'ExpectedString' | Should-BeLikeString -Because 'BecauseString' -Expected 'Expected*'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UseNamedParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using positional parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeLike' {
+                        It 'Should -BeLike' {
+                            'ExpectedString' | Should-BeLikeString 'Expected*' -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UsePositionalParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
+
+        Context 'When converting Should -BeLikeExactly' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Should -BeLikeExactly' {
+                        It 'Should -BeLikeExactly' {
+                            'ExpectedString' | Should -BeLikeExactly 'Expected*' -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+            }
+
+            It 'Should return the correct converted script' {
+                $mockExpectedConvertedScript = {
+
+                    Describe 'Should -BeLikeExactly' {
+                        It 'Should -BeLikeExactly' {
+                            'ExpectedString' | Should-BeLikeString -CaseSensitive 'Expected*' -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using named parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeLikeExactly' {
+                        It 'Should -BeLikeExactly' {
+                            'ExpectedString' | Should-BeLikeString -CaseSensitive -Because 'BecauseString' -Expected 'Expected*'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UseNamedParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using positional parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -BeLikeExactly' {
+                        It 'Should -BeLikeExactly' {
+                            'ExpectedString' | Should-BeLikeString -CaseSensitive 'Expected*' -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UsePositionalParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
+
         Context 'When converting Should -BeIn without a pipeline' {
             BeforeAll {
                 $mockAstExtentText = {
@@ -1143,7 +1261,7 @@ Describe 'Convert-PesterSyntax' {
             }
         }
 
-        Context 'When saving the converted script back to the file' {
+        Context 'When saving the converted script back to the original file' {
             BeforeAll {
                 $mockAstExtentText = {
                     Describe 'Should -Be' {
@@ -1172,6 +1290,51 @@ Describe 'Convert-PesterSyntax' {
                 Convert-PesterSyntax -Path $mockScriptFilePath -Force
 
                 Get-Content -Raw -Path $mockScriptFilePath | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
+
+        Context 'When saving the converted script to a different output path' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Should -Be' {
+                        It 'Should -Be' {
+                            Should -Be 1
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+
+                # Mock paths for testing
+                $mockNonExistentPath = Join-Path -Path $TestDrive -ChildPath 'NonExistentPath'
+                $mockFilePath = Join-Path -Path $TestDrive -ChildPath 'MockFile.txt'
+                $mockOutputPath = Join-Path -Path $TestDrive -ChildPath 'MockDirectory'
+
+                # Create a mock file
+                New-Item -Path $mockFilePath -ItemType 'File' -Force | Out-Null
+
+                # Create a mock directory
+                New-Item -Path $mockOutputPath -ItemType 'Directory' -Force | Out-Null
+            }
+
+            It 'Should throw an error when the output path does not exist' {
+                {
+                    Convert-PesterSyntax -Path $mockScriptFilePath -OutputPath $mockNonExistentPath -Force
+                } | Should -Throw -ErrorId 'CPS0002,Convert-PesterSyntax'
+            }
+
+            It 'Should throw an error when the output path is not a directory' {
+                {
+                    Convert-PesterSyntax -Path $mockScriptFilePath -OutputPath $mockFilePath -Force
+                } | Should-Throw -FullyQualifiedErrorId 'CPS0003,Convert-PesterSyntax'
+            }
+
+            It 'Should work correctly when the output path is a valid directory' {
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -OutputPath $mockOutputPath -Force
+
+                Should-BeNull -Actual $result -Because 'The function should not return anything when saving the converted script to a different output path'
             }
         }
     }

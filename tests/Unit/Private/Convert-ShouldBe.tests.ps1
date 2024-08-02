@@ -499,7 +499,7 @@ Describe 'Convert-ShouldBe' {
 
         Context 'When tests should always use positional parameters' {
             Context 'When the tests are affirming' {
-                It 'Should convert `Should -Be $true -ActualValue $true` correctly' {
+                It 'Should convert `Should -Be ''ExpectedString'' -ActualValue ''ActualString''` correctly' {
                     InModuleScope -ScriptBlock {
                         $mockCommandAstPester5 = {
                             Should -Be 'ExpectedString' -ActualValue 'ActualString'

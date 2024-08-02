@@ -168,7 +168,7 @@ Describe 'Convert-ShouldBeLessOrEqual' {
             It 'Should convert `Should -Not:$false -BeLessOrEqual 2` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {
-                        $false | Should -Not:$false -BeLessOrEqual 2
+                        2 | Should -Not:$false -BeLessOrEqual 2
                     }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
                     $result = Convert-ShouldBeLessOrEqual -CommandAst $mockCommandAstPester5
@@ -202,27 +202,27 @@ Describe 'Convert-ShouldBeLessOrEqual' {
                 }
             }
 
-            It 'Should convert `Should -BeLessOrEqual 2 ''mock should test correct value'' 3` correctly' {
+            It 'Should convert `Should -BeLessOrEqual 2 ''mock should test correct value'' 1` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {
-                        Should -BeLessOrEqual 2 'mock should test correct value' 3
+                        Should -BeLessOrEqual 2 'mock should test correct value' 1
                     }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
                     $result = Convert-ShouldBeLessOrEqual -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeLessThanOrEqual 2 3 -Because ''mock should test correct value'''
+                    $result | Should-BeString -CaseSensitive 'Should-BeLessThanOrEqual 2 1 -Because ''mock should test correct value'''
                 }
             }
 
-            It 'Should convert `Should 2 ''mock should test correct value'' 3 -BeLessOrEqual` correctly' {
+            It 'Should convert `Should 2 ''mock should test correct value'' 1 -BeLessOrEqual` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {
-                        Should 2 'mock should test correct value' 3 -BeLessOrEqual
+                        Should 2 'mock should test correct value' 1 -BeLessOrEqual
                     }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
                     $result = Convert-ShouldBeLessOrEqual -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeLessThanOrEqual 2 3 -Because ''mock should test correct value'''
+                    $result | Should-BeString -CaseSensitive 'Should-BeLessThanOrEqual 2 1 -Because ''mock should test correct value'''
                 }
             }
         }
@@ -279,7 +279,7 @@ Describe 'Convert-ShouldBeLessOrEqual' {
             It 'Should convert `Should -Not:$true -BeLessOrEqual 2` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {
-                        $false | Should -Not:$true -BeLessOrEqual 2
+                        2 | Should -Not:$true -BeLessOrEqual 2
                     }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
                     $result = Convert-ShouldBeLessOrEqual -CommandAst $mockCommandAstPester5

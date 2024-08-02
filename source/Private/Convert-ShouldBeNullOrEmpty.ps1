@@ -139,7 +139,20 @@ function Convert-ShouldBeNullOrEmpty
         }
 
         $newExtentText += $commandParameters.ActualValue.Positional ? (' {0}' -f $commandParameters.ActualValue.ExtentText) : ''
-        $newExtentText += $commandParameters.Because.Positional ? (' {0}' -f $commandParameters.Because.ExtentText) : ''
+
+        if ($commandParameters.Because -and $commandParameters.Because.Positional)
+        {
+            # Only add second positional if the first positional was present.
+            if ($commandParameters.ActualValue.Positional)
+            {
+                $newExtentText += ' {0}' -f $commandParameters.Because.ExtentText
+            }
+            else
+            {
+                # First positional parameter was not present, so set the second to named parameter.
+                $commandParameters.Because.Positional = $false
+            }
+        }
 
         # Holds the new parameter names so they can be added in alphabetical order.
         $parameterNames = @()

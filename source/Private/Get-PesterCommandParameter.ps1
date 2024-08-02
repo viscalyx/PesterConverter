@@ -84,9 +84,10 @@ function Get-PesterCommandParameter
         #>
         $commandElement = $commandElement |
             Where-Object -FilterScript {
+                # Calls ConvertTo-ActualParameterName to handle abbreviated parameter names.
                 -not (
                     $_ -is [System.Management.Automation.Language.CommandParameterAst] `
-                        -and $_.ParameterName -in $IgnoreParameter
+                        -and (ConvertTo-ActualParameterName -NamedParameter $_.ParameterName -CommandName $CommandName) -in $IgnoreParameter
                 )
             }
 
@@ -103,7 +104,18 @@ function Get-PesterCommandParameter
                     - ExpectedValue
                     - Because
             #>
-            $parameterElements = $commandElement.Where({ $_ -is [System.Management.Automation.Language.CommandParameterAst] -and ($_.ParameterName -in $PositionalParameter -or $_.ParameterName -in $NamedParameter) })
+            $parameterElements = $commandElement.Where({
+                    $result = $false
+
+                    if ($_ -is [System.Management.Automation.Language.CommandParameterAst])
+                    {
+                        $actualParameterName = ConvertTo-ActualParameterName -NamedParameter $_.ParameterName -CommandName $CommandName
+
+                        $result = $actualParameterName -in $PositionalParameter -or $actualParameterName -in $NamedParameter
+                    }
+
+                    $result
+                })
 
             $filterCommandElements = @()
 
@@ -114,7 +126,13 @@ function Get-PesterCommandParameter
                 # Above returned -1 if parameter name was not found.
                 if ($parameterIndex -ne -1)
                 {
-                    $parameterName = $commandElement[$parameterIndex].ParameterName
+                    $convertToActualParameterNameParameters = @{
+                        CommandName    = $CommandName
+                        NamedParameter = $commandElement[$parameterIndex].ParameterName
+                    }
+
+                    # Handle abbreviated parameter names.
+                    $parameterName = ConvertTo-ActualParameterName @convertToActualParameterNameParameters
 
                     $positionalParameterHashtable.$parameterName = @{
                         Position   = 0

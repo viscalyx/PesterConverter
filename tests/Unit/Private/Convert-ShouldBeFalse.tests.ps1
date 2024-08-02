@@ -93,6 +93,19 @@ Describe 'Convert-ShouldBeFalse' {
                 }
             }
 
+            # Test intentionally uses abbreviated parameter name for -ActualValue.
+            It 'Should convert `Should -BeFalse -Actual $true -Because ''BecauseMockString''` correctly' {
+                InModuleScope -ScriptBlock {
+                    $mockCommandAstPester5 = {
+                        Should -BeFalse -Actual $true -Because 'BecauseMockString'
+                    }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
+
+                    $result = Convert-ShouldBeFalse -CommandAst $mockCommandAstPester5
+
+                    $result | Should-BeString -CaseSensitive 'Should-BeFalse -Actual $true -Because ''BecauseMockString'''
+                }
+            }
+
             It 'Should convert `Should -BeFalse ''BecauseMockString''` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {
@@ -101,7 +114,7 @@ Describe 'Convert-ShouldBeFalse' {
 
                     $result = Convert-ShouldBeFalse -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeFalse ''BecauseMockString'''
+                    $result | Should-BeString -CaseSensitive 'Should-BeFalse -Because ''BecauseMockString'''
                 }
             }
 
@@ -137,7 +150,7 @@ Describe 'Convert-ShouldBeFalse' {
 
                     $result = Convert-ShouldBeFalse -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeFalse ''BecauseMockString'' -Actual $true'
+                    $result | Should-BeString -CaseSensitive 'Should-BeFalse -Actual $true -Because ''BecauseMockString'''
                 }
             }
 
@@ -149,7 +162,7 @@ Describe 'Convert-ShouldBeFalse' {
 
                     $result = Convert-ShouldBeFalse -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeFalse ''BecauseMockString'' -Actual $true'
+                    $result | Should-BeString -CaseSensitive 'Should-BeFalse -Actual $true -Because ''BecauseMockString'''
                 }
             }
 
@@ -168,7 +181,7 @@ Describe 'Convert-ShouldBeFalse' {
             It 'Should convert `Should -BeFalse $true -Because ''BecauseMockString''` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {
-                        Should -BeFalse -Because 'BecauseMockString' $true
+                        Should -BeFalse $true -Because 'BecauseMockString'
                     }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
                     $result = Convert-ShouldBeFalse -CommandAst $mockCommandAstPester5

@@ -101,7 +101,7 @@ Describe 'Convert-ShouldBeTrue' {
 
                     $result = Convert-ShouldBeTrue -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeTrue ''BecauseMockString'''
+                    $result | Should-BeString -CaseSensitive 'Should-BeTrue -Because ''BecauseMockString'''
                 }
             }
 
@@ -137,7 +137,7 @@ Describe 'Convert-ShouldBeTrue' {
 
                     $result = Convert-ShouldBeTrue -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeTrue ''BecauseMockString'' -Actual $true'
+                    $result | Should-BeString -CaseSensitive 'Should-BeTrue -Actual $true -Because ''BecauseMockString'''
                 }
             }
 
@@ -149,7 +149,7 @@ Describe 'Convert-ShouldBeTrue' {
 
                     $result = Convert-ShouldBeTrue -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeTrue ''BecauseMockString'' -Actual $true'
+                    $result | Should-BeString -CaseSensitive 'Should-BeTrue -Actual $true -Because ''BecauseMockString'''
                 }
             }
 

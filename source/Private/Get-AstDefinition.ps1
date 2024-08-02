@@ -47,7 +47,7 @@ function Get-AstDefinition
         {
             $tokens, $parseErrors = $null
 
-            [System.Management.Automation.Language.Parser]::ParseFile($filePath, [ref] $tokens, [ref] $parseErrors)
+            $ast = [System.Management.Automation.Language.Parser]::ParseFile($filePath, [ref] $tokens, [ref] $parseErrors)
 
             if ($parseErrors)
             {
@@ -59,6 +59,11 @@ function Get-AstDefinition
                         $filePath
                     )
                 )
+            }
+
+            if ($ast)
+            {
+                $ast
             }
         }
     }

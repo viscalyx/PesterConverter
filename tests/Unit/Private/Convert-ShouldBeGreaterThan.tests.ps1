@@ -168,7 +168,7 @@ Describe 'Convert-ShouldBeGreaterThan' {
             It 'Should convert `Should -Not:$false -BeGreaterThan 2` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {
-                        $false | Should -Not:$false -BeGreaterThan 2
+                        3 | Should -Not:$false -BeGreaterThan 2
                     }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
                     $result = Convert-ShouldBeGreaterThan -CommandAst $mockCommandAstPester5
@@ -236,7 +236,7 @@ Describe 'Convert-ShouldBeGreaterThan' {
 
                     $result = Convert-ShouldBeGreaterThan -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeLessThan 2'
+                    $result | Should-BeString -CaseSensitive 'Should-BeLessThanOrEqual 2'
                 }
             }
 
@@ -248,7 +248,7 @@ Describe 'Convert-ShouldBeGreaterThan' {
 
                     $result = Convert-ShouldBeGreaterThan -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeLessThan 2'
+                    $result | Should-BeString -CaseSensitive 'Should-BeLessThanOrEqual 2'
                 }
             }
 
@@ -260,7 +260,7 @@ Describe 'Convert-ShouldBeGreaterThan' {
 
                     $result = Convert-ShouldBeGreaterThan -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeLessThan $anyValue'
+                    $result | Should-BeString -CaseSensitive 'Should-BeLessThanOrEqual $anyValue'
                 }
             }
 
@@ -272,19 +272,19 @@ Describe 'Convert-ShouldBeGreaterThan' {
 
                     $result = Convert-ShouldBeGreaterThan -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeLessThan $anyValue'
+                    $result | Should-BeString -CaseSensitive 'Should-BeLessThanOrEqual $anyValue'
                 }
             }
 
             It 'Should convert `Should -Not:$true -BeGreaterThan 2` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {
-                        $false | Should -Not:$true -BeGreaterThan 2
+                        3 | Should -Not:$true -BeGreaterThan 2
                     }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
                     $result = Convert-ShouldBeGreaterThan -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeLessThan 2'
+                    $result | Should-BeString -CaseSensitive 'Should-BeLessThanOrEqual 2'
                 }
             }
 
@@ -296,7 +296,7 @@ Describe 'Convert-ShouldBeGreaterThan' {
 
                     $result = Convert-ShouldBeGreaterThan -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeLessThan 2 -Actual 3'
+                    $result | Should-BeString -CaseSensitive 'Should-BeLessThanOrEqual 2 -Actual 3'
                 }
             }
 
@@ -308,7 +308,7 @@ Describe 'Convert-ShouldBeGreaterThan' {
 
                     $result = Convert-ShouldBeGreaterThan -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeLessThan 2 -Actual 3'
+                    $result | Should-BeString -CaseSensitive 'Should-BeLessThanOrEqual 2 -Actual 3'
                 }
             }
 
@@ -320,7 +320,7 @@ Describe 'Convert-ShouldBeGreaterThan' {
 
                     $result = Convert-ShouldBeGreaterThan -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeLessThan 2 -Actual 3'
+                    $result | Should-BeString -CaseSensitive 'Should-BeLessThanOrEqual 2 -Actual 3'
                 }
             }
 
@@ -332,7 +332,7 @@ Describe 'Convert-ShouldBeGreaterThan' {
 
                     $result = Convert-ShouldBeGreaterThan -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeLessThan 2 -Actual 3'
+                    $result | Should-BeString -CaseSensitive 'Should-BeLessThanOrEqual 2 -Actual 3'
                 }
             }
 
@@ -344,7 +344,7 @@ Describe 'Convert-ShouldBeGreaterThan' {
 
                     $result = Convert-ShouldBeGreaterThan -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeLessThan 2 -Actual 3'
+                    $result | Should-BeString -CaseSensitive 'Should-BeLessThanOrEqual 2 -Actual 3'
                 }
             }
 
@@ -356,7 +356,7 @@ Describe 'Convert-ShouldBeGreaterThan' {
 
                     $result = Convert-ShouldBeGreaterThan -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeLessThan 2 -Actual 3'
+                    $result | Should-BeString -CaseSensitive 'Should-BeLessThanOrEqual 2 -Actual 3'
                 }
             }
 
@@ -368,7 +368,7 @@ Describe 'Convert-ShouldBeGreaterThan' {
 
                     $result = Convert-ShouldBeGreaterThan -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeLessThan -Actual 3 -Expected 2'
+                    $result | Should-BeString -CaseSensitive 'Should-BeLessThanOrEqual -Actual 3 -Expected 2'
                 }
             }
 
@@ -380,7 +380,7 @@ Describe 'Convert-ShouldBeGreaterThan' {
 
                     $result = Convert-ShouldBeGreaterThan -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeLessThan -Actual 3 -Expected 2'
+                    $result | Should-BeString -CaseSensitive 'Should-BeLessThanOrEqual -Actual 3 -Expected 2'
                 }
             }
 
@@ -392,7 +392,7 @@ Describe 'Convert-ShouldBeGreaterThan' {
 
                     $result = Convert-ShouldBeGreaterThan -CommandAst $mockCommandAstPester5
 
-                    $result | Should-BeString -CaseSensitive 'Should-BeLessThan -Actual 3 -Expected 2'
+                    $result | Should-BeString -CaseSensitive 'Should-BeLessThanOrEqual -Actual 3 -Expected 2'
                 }
             }
         }
@@ -485,7 +485,7 @@ Describe 'Convert-ShouldBeGreaterThan' {
 
                         $result = Convert-ShouldBeGreaterThan -CommandAst $mockCommandAstPester5 -UsePositionalParameters
 
-                        $result | Should-BeString -CaseSensitive 'Should-BeLessThan 2 3 -Because "this must return true"'
+                        $result | Should-BeString -CaseSensitive 'Should-BeLessThanOrEqual 2 3 -Because "this must return true"'
                     }
                 }
             }

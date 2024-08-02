@@ -24,7 +24,7 @@ jobs:
       - name: Install GitVersion
         shell: pwsh
         run: |
-          dotnet tool install --global GitVersion.Tool
+          dotnet tool install --global GitVersion.Tool --version 5.*
       - name: Run GitVersion
         shell: pwsh
         run: |

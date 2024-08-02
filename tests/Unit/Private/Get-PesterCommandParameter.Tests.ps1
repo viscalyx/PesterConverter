@@ -168,6 +168,33 @@ Describe 'Get-PesterCommandParameter' {
                 }
             }
 
+            # Test intentionally uses abbreviated parameter name for -ActualValue.
+            Context 'When the command is `Should ''ExpectedString'' -Be -Actual ''ActualString'' -Not` to be parsed' {
+                It 'Should return the positional parameters in the correct order' {
+                    InModuleScope -ScriptBlock {
+                        $mockCommandAst = {
+                            Should 'ExpectedString' -Be -Actual 'ActualString' -Not
+                        }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
+
+                        $result = Get-PesterCommandParameter -CommandAst $mockCommandAst @mockDefaultParameters
+
+                        $result | Should-HaveType -Expected ([System.Collections.Hashtable])
+                        $result | Should-BeEquivalent @{
+                            ActualValue   = @{
+                                ExtentText = "'ActualString'"
+                                Position   = 0
+                                Positional = $false
+                            }
+                            ExpectedValue = @{
+                                ExtentText = "'ExpectedString'"
+                                Position   = 1
+                                Positional = $true
+                            }
+                        }
+                    }
+                }
+            }
+
             Context 'When the command is `Should -Be $false -Because ''mock should test correct value'' $false` to be parsed' {
                 It 'Should return the positional parameters in the correct order' {
                     InModuleScope -ScriptBlock {

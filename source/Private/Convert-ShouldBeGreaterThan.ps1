@@ -36,11 +36,19 @@
 
         Pester 6 Syntax:
             Should-BeGreaterThan [[-Actual] <Object>] [-Expected] <Object> [-Because <String>]
-            Should-BeLessThan [[-Actual] <Object>] [-Expected] <Object> [-Because <String>]
+            Should-BeLessThanOrEqual [[-Actual] <Object>] [-Expected] <Object> [-Because <String>]
 
             Positional parameters:
                 Position 1: Expected
                 Position 2: Actual
+
+        Conversion notes:
+            If the command is negated, the `Should-BeLessThanOrEqual` command is used.
+            Assume the actual value is 2 and the expected value should not be greater
+            than 2, then we need to use the `Should-BeLessThanOrEqual` command for
+            the logic to be the same:
+                Pester 5: 2 | Should -Not -BeGreaterThan 2
+                Pester 6: 2 | Should-BeLessThanOrEqual 2
 #>
 function Convert-ShouldBeGreaterThan
 {
@@ -88,7 +96,7 @@ function Convert-ShouldBeGreaterThan
         # Add the correct Pester command based on negation
         if ($isNegated)
         {
-            $newExtentText = 'Should-BeLessThan'
+            $newExtentText = 'Should-BeLessThanOrEqual'
         }
         else
         {

@@ -74,7 +74,7 @@ Describe 'Convert-ShouldNotThrow' {
                 }
             }
 
-            It 'Should convert `{ Write-Error -Message ''MockErrorMessage'' -ErrorId ''MockErrorId'' -Category ''InvalidOperation'' -TargetObject ''MockTargetObject'' -ErrorAction ''Stop'' } | Should -Not -Throw -ExceptionType ([System.Exception]) -ErrorId ''MockErrorId'' -Because ''BecauseString'' -ExceptionMessage ''MockErrorMessage''` correctly' {
+            It 'Should convert `{ Write-Error -Message ''MockErrorMessage'' -ErrorId ''MockErrorId'' -Category ''InvalidOperation'' -TargetObject ''MockTargetObject'' -ErrorAction ''Stop'' } | Should -Throw -Because ''BecauseString'' -ExceptionType ([System.Exception]) -ErrorId ''MockErrorId'' -ExpectedMessage ''MockErrorMessage''` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAstPester5 = {
                         {
