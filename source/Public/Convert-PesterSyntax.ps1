@@ -428,6 +428,7 @@ function Convert-PesterSyntax
                 if ($OutputPath)
                 {
                     $newFilePath = Join-Path -Path $OutputPath -ChildPath (Split-Path -Path $filePath -Leaf)
+
                     Set-Content -Path $newFilePath -Value $convertedScriptText -NoNewLine -ErrorAction 'Stop'
                 }
                 else
