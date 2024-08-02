@@ -63,7 +63,7 @@ function Get-AstDefinition
 
             if ($ast)
             {
-                Write-Output -InputObject $ast
+                $ast
             }
         }
     }
