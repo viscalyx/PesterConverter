@@ -21,7 +21,7 @@
     Description          = 'Commands to convert Pester tests.'
 
     # Minimum version of the PowerShell engine required by this module
-    PowerShellVersion    = '7.0'
+    PowerShellVersion    = '7.1'
 
     # Modules that must be imported into the global environment prior to importing this module
     RequiredModules      = @()
