@@ -92,14 +92,14 @@ function Get-PesterCommandParameter
             }
 
         # Build a hashtable based on the values in $PositionalParameter and $NamedParameter.
-        $positionalParameterHashtable = @{}
+        $parameterHashtable = @{}
 
-        if ($commandElement.Count -gt 0)
+        if (${commandElement}?.Count -gt 0)
         {
             Write-Debug -Message ($script:localizedData.Get_PesterCommandParameter_Debug_NamedParameters -f ($NamedParameter -join ', '))
 
             <#
-                Filter out the value parameters including its values from the command elements, e.g.:
+                Filter out the named parameters including its values from the command elements, e.g.:
                     - ActualValue
                     - ExpectedValue
                     - Because
@@ -111,6 +111,7 @@ function Get-PesterCommandParameter
                     {
                         $actualParameterName = ConvertTo-ActualParameterName -NamedParameter $_.ParameterName -CommandName $CommandName
 
+                        # Search for named parameters including positional parameters that too can be set as named parameters.
                         $result = $actualParameterName -in $PositionalParameter -or $actualParameterName -in $NamedParameter
                     }
 
@@ -134,7 +135,7 @@ function Get-PesterCommandParameter
                     # Handle abbreviated parameter names.
                     $parameterName = ConvertTo-ActualParameterName @convertToActualParameterNameParameters
 
-                    $positionalParameterHashtable.$parameterName = @{
+                    $parameterHashtable.$parameterName = @{
                         Position   = 0
                         Positional = $false
                         ExtentText = $commandElement[$parameterIndex + 1].Extent.Text
@@ -147,31 +148,31 @@ function Get-PesterCommandParameter
 
             # Filter out the value parameter and its value from the command elements.
             $commandElement = $commandElement |
-                Where-Object -FilterScript { $_ -notin $filterCommandElements }
+                Where-Object -FilterScript {
+                    $_ -notin $filterCommandElements
+                }
         }
 
         # Get the positional parameters extent text that are left (if any).
-        if ($commandElement.Count -gt 0)
+        if (${commandElement}?.Count -gt 0)
         {
             Write-Debug -Message ($script:localizedData.Get_PesterCommandParameter_Debug_PositionalParameters -f ($PositionalParameter -join ', '))
 
             $elementCounter = 0
             $positionalCounter = 1
 
+            # Positional parameters are discovered in the order they are specified in $PositionalParameter.
             foreach ($parameter in $PositionalParameter)
             {
-                # Only add the positional parameter if it does not exist in the hashtable.
-                if (-not $positionalParameterHashtable.ContainsKey($parameter))
+                # Only add the positional parameter if it does not already exist in the hashtable.
+                if (-not $parameterHashtable.ContainsKey($parameter))
                 {
                     # Only add positional parameter if there actually a value for it.
-                    $positionalParameterHashtable.$parameter = @{
-                        Position   = $positionalCounter
+                    $parameterHashtable.$parameter = @{
+                        Position   = $positionalCounter++
                         Positional = $true
-                        ExtentText = $commandElement[$elementCounter].Extent.Text
+                        ExtentText = $commandElement[$elementCounter++].Extent.Text
                     }
-
-                    # Increment the positional counter.
-                    $elementCounter++
 
                     # If the command element is $null then there are no more positional parameters to process.
                     if ($null -eq $commandElement[$elementCounter])
@@ -179,12 +180,9 @@ function Get-PesterCommandParameter
                         break
                     }
                 }
-
-                # Increment the positional counter.
-                $positionalCounter++
             }
         }
 
-        return $positionalParameterHashtable
+        return $parameterHashtable
     }
 }

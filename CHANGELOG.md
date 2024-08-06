@@ -49,3 +49,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Minor change to `Get-AstDefinition` to handle when a file is not correctly
   parsed.
 - Some code cleanup.
+- Fix incorrect position value in Get-PesterCommandParameter.
+- Update PowerShell version requirement to 7.1.
