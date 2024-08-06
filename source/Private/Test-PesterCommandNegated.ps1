@@ -46,19 +46,14 @@ function Test-PesterCommandNegated
         $CommandAst = $CommandAst.Parent.PipelineElements[-1]
     }
 
-    $negateCommandParameterAst = $CommandAst.CommandElements |
+    $negateCommandParameterAst = ${CommandAst}?.CommandElements |
         Where-Object -FilterScript {
             $_ -is [System.Management.Automation.Language.CommandParameterAst] `
                 -and $_.ParameterName -eq 'Not' `
                 -and $_.Argument.Extent.Text -ne '$false'
         }
 
-    $negated = $false
-
-    if ($negateCommandParameterAst)
-    {
-        $negated = $true
-    }
+    $negated = $negateCommandParameterAst ? $true : $false
 
     return $negated
 }
