@@ -95,14 +95,7 @@ function Convert-ShouldBeNullOrEmpty
         Write-Debug -Message ($script:localizedData.Convert_Should_Debug_ConvertingFromTo -f $sourceSyntaxVersion, '6')
 
         # Add the correct Pester command based on negation
-        if ($isNegated)
-        {
-            $newExtentText = 'Should-BeTruthy'
-        }
-        else
-        {
-            $newExtentText = 'Should-BeFalsy'
-        }
+        $newExtentText = $isNegated ? 'Should-BeTruthy' : 'Should-BeFalsy'
 
         $getPesterCommandParameterParameters = @{
             CommandAst          = $CommandAst

@@ -85,14 +85,14 @@ function Get-ShouldCommandOperatorName
                     $node
                 )
 
-                return $node -is [System.Management.Automation.Language.CommandParameterAst] -and ($node.ParameterName -in $possibleShouldOperator -or $node.ParameterName -in $possibleShouldOperatorAlias.Keys)
+                return $node -is [System.Management.Automation.Language.CommandParameterAst] -and ($node.ParameterName -in $possibleShouldOperator -or ($possibleShouldOperatorAlias -and $node.ParameterName -in $possibleShouldOperatorAlias.Keys))
             }, $true)
 
-        if ($shouldOperatorAsts.ParameterName -in $possibleShouldOperatorAlias.Keys)
+        if (${shouldOperatorAsts}?.ParameterName -in ${possibleShouldOperatorAlias}?.Keys)
         {
             return $possibleShouldOperatorAlias[$shouldOperatorAsts.ParameterName]
         }
 
-        return $shouldOperatorAsts.ParameterName
+        return ${shouldOperatorAsts}?.ParameterName
     }
 }

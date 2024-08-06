@@ -44,7 +44,7 @@ function ConvertTo-ActualParameterName
         # Should in Pester 5.
         'Should'
         {
-            $parametersName = @(
+            $parameterNames = @(
                 # Parameters names.
                 'ActualValue'
                 'Alias'
@@ -125,25 +125,10 @@ function ConvertTo-ActualParameterName
     }
 
     # Try to match exact name.
-    $result = $parametersName -match "^$NamedParameter$"
+    $result = $parameterNames -match "^$NamedParameter$"
 
-    if (-not $result)
-    {
-        # Try to match abbreviated name.
-        $result = $parametersName -match "^$NamedParameter"
-
-        if ($result.Count -gt 1)
-        {
-            $PSCmdlet.ThrowTerminatingError(
-                [System.Management.Automation.ErrorRecord]::new(
-                    ($script:localizedData.AmbiguousNamedParameter -f $NamedParameter, $CommandName),
-                    'CTAPN0001', # cSpell: disable-line
-                    [System.Management.Automation.ErrorCategory]::InvalidOperation,
-                    $NamedParameter
-                )
-            )
-        }
-    }
+    # Try to match abbreviated name.
+    $result = $result ? $result : $parameterNames -match "^$NamedParameter"
 
     if (-not $result)
     {
@@ -151,6 +136,18 @@ function ConvertTo-ActualParameterName
             [System.Management.Automation.ErrorRecord]::new(
                 ($script:localizedData.UnknownNamedParameter -f $NamedParameter, $CommandName),
                 'CTAPN0002', # cSpell: disable-line
+                [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                $NamedParameter
+            )
+        )
+    }
+
+    if (${result}?.Count -gt 1)
+    {
+        $PSCmdlet.ThrowTerminatingError(
+            [System.Management.Automation.ErrorRecord]::new(
+                ($script:localizedData.AmbiguousNamedParameter -f $NamedParameter, $CommandName),
+                'CTAPN0001', # cSpell: disable-line
                 [System.Management.Automation.ErrorCategory]::InvalidOperation,
                 $NamedParameter
             )

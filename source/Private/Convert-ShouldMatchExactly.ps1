@@ -86,14 +86,7 @@ function Convert-ShouldMatchExactly
         Write-Debug -Message ($script:localizedData.Convert_Should_Debug_ConvertingFromTo -f $sourceSyntaxVersion, '6')
 
         # Add the correct Pester command based on negation
-        if ($isNegated)
-        {
-            $newExtentText = 'Should-NotMatchString'
-        }
-        else
-        {
-            $newExtentText = 'Should-MatchString'
-        }
+        $newExtentText = $isNegated ? 'Should-NotMatchString' : 'Should-MatchString'
 
         # Always add the `-CaseSensitive` parameter since MatchExactly was case-sensitive.
         $newExtentText += ' -CaseSensitive'

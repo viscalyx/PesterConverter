@@ -86,14 +86,7 @@ function Convert-ShouldBe
         Write-Debug -Message ($script:localizedData.Convert_Should_Debug_ConvertingFromTo -f $sourceSyntaxVersion, '6')
 
         # Add the correct Pester command based on negation
-        if ($isNegated)
-        {
-            $newExtentText = 'Should-NotBe'
-        }
-        else
-        {
-            $newExtentText = 'Should-Be'
-        }
+        $newExtentText = $isNegated ? 'Should-NotBe' : 'Should-Be'
 
         $getPesterCommandParameterParameters = @{
             CommandAst          = $CommandAst

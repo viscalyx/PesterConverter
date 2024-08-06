@@ -87,14 +87,7 @@ function Convert-ShouldMatch
         Write-Debug -Message ($script:localizedData.Convert_Should_Debug_ConvertingFromTo -f $sourceSyntaxVersion, '6')
 
         # Add the correct Pester command based on negation
-        if ($isNegated)
-        {
-            $newExtentText = 'Should-NotMatchString'
-        }
-        else
-        {
-            $newExtentText = 'Should-MatchString'
-        }
+        $newExtentText = $isNegated ? 'Should-NotMatchString' : 'Should-MatchString'
 
         $getPesterCommandParameterParameters = @{
             CommandAst          = $CommandAst

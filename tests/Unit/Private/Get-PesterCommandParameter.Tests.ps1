@@ -208,7 +208,7 @@ Describe 'Get-PesterCommandParameter' {
                         $result | Should-BeEquivalent @{
                             ActualValue   = @{
                                 ExtentText = '$false'
-                                Position   = 3
+                                Position   = 2
                                 Positional = $true
                             }
                             Because       = @{
