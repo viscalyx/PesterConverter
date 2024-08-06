@@ -86,14 +86,7 @@ function Convert-ShouldBeExactly
         Write-Debug -Message ($script:localizedData.Convert_Should_Debug_ConvertingFromTo -f $sourceSyntaxVersion, '6')
 
         # Add the correct Pester command based on negation
-        if ($isNegated)
-        {
-            $newExtentText = 'Should-NotBeString'
-        }
-        else
-        {
-            $newExtentText = 'Should-BeString'
-        }
+        $newExtentText = $isNegated ? 'Should-NotBeString' : 'Should-BeString'
 
         # Always add the `-CaseSensitive` parameter since BeExactly was case-sensitive.
         $newExtentText += ' -CaseSensitive'

@@ -48,3 +48,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix parameter name in `Convert-ShouldBeOfType`
 - Minor change to `Get-AstDefinition` to handle when a file is not correctly
   parsed.
+- Some code cleanup.

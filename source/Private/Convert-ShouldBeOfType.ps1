@@ -99,14 +99,7 @@ function Convert-ShouldBeOfType
         Write-Debug -Message ($script:localizedData.Convert_Should_Debug_ConvertingFromTo -f $sourceSyntaxVersion, '6')
 
         # Add the correct Pester command based on negation
-        if ($isNegated)
-        {
-            $newExtentText = 'Should-NotHaveType'
-        }
-        else
-        {
-            $newExtentText = 'Should-HaveType'
-        }
+        $newExtentText = $isNegated ? 'Should-NotHaveType' : 'Should-HaveType'
 
         $getPesterCommandParameterParameters = @{
             CommandAst          = $CommandAst

@@ -94,14 +94,7 @@ function Convert-ShouldBeLessThan
         Write-Debug -Message ($script:localizedData.Convert_Should_Debug_ConvertingFromTo -f $sourceSyntaxVersion, '6')
 
         # Add the correct Pester command based on negation
-        if ($isNegated)
-        {
-            $newExtentText = 'Should-BeGreaterThanOrEqual'
-        }
-        else
-        {
-            $newExtentText = 'Should-BeLessThan'
-        }
+        $newExtentText = $isNegated ? 'Should-BeGreaterThanOrEqual' : 'Should-BeLessThan'
 
         $getPesterCommandParameterParameters = @{
             CommandAst          = $CommandAst
