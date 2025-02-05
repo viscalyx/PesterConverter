@@ -3,8 +3,8 @@
         Converts a command `Should -BeFalse` to the specified Pester syntax.
 
     .DESCRIPTION
-        The Convert-ShouldBeFalse function is used to convert a command `Should -BeFalse` to
-        the specified Pester syntax.
+        The Convert-ShouldBeFalse function is used to convert a command `Should -BeFalse`
+        to the specified Pester syntax.
 
     .PARAMETER CommandAst
         The CommandAst object representing the command to be converted.

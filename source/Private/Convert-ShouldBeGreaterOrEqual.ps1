@@ -3,8 +3,8 @@
         Converts a command `Should -BeGreaterOrEqual` to the specified Pester syntax.
 
     .DESCRIPTION
-        The Convert-ShouldBeGreaterOrEqual function is used to convert a command `Should -BeGreaterOrEqual` to
-        the specified Pester syntax.
+        The Convert-ShouldBeGreaterOrEqual function is used to convert a command
+        `Should -BeGreaterOrEqual` to the specified Pester syntax.
 
     .PARAMETER CommandAst
         The CommandAst object representing the command to be converted.

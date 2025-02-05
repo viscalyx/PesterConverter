@@ -3,8 +3,8 @@
         Converts a command `Should -Throw` to the specified Pester syntax.
 
     .DESCRIPTION
-        The Convert-ShouldBe function is used to convert a command `Should -Throw` to
-        the specified Pester syntax.
+        The Convert-ShouldThrow function is used to convert a command `Should -Throw`
+        to the specified Pester syntax.
 
     .PARAMETER CommandAst
         The CommandAst object representing the command to be converted.

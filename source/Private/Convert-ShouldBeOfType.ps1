@@ -3,7 +3,7 @@
         Converts a command `Should -BeOfType` to the specified Pester syntax.
 
     .DESCRIPTION
-        The Convert-ShouldBe function is used to convert a command `Should -BeOfType`
+        The Convert-ShouldBeOfType function is used to convert a command `Should -BeOfType`
         to the specified Pester syntax.
 
     .PARAMETER CommandAst
