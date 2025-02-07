@@ -1187,6 +1187,64 @@ Describe 'Convert-PesterSyntax' {
             }
         }
 
+        Context 'When converting Should -Invoke' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Should -Invoke' {
+                        It 'Should -Invoke' {
+                            'TestCommand' | Should -Invoke 'TestCommand' -Times 3 -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+            }
+
+            It 'Should return the correct converted script' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -Invoke' {
+                        It 'Should -Invoke' {
+                            'TestCommand' | Should-Invoke 'TestCommand' -Because 'BecauseString' -Times 3
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using named parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -Invoke' {
+                        It 'Should -Invoke' {
+                            'TestCommand' | Should-Invoke -Because 'BecauseString' -CommandName 'TestCommand' -Times 3
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UseNamedParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using positional parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -Invoke' {
+                        It 'Should -Invoke' {
+                            'TestCommand' | Should-Invoke 'TestCommand' 3 -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UsePositionalParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
+
         Context 'When converting several files' {
             BeforeAll {
                 $mockAstExtentText = {
