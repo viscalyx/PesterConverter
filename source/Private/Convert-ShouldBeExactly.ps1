@@ -188,7 +188,12 @@ function Convert-ShouldBeExactly
         {
             $originalParameterName = $parameterNames.$currentParameter
 
-            $newExtentText += ' -{0} {1}' -f $currentParameter, $commandParameters.$originalParameterName.ExtentText
+            $newExtentText += ' -{0}' -f $currentParameter
+
+            if ($commandParameters.$originalParameterName.ExtentText)
+            {
+                $newExtentText += ' {0}' -f $commandParameters.$originalParameterName.ExtentText
+            }
         }
     }
 
