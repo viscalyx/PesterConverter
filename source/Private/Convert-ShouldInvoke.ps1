@@ -1,10 +1,10 @@
 <#
     .SYNOPSIS
-        Converts a command `Should -BeLike` to the specified Pester syntax.
+        Converts a command `Should -Invoke` (or `Should -Not -Invoke`) to Pester 6 syntax.
 
     .DESCRIPTION
-        The Convert-ShouldBeLike function is used to convert a command `Should -BeLike`
-        to the specified Pester syntax.
+        The Convert-ShouldInvoke function is used to convert Pester v5 commands for invoking commands
+        to the Pester v6 syntax: Should-Invoke or Should-NotInvoke.
 
     .PARAMETER CommandAst
         The CommandAst object representing the command to be converted.
@@ -16,33 +16,37 @@
         Specifies whether to use named parameters in the converted syntax.
 
     .PARAMETER UsePositionalParameters
-        Specifies whether to use positional parameters in the converted syntax,
-        where supported.
+        Specifies whether to use positional parameters in the converted syntax.
 
     .EXAMPLE
-        $commandAst = [System.Management.Automation.Language.Parser]::ParseInput('Should -BeLike "Test*"')
-        Convert-ShouldBeLike -CommandAst $commandAst -Pester6
+        $commandAst = [System.Management.Automation.Language.Parser]::ParseInput('Should -Invoke "Test"')
+        Convert-ShouldBe -CommandAst $commandAst -Pester6
 
-        This example converts the `Should -BeLike "Test*"` command to Pester 6 syntax.
+        This example converts the `Should -Be "Test"` command to Pester 6 syntax.
 
     .NOTES
         Pester 5 Syntax:
-            Should -BeLike [[-ActualValue] <Object>] [[-ExpectedValue] <Object>] [[-Because] <string>] [-Not]
+            Should -Invoke [-CommandName] <string> [[-Times] <int>] [-ParameterFilter <scriptblock>] [-ModuleName <string>] [-Scope <string>] [-Exactly] [-ActualValue <Object>] [-Not] [-Because <string>] [<CommonParameters>]
+            Should -Invoke [-CommandName] <string> [[-Times] <int>] -ExclusiveFilter <scriptblock> [-ParameterFilter <scriptblock>] [-ModuleName <string>] [-Scope <string>] [-Exactly] [-ActualValue <Object>] [-Not] [-Because <string>] [<CommonParameters>]
 
             Positional parameters:
-                Position 1: ExpectedValue
-                Position 2: Because
-                Position 3: ActualValue
+                Position 1: CommandName
+                Position 2: Times
 
         Pester 6 Syntax:
-            Should-BeLikeString [[-Actual] <Object>] [-Expected] <String> [-CaseSensitive] [-Because <String>]
-            Should-NotBeLikeString [[-Actual] <Object>] [-Expected] <String> [-CaseSensitive] [-Because <String>]
+            Should-Invoke [-CommandName] <String> [[-Times] <Int32>] [-ParameterFilter <ScriptBlock>] [-ExclusiveFilter <ScriptBlock>] [-ModuleName <String>] [-Scope <String>] [-Exactly] [-Because <String>] [<CommonParameters>]
+            Should-Invoke -ExclusiveFilter <ScriptBlock> [<CommonParameters>]
+            Should-Invoke [-Because <String>] [-Verifiable] [<CommonParameters>]
+
+            Should-NotInvoke [-CommandName] <String> [[-Times] <Int32>] [-ParameterFilter <ScriptBlock>] [-ExclusiveFilter <ScriptBlock>] [-ModuleName <String>] [-Scope <String>] [-Exactly] [-Because <String>] [<CommonParameters>]
+            Should-NotInvoke -ExclusiveFilter <ScriptBlock> [<CommonParameters>]
+            Should-NotInvoke [-Because <String>] [-Verifiable] [<CommonParameters>]
 
             Positional parameters:
-                Position 1: Expected
-                Position 2: Actual
+                Position 1: CommandName
+                Position 2: Times
 #>
-function Convert-ShouldBeLike
+function Convert-ShouldInvoke
 {
     [CmdletBinding()]
     [OutputType([System.String])]
@@ -75,7 +79,7 @@ function Convert-ShouldBeLike
 
     Write-Debug -Message ($script:localizedData.Convert_Should_Debug_ParsingCommandAst -f $CommandAst.Extent.Text)
 
-    # Determine if the command is negated
+    # Determine if the command is negated.
     $isNegated = Test-PesterCommandNegated -CommandAst $CommandAst
 
     $sourceSyntaxVersion = Get-PesterCommandSyntaxVersion -CommandAst $CommandAst
@@ -86,29 +90,30 @@ function Convert-ShouldBeLike
         Write-Debug -Message ($script:localizedData.Convert_Should_Debug_ConvertingFromTo -f $sourceSyntaxVersion, '6')
 
         # Add the correct Pester command based on negation
-        $newExtentText = $isNegated ? 'Should-NotBeLikeString' : 'Should-BeLikeString'
+        $newExtentText = $isNegated ? 'Should-NotInvoke' : 'Should-Invoke'
 
         $getPesterCommandParameterParameters = @{
             CommandAst          = $CommandAst
             CommandName         = 'Should'
             IgnoreParameter     = @(
-                'BeLike'
+                'Invoke',
                 'Not'
             )
             PositionalParameter = @(
-                'ExpectedValue'
+                'CommandName',
+                'Times'
+            )
+            NamedParameter      = @(
+                'ParameterFilter',
+                'ExclusiveFilter',
+                'ModuleName',
+                'Scope',
+                'Exactly',
                 'Because'
-                'ActualValue'
             )
         }
 
         $commandParameters = Get-PesterCommandParameter @getPesterCommandParameterParameters
-
-        # Parameter 'Because' is only supported as named parameter in Pester 6 syntax.
-        if ($commandParameters.Because)
-        {
-            $commandParameters.Because.Positional = $false
-        }
 
         # Determine if named or positional parameters should be forcibly used
         if ($UseNamedParameters.IsPresent)
@@ -124,21 +129,21 @@ function Convert-ShouldBeLike
                 If a previous positional parameter is missing then the ones behind
                 it cannot be set to positional.
             #>
-            if ($commandParameters.ExpectedValue)
+            if ($commandParameters.CommandName)
             {
-                $commandParameters.ExpectedValue.Positional = $true
+                $commandParameters.CommandName.Positional = $true
 
-                if ($commandParameters.ActualValue)
+                if ($commandParameters.Times)
                 {
-                    $commandParameters.ActualValue.Positional = $true
+                    $commandParameters.Times.Positional = $true
                 }
             }
         }
 
-        $newExtentText += $commandParameters.ExpectedValue.Positional ? (' {0}' -f $commandParameters.ExpectedValue.ExtentText) : ''
-        $newExtentText += $commandParameters.ActualValue.Positional ? (' {0}' -f $commandParameters.ActualValue.ExtentText) : ''
+        $newExtentText += $commandParameters.CommandName.Positional ? (' {0}' -f $commandParameters.CommandName.ExtentText) : ''
+        $newExtentText += $commandParameters.Times.Positional ? (' {0}' -f $commandParameters.Times.ExtentText) : ''
 
-        # Holds the new parameter names so they can be added in alphabetical order.
+        # Prepare remaining parameters as named parameters in alphabetical order.
         $parameterNames = @()
 
         foreach ($currentParameter in $commandParameters.Keys)
@@ -150,23 +155,7 @@ function Convert-ShouldBeLike
 
             switch ($currentParameter)
             {
-                'ActualValue'
-                {
-                    $parameterNames += @{
-                        Actual = 'ActualValue'
-                    }
-
-                    break
-                }
-
-                'ExpectedValue'
-                {
-                    $parameterNames += @{
-                        Expected = 'ExpectedValue'
-                    }
-
-                    break
-                }
+                # There are no parameters that need to be converted to different names.
 
                 default
                 {

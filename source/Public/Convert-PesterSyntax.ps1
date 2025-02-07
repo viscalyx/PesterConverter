@@ -392,6 +392,13 @@ function Convert-PesterSyntax
                                 break
                             }
 
+                            'Invoke'
+                            {
+                                $newExtentText = Convert-ShouldInvoke -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
+
+                                break
+                            }
+
                             default
                             {
                                 Write-Warning -Message ($script:localizedData.Convert_PesterSyntax_Warning_UnsupportedCommandOperator -f $operatorName, $commandAst.Extent.Text)

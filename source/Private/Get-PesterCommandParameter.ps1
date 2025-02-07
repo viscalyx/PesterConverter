@@ -135,14 +135,21 @@ function Get-PesterCommandParameter
                     # Handle abbreviated parameter names.
                     $parameterName = ConvertTo-ActualParameterName @convertToActualParameterNameParameters
 
+                    # If the next element is not of type CommandParameterAst then current element is a value for previous parameter.
+                    $parameterHasValue = $commandElement[$parameterIndex + 1].GetType().FullName -ne 'System.Management.Automation.Language.CommandParameterAst'
+
                     $parameterHashtable.$parameterName = @{
                         Position   = 0
                         Positional = $false
-                        ExtentText = $commandElement[$parameterIndex + 1].Extent.Text
+                        ExtentText = $parameterHasValue ? $commandElement[$parameterIndex + 1].Extent.Text : $null
                     }
 
                     $filterCommandElements += $commandElement[$parameterIndex]
-                    $filterCommandElements += $commandElement[$parameterIndex + 1]
+
+                    if ($parameterHasValue)
+                    {
+                        $filterCommandElements += $commandElement[$parameterIndex + 1]
+                    }
                 }
             }
 

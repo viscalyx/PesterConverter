@@ -3,8 +3,8 @@
         Converts a command `Should -BeTrue` to the specified Pester syntax.
 
     .DESCRIPTION
-        The Convert-ShouldBeTrue function is used to convert a command `Should -BeTrue` to
-        the specified Pester syntax.
+        The Convert-ShouldBeTrue function is used to convert a command `Should -BeTrue`
+        to the specified Pester syntax.
 
     .PARAMETER CommandAst
         The CommandAst object representing the command to be converted.
@@ -179,7 +179,12 @@ function Convert-ShouldBeTrue
         {
             $originalParameterName = $parameterNames.$currentParameter
 
-            $newExtentText += ' -{0} {1}' -f $currentParameter, $commandParameters.$originalParameterName.ExtentText
+            $newExtentText += ' -{0}' -f $currentParameter
+
+            if ($commandParameters.$originalParameterName.ExtentText)
+            {
+                $newExtentText += ' {0}' -f $commandParameters.$originalParameterName.ExtentText
+            }
         }
     }
 

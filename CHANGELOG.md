@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       - BeOfType
       - BeTrue
       - Contain
+      - Invoke
       - Match
       - MatchExactly
       - Throw
@@ -51,3 +52,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Some code cleanup.
 - Fix incorrect position value in Get-PesterCommandParameter.
 - Update PowerShell version requirement to 7.1.
+- `Get-PesterCommandParameter`
+  - Now supports Switch parameters.
