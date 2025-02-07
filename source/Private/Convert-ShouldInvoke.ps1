@@ -144,7 +144,7 @@ function Convert-ShouldInvoke
         $newExtentText += $commandParameters.Times.Positional ? (' {0}' -f $commandParameters.Times.ExtentText) : ''
 
         # Prepare remaining parameters as named parameters in alphabetical order.
-        $parameterNames = @()
+        $parameterNames = @{}
 
         foreach ($currentParameter in $commandParameters.Keys)
         {
@@ -159,9 +159,7 @@ function Convert-ShouldInvoke
 
                 default
                 {
-                    $parameterNames += @{
-                        $currentParameter = $currentParameter
-                    }
+                    $parameterNames.$currentParameter = $currentParameter
 
                     break
                 }

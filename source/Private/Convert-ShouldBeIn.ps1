@@ -174,7 +174,7 @@ function Convert-ShouldBeIn
         $newExtentText += $commandParameters.ActualValue.Positional ? (' {0}' -f $commandParameters.ActualValue.ExtentText) : ''
 
         # Holds the new parameter names so they can be added in alphabetical order.
-        $parameterNames = @()
+        $parameterNames = @{}
 
         foreach ($currentParameter in $commandParameters.Keys)
         {
@@ -192,27 +192,21 @@ function Convert-ShouldBeIn
                         continue
                     }
 
-                    $parameterNames += @{
-                        Actual = 'ActualValue'
-                    }
+                    $parameterNames.Actual = 'ActualValue'
 
                     break
                 }
 
                 'ExpectedValue'
                 {
-                    $parameterNames += @{
-                        Expected = 'ExpectedValue'
-                    }
+                    $parameterNames.Expected = 'ExpectedValue'
 
                     break
                 }
 
                 default
                 {
-                    $parameterNames += @{
-                        $currentParameter = $currentParameter
-                    }
+                    $parameterNames.$currentParameter = $currentParameter
 
                     break
                 }

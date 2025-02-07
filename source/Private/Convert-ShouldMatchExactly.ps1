@@ -143,7 +143,7 @@ function Convert-ShouldMatchExactly
         $newExtentText += $commandParameters.ActualValue.Positional ? (' {0}' -f $commandParameters.ActualValue.ExtentText) : ''
 
         # Holds the new parameter names so they can be added in alphabetical order.
-        $parameterNames = @()
+        $parameterNames = @{}
 
         foreach ($currentParameter in $commandParameters.Keys)
         {
@@ -156,27 +156,21 @@ function Convert-ShouldMatchExactly
             {
                 'ActualValue'
                 {
-                    $parameterNames += @{
-                        Actual = 'ActualValue'
-                    }
+                    $parameterNames.Actual = 'ActualValue'
 
                     break
                 }
 
                 'RegularExpression'
                 {
-                    $parameterNames += @{
-                        Expected = 'RegularExpression'
-                    }
+                    $parameterNames.Expected = 'RegularExpression'
 
                     break
                 }
 
                 default
                 {
-                    $parameterNames += @{
-                        $currentParameter = $currentParameter
-                    }
+                    $parameterNames.$currentParameter = $currentParameter
 
                     break
                 }

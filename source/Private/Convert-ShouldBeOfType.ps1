@@ -162,7 +162,7 @@ function Convert-ShouldBeOfType
         $newExtentText += $commandParameters.ActualValue.Positional ? (' {0}' -f $commandParameters.ActualValue.ExtentText) : ''
 
         # Holds the new parameter names so they can be added in alphabetical order.
-        $parameterNames = @()
+        $parameterNames = @{}
 
         foreach ($currentParameter in $commandParameters.Keys)
         {
@@ -175,27 +175,21 @@ function Convert-ShouldBeOfType
             {
                 'ActualValue'
                 {
-                    $parameterNames += @{
-                        Actual = 'ActualValue'
-                    }
+                    $parameterNames.Actual = 'ActualValue'
 
                     break
                 }
 
                 'ExpectedType'
                 {
-                    $parameterNames += @{
-                        Expected = 'ExpectedType'
-                    }
+                    $parameterNames.Expected = 'ExpectedType'
 
                     break
                 }
 
                 default
                 {
-                    $parameterNames += @{
-                        $currentParameter = $currentParameter
-                    }
+                    $parameterNames.$currentParameter = $currentParameter
 
                     break
                 }

@@ -177,7 +177,7 @@ function Convert-ShouldThrow
         $newExtentText += $commandParameters.Because.Positional ? (' {0}' -f $commandParameters.Because.ExtentText) : ''
 
         # Holds the new parameter names so they can be added in alphabetical order.
-        $parameterNames = @()
+        $parameterNames = @{}
 
         foreach ($currentParameter in $commandParameters.Keys)
         {
@@ -190,36 +190,28 @@ function Convert-ShouldThrow
             {
                 'ExpectedMessage'
                 {
-                    $parameterNames += @{
-                        ExceptionMessage = 'ExpectedMessage'
-                    }
+                    $parameterNames.ExceptionMessage = 'ExpectedMessage'
 
                     break
                 }
 
                 'ErrorId'
                 {
-                    $parameterNames += @{
-                        FullyQualifiedErrorId = 'ErrorId'
-                    }
+                    $parameterNames.FullyQualifiedErrorId = 'ErrorId'
 
                     break
                 }
 
                 'ActualValue'
                 {
-                    $parameterNames += @{
-                        ScriptBlock = 'ActualValue'
-                    }
+                    $parameterNames.ScriptBlock = 'ActualValue'
 
                     break
                 }
 
                 default
                 {
-                    $parameterNames += @{
-                        $currentParameter = $currentParameter
-                    }
+                    $parameterNames.$currentParameter = $currentParameter
 
                     break
                 }
