@@ -85,7 +85,7 @@ function Convert-ShouldHaveCount
     # Parse the command elements and convert them to Pester 6 syntax
     if ($PSCmdlet.ParameterSetName -eq 'Pester6')
     {
-        Write-Debug -Message ($script:localizedData.Convert_Debug_ConvertingFromTo -f $sourceSyntaxVersion, '6')
+        Write-Debug -Message ($script:localizedData.Convert_Should_Debug_ConvertingFromTo -f $sourceSyntaxVersion, '6')
 
         # Negated tests are not supported.
         if ($isNegated)
