@@ -39,6 +39,9 @@ ConvertFrom-StringData @'
     Convert_Should_Debug_ConvertingFromTo = Converting from Pester v{0} to Pester v{1} syntax.
     Convert_Should_Debug_ConvertedCommand = Converted the command `{0}` to `{1}`.
 
+    ## Convert-ShouldHaveCount
+    Convert_HaveCount_Error_NegatedTestsNotSupported = Negated tests are not supported: '{0}'.
+
     ## Get-PesterCommandParameter
     Get_PesterCommandParameter_Debug_RetrievingParameters = Retrieving the parameters of the extent: {0}
     Get_PesterCommandParameter_Debug_RetrievingCommandName = Retrieving parameters for the command name: {0}

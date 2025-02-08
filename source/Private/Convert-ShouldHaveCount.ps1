@@ -1,10 +1,12 @@
 <#
     .SYNOPSIS
-        Converts a command `Should -MatchExactly` to the specified Pester syntax.
+        Converts a command `Should -HaveCount` from Pester v5 to the Pester v6 syntax.
 
     .DESCRIPTION
-        The Convert-ShouldMatchExactly function is used to convert a command
-        `Should -MatchExactly` to the specified Pester syntax.
+        The Convert-ShouldHaveCount function converts the Pester v5 syntax:
+            Should -HaveCount [[-ActualValue] <Object>] [[-ExpectedValue] <int>] [[-Because] <string>] [-Not]
+        to the Pester v6 syntax:
+            Should-BeCollection [[-Actual] <Object>] [-Because <String>] [-Count <Int32>] [<CommonParameters>]
 
     .PARAMETER CommandAst
         The CommandAst object representing the command to be converted.
@@ -13,21 +15,20 @@
         Specifies that the command should be converted to Pester version 6 syntax.
 
     .PARAMETER UseNamedParameters
-        Specifies whether to use named parameters in the converted syntax.
+        Forces the use of named parameters in the converted syntax.
 
     .PARAMETER UsePositionalParameters
-        Specifies whether to use positional parameters in the converted syntax,
-        where supported.
+        Forces the use of positional parameters in the converted syntax.
 
     .EXAMPLE
-        $commandAst = [System.Management.Automation.Language.Parser]::ParseInput('Should -MatchExactly "Test"')
-        Convert-ShouldMatchExactly -CommandAst $commandAst -Pester6
+        $commandAst = [System.Management.Automation.Language.Parser]::ParseInput('Should -HaveCount 3')
+        Convert-ShouldHaveCount -CommandAst $commandAst -Pester6
 
-        This example converts the `Should -MatchExactly "Test"` command to Pester 6 syntax.
+        This example converts the `Should -HaveCount 3` command to Pester 6 syntax.
 
     .NOTES
         Pester 5 Syntax:
-            Should -MatchExactly [[-ActualValue] <Object>] [-Not] [[-ExpectedValue] <Object>] [-Because <Object>]
+            Should -HaveCount [[-ActualValue] <Object>] [[-ExpectedValue] <int>] [[-Because] <string>] [-Not]
 
             Positional parameters:
                 Position 1: ExpectedValue
@@ -35,14 +36,15 @@
                 Position 3: ActualValue
 
         Pester 6 Syntax:
-            Should-BeString [[-Actual] <Object>] [[-Expected] <String>] [-Because <String>] [-CaseSensitive] [-IgnoreWhitespace]
-            Should-NotBeString [[-Actual] <Object>] [[-Expected] <String>] [-Because <String>] [-CaseSensitive] [-IgnoreWhitespace]
+            Should-BeCollection [[-Actual] <Object>] [-Because <String>] [-Count <Int32>] [<CommonParameters>]
 
             Positional parameters:
                 Position 1: Expected
                 Position 2: Actual
+
+            Negated tests are not supported.
 #>
-function Convert-ShouldMatchExactly
+function Convert-ShouldHaveCount
 {
     [CmdletBinding()]
     [OutputType([System.String])]
@@ -85,22 +87,25 @@ function Convert-ShouldMatchExactly
     {
         Write-Debug -Message ($script:localizedData.Convert_Should_Debug_ConvertingFromTo -f $sourceSyntaxVersion, '6')
 
-        # Add the correct Pester command based on negation
-        $newExtentText = $isNegated ? 'Should-NotMatchString' : 'Should-MatchString'
+        # Negated tests are not supported.
+        if ($isNegated)
+        {
+            Write-Verbose -Message ($script:localizedData.Convert_HaveCount_Error_NegatedTestsNotSupported -f $CommandAst.Extent.Text)
 
-        # Always add the `-CaseSensitive` parameter since MatchExactly was case-sensitive.
-        $newExtentText += ' -CaseSensitive'
+            return $CommandAst.Extent.Text
+        }
+
+        # Add the correct Pester 6 command name
+        $newExtentText = 'Should-BeCollection'
 
         $getPesterCommandParameterParameters = @{
             CommandAst          = $CommandAst
             CommandName         = 'Should'
             IgnoreParameter     = @(
-                'CMATCH'
-                'MatchExactly'
-                'Not'
+                'HaveCount'
             )
             PositionalParameter = @(
-                'RegularExpression'
+                'ExpectedValue'
                 'Because'
                 'ActualValue'
             )
@@ -112,6 +117,15 @@ function Convert-ShouldMatchExactly
         if ($commandParameters.Because)
         {
             $commandParameters.Because.Positional = $false
+        }
+
+        <#
+            Parameter 'ExpectedValue' will be set as parameter 'Count' and is only
+            supported as named parameter in Pester 6 syntax.
+        #>
+        if ($commandParameters.ExpectedValue)
+        {
+            $commandParameters.ExpectedValue.Positional = $false
         }
 
         # Determine if named or positional parameters should be forcibly used
@@ -128,18 +142,12 @@ function Convert-ShouldMatchExactly
                 If a previous positional parameter is missing then the ones behind
                 it cannot be set to positional.
             #>
-            if ($commandParameters.RegularExpression)
+            if ($commandParameters.ActualValue)
             {
-                $commandParameters.RegularExpression.Positional = $true
-
-                if ($commandParameters.ActualValue)
-                {
-                    $commandParameters.ActualValue.Positional = $true
-                }
+                $commandParameters.ActualValue.Positional = $true
             }
         }
 
-        $newExtentText += $commandParameters.RegularExpression.Positional ? (' {0}' -f $commandParameters.RegularExpression.ExtentText) : ''
         $newExtentText += $commandParameters.ActualValue.Positional ? (' {0}' -f $commandParameters.ActualValue.ExtentText) : ''
 
         # Holds the new parameter names so they can be added in alphabetical order.
@@ -161,9 +169,9 @@ function Convert-ShouldMatchExactly
                     break
                 }
 
-                'RegularExpression'
+                'ExpectedValue'
                 {
-                    $parameterNames.Expected = 'RegularExpression'
+                    $parameterNames.Count = 'ExpectedValue'
 
                     break
                 }

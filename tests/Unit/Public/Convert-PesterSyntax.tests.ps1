@@ -1245,6 +1245,64 @@ Describe 'Convert-PesterSyntax' {
             }
         }
 
+        Context 'When converting Should -HaveCount' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Should -HaveCount' {
+                        It 'Should -HaveCount' {
+                            $array | Should -HaveCount 3 -Because 'BecauseString'
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+            }
+
+            It 'Should convert the syntax correctly' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -HaveCount' {
+                        It 'Should -HaveCount' {
+                            $array | Should-BeCollection -Because 'BecauseString' -Count 3
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should convert using named parameters correctly' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -HaveCount' {
+                        It 'Should -HaveCount' {
+                            $array | Should-BeCollection -Because 'BecauseString' -Count 3
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UseNamedParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should convert using positional parameters correctly' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -HaveCount' {
+                        It 'Should -HaveCount' {
+                            $array | Should-BeCollection -Because 'BecauseString' -Count 3
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UsePositionalParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
+
         Context 'When converting several files' {
             BeforeAll {
                 $mockAstExtentText = {

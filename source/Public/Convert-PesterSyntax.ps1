@@ -399,6 +399,13 @@ function Convert-PesterSyntax
                                 break
                             }
 
+                            'HaveCount'
+                            {
+                                $newExtentText = Convert-ShouldHaveCount -CommandAst $commandAst @convertParameters -ErrorAction 'Stop'
+
+                                break
+                            }
+
                             default
                             {
                                 Write-Warning -Message ($script:localizedData.Convert_PesterSyntax_Warning_UnsupportedCommandOperator -f $operatorName, $commandAst.Extent.Text)

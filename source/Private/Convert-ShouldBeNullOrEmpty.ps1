@@ -148,7 +148,7 @@ function Convert-ShouldBeNullOrEmpty
         }
 
         # Holds the new parameter names so they can be added in alphabetical order.
-        $parameterNames = @()
+        $parameterNames = @{}
 
         foreach ($currentParameter in $commandParameters.Keys)
         {
@@ -161,18 +161,14 @@ function Convert-ShouldBeNullOrEmpty
             {
                 'ActualValue'
                 {
-                    $parameterNames += @{
-                        Actual = 'ActualValue'
-                    }
+                    $parameterNames.Actual = 'ActualValue'
 
                     break
                 }
 
                 default
                 {
-                    $parameterNames += @{
-                        $currentParameter = $currentParameter
-                    }
+                    $parameterNames.$currentParameter = $currentParameter
 
                     break
                 }
