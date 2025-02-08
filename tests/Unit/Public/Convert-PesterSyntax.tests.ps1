@@ -1438,13 +1438,13 @@ Describe 'Convert-PesterSyntax' {
             It 'Should throw an error when the output path does not exist' {
                 {
                     Convert-PesterSyntax -Path $mockScriptFilePath -OutputPath $mockNonExistentPath -Force
-                } | Should -Throw -ErrorId 'CPS0002,Convert-PesterSyntax'
+                } | Should -Throw -FullyQualifiedErrorId 'CPS0002,Convert-PesterSyntax'
             }
 
             It 'Should throw an error when the output path is not a directory' {
                 {
                     Convert-PesterSyntax -Path $mockScriptFilePath -OutputPath $mockFilePath -Force
-                } | Should-Throw -FullyQualifiedErrorId 'CPS0002,Convert-PesterSyntax'
+                } | Should-Throw -FullyQualifiedErrorId 'CPS0003,Convert-PesterSyntax'
             }
 
             It 'Should work correctly when the output path is a valid directory' {
