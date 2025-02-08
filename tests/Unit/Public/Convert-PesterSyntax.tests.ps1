@@ -1355,7 +1355,7 @@ Describe 'Convert-PesterSyntax' {
             It 'Should not throw an exception' {
                 $null = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
 
-                Should -Invoke -CommandName Write-Warning -Exactly -Times 1 -Scope It -ParameterFilter { $Message -like '*not found*supported command operators*' }
+                Should-Invoke -CommandName Write-Warning -Exactly -ParameterFilter { $Message -like '*not found*supported command operators*' } -Scope It -Times 1
             }
         }
 
@@ -1444,7 +1444,7 @@ Describe 'Convert-PesterSyntax' {
             It 'Should throw an error when the output path is not a directory' {
                 {
                     Convert-PesterSyntax -Path $mockScriptFilePath -OutputPath $mockFilePath -Force
-                } | Should-Throw -FullyQualifiedErrorId 'CPS0003,Convert-PesterSyntax'
+                } | Should-Throw -FullyQualifiedErrorId 'CPS0002,Convert-PesterSyntax'
             }
 
             It 'Should work correctly when the output path is a valid directory' {

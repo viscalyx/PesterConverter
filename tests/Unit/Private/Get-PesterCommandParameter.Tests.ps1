@@ -64,7 +64,7 @@ Describe 'Get-PesterCommandParameter' {
                     $result = Get-PesterCommandParameter -CommandAst $mockCommandAst @mockDefaultParameters
 
                     $result | Should-HaveType -Expected ([System.Collections.Hashtable])
-                    $result.Keys.Count | Should -Be 0
+                    $result.Keys | Should-BeCollection -Count 0
                 }
             }
         }
@@ -79,7 +79,7 @@ Describe 'Get-PesterCommandParameter' {
                     $result = Get-PesterCommandParameter -CommandAst $mockCommandAst @mockDefaultParameters
 
                     $result | Should-HaveType -Expected ([System.Collections.Hashtable])
-                    $result.Keys.Count | Should -Be 0
+                    $result.Keys | Should-BeCollection -Count 0
                 }
             }
         }
