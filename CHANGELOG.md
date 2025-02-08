@@ -55,3 +55,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update PowerShell version requirement to 7.1.
 - `Get-PesterCommandParameter`
   - Now supports Switch parameters.
+  - Also supports when Switch parameters is the last parameter on the extent.

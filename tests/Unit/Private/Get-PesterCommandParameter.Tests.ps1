@@ -43,7 +43,7 @@ AfterAll {
 }
 
 Describe 'Get-PesterCommandParameter' {
-    Context 'When the command is ''Should''' {
+    Context 'When the command is ''Should -Be''' {
         BeforeAll {
             InModuleScope -ScriptBlock {
                 $script:mockDefaultParameters = @{
@@ -221,6 +221,100 @@ Describe 'Get-PesterCommandParameter' {
                                 Position   = 1
                                 Positional = $true
                             }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    Context 'When the command is ''Should -Invoke''' {
+        BeforeAll {
+            InModuleScope -ScriptBlock {
+                $script:mockDefaultParameters = @{
+                    CommandName         = 'Should'
+                    IgnoreParameter     = @('Invoke', 'Not')
+                    PositionalParameter = @('Times')
+                    NamedParameter      = @('Exactly')
+                }
+            }
+        }
+
+        Context 'When the command is `Should -Invoke -Exactly -Times 1` to be parsed' {
+            It 'Should handle switch parameters correctly' {
+                InModuleScope -ScriptBlock {
+                    $mockCommandAst = {
+                        Should -Invoke -Exactly -Times 1
+                    }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
+
+                    $result = Get-PesterCommandParameter -CommandAst $mockCommandAst @mockDefaultParameters
+
+                    $result | Should-HaveType -Expected ([System.Collections.Hashtable])
+                    $result | Should-BeEquivalent @{
+                        Exactly       = @{
+                            ExtentText = $null
+                            Position   = 0
+                            Positional = $false
+                        }
+
+                        Times         = @{
+                            ExtentText = '1'
+                            Position   = 0
+                            Positional = $false
+                        }
+                    }
+                }
+            }
+        }
+
+        Context 'When the command is `Should -Invoke -Times 1 -Exactly` to be parsed' {
+            It 'Should handle switch parameters at the end of extent correctly' {
+                InModuleScope -ScriptBlock {
+                    $mockCommandAst = {
+                        Should -Invoke -Times 1 -Exactly
+                    }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
+
+                    $result = Get-PesterCommandParameter -CommandAst $mockCommandAst @mockDefaultParameters
+
+                    $result | Should-HaveType -Expected ([System.Collections.Hashtable])
+                    $result | Should-BeEquivalent @{
+                        Exactly       = @{
+                            ExtentText = $null
+                            Position   = 0
+                            Positional = $false
+                        }
+
+                        Times         = @{
+                            ExtentText = '1'
+                            Position   = 0
+                            Positional = $false
+                        }
+                    }
+                }
+            }
+        }
+
+        Context 'When the command is `Should -Invoke -Times 1 -Exactly:$true` to be parsed' {
+            It 'Should handle switch parameters with value correctly' {
+                InModuleScope -ScriptBlock {
+                    $mockCommandAst = {
+                        Should -Invoke -Times 1 -Exactly:$true
+                    }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
+
+                    $result = Get-PesterCommandParameter -CommandAst $mockCommandAst @mockDefaultParameters
+
+                    $result | Should-HaveType -Expected ([System.Collections.Hashtable])
+                    $result | Should-BeEquivalent @{
+                        Exactly       = @{
+                            ExtentText = $null
+                            Position   = 0
+                            Positional = $false
+                        }
+
+                        Times         = @{
+                            ExtentText = '1'
+                            Position   = 0
+                            Positional = $false
                         }
                     }
                 }
