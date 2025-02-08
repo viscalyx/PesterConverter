@@ -31,6 +31,8 @@ BeNullOrEmpty | `Should-BeFalsy` | `Should-BeTruthy` | See 2)
 BeOfType | `Should-HaveType` | `Should-NotHaveType` | -
 BeTrue | `Should-BeTrue` | `Should-BeFalse` | See 4)
 Contain | `Should-ContainCollection` | `Should-NotContainCollection` | -
+HaveCount | `Should-BeCollection -Count` | - | See 5)
+Invoke | `Should-Invoke` | `Should-NotInvoke` | -
 Match | `Should-MatchString` | `Should-NotMatchString` | -
 MatchExactly | `Should-MatchString -CaseSensitive` | `Should-NotMatchString -CaseSensitive` | -
 Throw | `Should-Throw` | `$null = & (<ActualValue>)` | See 1)
@@ -55,3 +57,6 @@ was also possible to pass `$null` to `BeFalse` for it to pass which is not
 allowed in Pester 6. If this happens then either the code being tested need
 to be changed to always return boolean value `$true` or `$false`, or change
 the test to use the Pester 6 commands `Should-BeFalsy` or `Should-BeTruthy`.
+5) Negated version of `-HaveCount` will not be converted since there are no
+command `Should-NotBeCollection -Count` and using an alternative to it has
+not been considered (e.g. `(<code>).Count | Should-Be <expected value>`).
