@@ -75,7 +75,7 @@ function Convert-ShouldHaveCount
 
     Assert-BoundParameter @assertBoundParameterParameters
 
-    Write-Debug -Message ($script:localizedData.Convert_Debug_ParsingCommandAst -f $CommandAst.Extent.Text)
+    Write-Debug -Message ($script:localizedData.Convert_Should_Debug_ParsingCommandAst -f $CommandAst.Extent.Text)
 
     # Determine if the command is negated
     $isNegated = Test-PesterCommandNegated -CommandAst $CommandAst
