@@ -122,7 +122,7 @@ Describe 'Convert-ShouldInvoke' {
 
     Context 'When additional parameters are provided' {
         Context 'Affirming command' {
-            It 'converts extra parameters using default settings correctly' {
+            It 'Should convert extra parameters using default settings correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAst = {
                         'TestCommand' | Should -Invoke 'TestCommand' -Times 5 `
@@ -140,7 +140,7 @@ Describe 'Convert-ShouldInvoke' {
                     $result | Should-BeString -CaseSensitive $expected
                 }
             }
-            It 'converts extra parameters using positional settings correctly' {
+            It 'Should convert extra parameters using positional settings correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAst = {
                         'TestCommand' | Should -Invoke 'TestCommand' -Times 5 `
@@ -161,7 +161,7 @@ Describe 'Convert-ShouldInvoke' {
         }
 
         Context 'Negated command' {
-            It 'converts extra parameters using default settings correctly' {
+            It 'Should convert extra parameters using default settings correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAst = {
                         'TestCommand' | Should -Not -Invoke 'TestCommand' -Times 4 `
@@ -179,7 +179,7 @@ Describe 'Convert-ShouldInvoke' {
                     $result | Should-BeString -CaseSensitive $expected
                 }
             }
-            It 'converts extra parameters using positional settings correctly' {
+            It 'Should convert extra parameters using positional settings correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAst = {
                         'TestCommand' | Should -Not -Invoke 'TestCommand' -Times 4 `
@@ -188,6 +188,25 @@ Describe 'Convert-ShouldInvoke' {
                             -Scope 'Local' `
                             -Exactly `
                             -Because 'ExtraBecauseNegated'
+                    }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
+
+                    $expected = 'Should-NotInvoke ''TestCommand'' 4 -Because ''ExtraBecauseNegated'' -Exactly -ModuleName ''TestModule'' -ParameterFilter { $_.Name -eq ''test'' } -Scope ''Local'''
+
+                    $result = Convert-ShouldInvoke -CommandAst $mockCommandAst -Pester6 -UsePositionalParameters
+
+                    $result | Should-BeString -CaseSensitive $expected
+                }
+            }
+
+            It 'Should convert Exactly as last parameter correctly' {
+                InModuleScope -ScriptBlock {
+                    $mockCommandAst = {
+                        'TestCommand' | Should -Not -Invoke 'TestCommand' -Times 4 `
+                            -ParameterFilter { $_.Name -eq 'test' } `
+                            -ModuleName 'TestModule' `
+                            -Scope 'Local' `
+                            -Because 'ExtraBecauseNegated' `
+                            -Exactly
                     }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
 
                     $expected = 'Should-NotInvoke ''TestCommand'' 4 -Because ''ExtraBecauseNegated'' -Exactly -ModuleName ''TestModule'' -ParameterFilter { $_.Name -eq ''test'' } -Scope ''Local'''
