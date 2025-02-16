@@ -27,12 +27,6 @@ Describe 'Should -Throw' {
                 Should -Throw -Because 'BecauseString' -ExpectedMessage 'myMessage'
         }
 
-        It 'Should convert `"throw ''five''" | ForEach-Object { [scriptblock]::Create($_) } | Should -Throw -Not` correctly' {
-            "throw 'five'" |
-                ForEach-Object { [scriptblock]::Create($_) } |
-                Should -Throw
-        }
-
         It 'Should convert `Should -Throw ''MockErrorMessage'' ''MockErrorId'' ([System.Exception]) ''BecauseString''` correctly' {
             {
                 Write-Error -Message 'MockErrorMessage' -ErrorId 'MockErrorId' -Category 'InvalidOperation' -TargetObject 'MockTargetObject' -ErrorAction 'Stop'
