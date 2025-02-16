@@ -24,7 +24,7 @@
 
     .EXAMPLE
         $commandAst = [System.Management.Automation.Language.Parser]::ParseInput('Assert-MockCalled -CommandName "TestCommand"')
-        Convert-AssertMockCalled -CommandAst $commandAst
+        Convert-AssertMockCalled -CommandAst $commandAst -Pester6
 
         This example converts the `Assert-MockCalled -CommandName "TestCommand"` command to `Should -Invoke`.
 
