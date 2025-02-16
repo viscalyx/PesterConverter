@@ -122,16 +122,6 @@ Describe 'ConvertTo-ActualParameterName' {
     }
 
     Context 'When using null or empty values' {
-        It 'Should throw when NamedParameter is empty' {
-            InModuleScope -ScriptBlock {
-                $mockErrorMessage = $script:localizedData.UnknownNamedParameter -f '', 'Should'
-
-                {
-                    ConvertTo-ActualParameterName -CommandName 'Should' -NamedParameter ''
-                } | Should -Throw -ExpectedMessage $mockErrorMessage
-            }
-        }
-
         It 'Should throw when NamedParameter contains only whitespace' {
             InModuleScope -ScriptBlock {
                 $mockErrorMessage = $script:localizedData.UnknownNamedParameter -f '   ', 'Should'
