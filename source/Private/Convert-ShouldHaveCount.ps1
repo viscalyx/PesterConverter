@@ -103,6 +103,7 @@ function Convert-ShouldHaveCount
             CommandName         = 'Should'
             IgnoreParameter     = @(
                 'HaveCount'
+                'Not'
             )
             PositionalParameter = @(
                 'ExpectedValue'

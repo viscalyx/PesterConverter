@@ -30,7 +30,7 @@ ConvertFrom-StringData @'
     Convert_PesterSyntax_Debug_FoundShouldCommand = Found {0} `Should` command(s) in file '{1}'.
     Convert_PesterSyntax_Warning_UnsupportedCommandOperator = Unsupported command operator '{0}' in extent: `{1}`
     Convert_PesterSyntax_MissingSupportedCommandOperator = Did not found any of the supported command operators in extent: `{0}`
-    Convert_PesterSyntax_NoShouldCommand = "No 'Should' command found in '{0}'.
+    Convert_PesterSyntax_NoPesterCommand = No supported Pester commands found in '{0}'.
     Convert_PesterSyntax_OutputPathDoesNotExist = The output path '{0}' does not exist. Please specify an existing path.
     Convert_PesterSyntax_OutputPathIsNotDirectory = The output path '{0}' is not a directory. Please specify a directory path.
 
@@ -38,6 +38,12 @@ ConvertFrom-StringData @'
     Convert_Should_Debug_ParsingCommandAst = Parsing the command AST: `{0}`
     Convert_Should_Debug_ConvertingFromTo = Converting from Pester v{0} to Pester v{1} syntax.
     Convert_Should_Debug_ConvertedCommand = Converted the command `{0}` to `{1}`.
+
+    ## Convert-AssertMockCalled
+    Convert_AssertMockCalled_Debug_ParsingCommandAst = Parsing the command AST: `{0}`
+    Convert_AssertMockCalled_Debug_ConvertingFromTo = Converting from Pester v{0} to Pester v{1} syntax.
+    Convert_AssertMockCalled_Debug_ConvertedCommand = Converted the command `{0}` to `{1}`.
+    Convert_AssertMockCalled_Debug_IntermediateStep = Converting Pester 4 syntax through Pester 5 as intermediate step.
 
     ## Convert-ShouldHaveCount
     Convert_HaveCount_Error_NegatedTestsNotSupported = Negated tests are not supported: '{0}'.

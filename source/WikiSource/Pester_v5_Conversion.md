@@ -8,7 +8,16 @@ Information converting Pester v5 to Pester v6.
 
 The following commands are supported:
 
+- [`Assert-MockCalled`](#assert-mockcalled)
 - [`Should`](#should)
+
+#### `Assert-MockCalled`
+
+The command `Assert-MockCalled` is converted to the appropriate Pester v5 command:
+
+Assert-MockCalled | Affirm | Notes
+--- | --- | ---
+Assert-MockCalled | `Should -Invoke` | -
 
 #### `Should`
 

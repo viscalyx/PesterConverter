@@ -38,7 +38,11 @@ function Get-PesterCommandSyntaxVersion
 
     $sourceSyntaxVersion = $null
 
-    if ($CommandAst.CommandElements[0].Extent.Text -match 'Should-\w+\b')
+    if ($CommandAst.CommandElements[0].Extent.Text -match 'Assert-MockCalled')
+    {
+        $sourceSyntaxVersion = 4
+    }
+    elseif ($CommandAst.CommandElements[0].Extent.Text -match 'Should-\w+\b')
     {
         $sourceSyntaxVersion = 6
     }

@@ -43,50 +43,93 @@ AfterAll {
 }
 
 Describe 'ConvertTo-ActualParameterName' {
-    It 'Should return the correct parameter name for a valid abbreviation' {
-        InModuleScope -ScriptBlock {
-            $result = ConvertTo-ActualParameterName -CommandName 'Should' -NamedParameter 'Actual'
+    Context 'When using Should command' {
+        It 'Should return the correct parameter name for a valid abbreviation' {
+            InModuleScope -ScriptBlock {
+                $result = ConvertTo-ActualParameterName -CommandName 'Should' -NamedParameter 'Actual'
 
-            $result | Should-Be 'ActualValue'
+                $result | Should-Be 'ActualValue'
+            }
+        }
+
+        It 'Should return the correct parameter name for a actual name' {
+            InModuleScope -ScriptBlock {
+                $result = ConvertTo-ActualParameterName -CommandName 'Should' -NamedParameter 'Be'
+
+                $result | Should-Be 'Be'
+            }
+        }
+
+        It 'Should throw an error for ambiguous parameter names' {
+            InModuleScope -ScriptBlock {
+                $mockErrorMessage = $script:localizedData.AmbiguousNamedParameter -f 'BeL', 'Should'
+
+                {
+                    # Would return BeLessOrEqual, BeLessThan, BeLike, BeLikeExactly which is ambiguous for "BeL".
+                    ConvertTo-ActualParameterName -CommandName 'Should' -NamedParameter 'BeL'
+                } | Should-Throw -ExceptionMessage $mockErrorMessage
+            }
+        }
+
+        It 'Should throw an error for invalid command names' {
+            InModuleScope -ScriptBlock {
+                {
+                    ConvertTo-ActualParameterName -CommandName 'InvalidCommand' -NamedParameter 'Actual'
+                } | Should-Throw
+            }
+        }
+
+        It 'Should return an empty result for non-matching parameter names' {
+            InModuleScope -ScriptBlock {
+                $mockErrorMessage = $script:localizedData.UnknownNamedParameter -f 'NonExistent', 'Should'
+
+                {
+                    ConvertTo-ActualParameterName -CommandName 'Should' -NamedParameter 'NonExistent'
+                } | Should-Throw -ExceptionMessage $mockErrorMessage
+
+                $result | Should-BeNull
+            }
         }
     }
 
-    It 'Should return the correct parameter name for a actual name' {
-        InModuleScope -ScriptBlock {
-            $result = ConvertTo-ActualParameterName -CommandName 'Should' -NamedParameter 'Be'
+    Context 'When using Assert-MockCalled command' {
+        It 'Should return the correct parameter name for a valid abbreviation' {
+            InModuleScope -ScriptBlock {
+                $result = ConvertTo-ActualParameterName -CommandName 'Assert-MockCalled' -NamedParameter 'Param'
 
-            $result | Should-Be 'Be'
+                $result | Should -Be 'ParameterFilter'
+            }
+        }
+
+        It 'Should return the correct parameter name for an exact match' {
+            InModuleScope -ScriptBlock {
+                $result = ConvertTo-ActualParameterName -CommandName 'Assert-MockCalled' -NamedParameter 'Times'
+
+                $result | Should -Be 'Times'
+            }
+        }
+
+        It 'Should throw when parameter name is ambiguous' {
+            InModuleScope -ScriptBlock {
+                $mockErrorMessage = $script:localizedData.AmbiguousNamedParameter -f 'E', 'Assert-MockCalled'
+
+                {
+                    # Would return Exactly and ExclusiveFilter which is ambiguous for "E"
+                    ConvertTo-ActualParameterName -CommandName 'Assert-MockCalled' -NamedParameter 'E'
+                } | Should -Throw -ExpectedMessage $mockErrorMessage
+            }
         }
     }
 
-    It 'Should throw an error for ambiguous parameter names' {
-        InModuleScope -ScriptBlock {
-            $mockErrorMessage = $script:localizedData.AmbiguousNamedParameter -f 'BeL', 'Should'
+    Context 'When using null or empty values' {
+        It 'Should throw when NamedParameter contains only whitespace' {
+            InModuleScope -ScriptBlock {
+                $mockErrorMessage = $script:localizedData.UnknownNamedParameter -f '   ', 'Should'
 
-            {
-                # Would return BeLessOrEqual, BeLessThan, BeLike, BeLikeExactly which is ambiguous for "BeL".
-                ConvertTo-ActualParameterName -CommandName 'Should' -NamedParameter 'BeL'
-            } | Should-Throw -ExceptionMessage $mockErrorMessage
-        }
-    }
-
-    It 'Should throw an error for invalid command names' {
-        InModuleScope -ScriptBlock {
-            {
-                ConvertTo-ActualParameterName -CommandName 'InvalidCommand' -NamedParameter 'Actual'
-            } | Should-Throw
-        }
-    }
-
-    It 'Should return an empty result for non-matching parameter names' {
-        InModuleScope -ScriptBlock {
-            $mockErrorMessage = $script:localizedData.UnknownNamedParameter -f 'NonExistent', 'Should'
-
-            {
-                ConvertTo-ActualParameterName -CommandName 'Should' -NamedParameter 'NonExistent'
-            } | Should-Throw -ExceptionMessage $mockErrorMessage
-
-            $result | Should-BeNull
+                {
+                    ConvertTo-ActualParameterName -CommandName 'Should' -NamedParameter '   '
+                } | Should -Throw -ExpectedMessage $mockErrorMessage
+            }
         }
     }
 }
