@@ -8,8 +8,16 @@ Information converting Pester v5 to Pester v6.
 
 The following commands are supported:
 
-- [`Should`](#should)
 - [`Assert-MockCalled`](#assert-mockcalled)
+- [`Should`](#should)
+
+#### `Assert-MockCalled`
+
+The command `Assert-MockCalled` is converted to the appropriate Pester v5 command:
+
+Assert-MockCalled | Affirm | Notes
+--- | --- | ---
+Assert-MockCalled | `Should -Invoke` | -
 
 #### `Should`
 
@@ -61,11 +69,3 @@ the test to use the Pester 6 commands `Should-BeFalsy` or `Should-BeTruthy`.
 5) Negated version of `-HaveCount` will not be converted since there are no
 command `Should-NotBeCollection -Count` and using an alternative to it has
 not been considered (e.g. `(<code>).Count | Should-Be <expected value>`).
-
-#### `Assert-MockCalled`
-
-The command `Assert-MockCalled` is converted to the appropriate Pester v5 command:
-
-Assert-MockCalled | Affirm | Notes
---- | --- | ---
-Assert-MockCalled | `Should -Invoke` | -

@@ -1,10 +1,10 @@
 <#
     .SYNOPSIS
-        Converts a command `Assert-MockCalled` to `Should -Invoke`.
+        Converts a command `Assert-MockCalled` to `Should -Invoke` or `Should-Invoke`.
 
     .DESCRIPTION
         The Convert-AssertMockCalled function is used to convert a command `Assert-MockCalled`
-        to `Should -Invoke`.
+        to `Should -Invoke` or `Should-Invoke`.
 
     .PARAMETER CommandAst
         The CommandAst object representing the command to be converted.
@@ -24,9 +24,15 @@
 
     .EXAMPLE
         $commandAst = [System.Management.Automation.Language.Parser]::ParseInput('Assert-MockCalled -CommandName "TestCommand"')
-        Convert-AssertMockCalled -CommandAst $commandAst -Pester6
+        Convert-AssertMockCalled -CommandAst $commandAst -Pester5
 
         This example converts the `Assert-MockCalled -CommandName "TestCommand"` command to `Should -Invoke`.
+
+    .EXAMPLE
+        $commandAst = [System.Management.Automation.Language.Parser]::ParseInput('Assert-MockCalled -CommandName "TestCommand"')
+        Convert-AssertMockCalled -CommandAst $commandAst -Pester6
+
+        This example converts the `Assert-MockCalled -CommandName "TestCommand"` command to `Should-Invoke`.
 
     .NOTES
         Pester 4/5 Syntax:
