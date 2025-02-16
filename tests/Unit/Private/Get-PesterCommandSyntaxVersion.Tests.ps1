@@ -71,6 +71,20 @@ Describe 'Get-PesterCommandSyntaxVersion' {
         }
     }
 
+    Context 'When expecting Pester 4 syntax' {
+        It 'Should return the correct Pester syntax version for Assert-MockCalled' {
+            InModuleScope -ScriptBlock {
+                $mockCommandAst = {
+                    Assert-MockCalled Get-Something -Times 1
+                }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
+
+                $result = Get-PesterCommandSyntaxVersion -CommandAst $mockCommandAst
+
+                $result | Should-Be -Expected 4
+            }
+        }
+    }
+
     It 'Should return $null' {
         InModuleScope -ScriptBlock {
             $mockCommandAst = {
