@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Public commands:
   - `Convert-PesterSyntax`
-    - Add support for Should operators:
+    - Add support for `Should` operators:
       - Be
       - BeExactly
       - BeFalse
@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       - Match
       - MatchExactly
       - Throw
+    - Add support for `Assert-MockCalled`.
     - Added new parameter `OutputPath` to write the resulting file to
       a separate path.
 - Add integration tests.

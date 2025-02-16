@@ -9,6 +9,12 @@
     .PARAMETER CommandAst
         The CommandAst object representing the command to be converted.
 
+    .PARAMETER Pester5
+        Specifies that the command should be converted to Pester version 5 syntax.
+
+    .PARAMETER Pester6
+        Specifies that the command should be converted to Pester version 6 syntax.
+
     .PARAMETER UseNamedParameters
         Specifies whether to use named parameters in the converted syntax.
 
@@ -53,6 +59,14 @@ function Convert-AssertMockCalled
         [System.Management.Automation.Language.CommandAst]
         $CommandAst,
 
+        [Parameter(Mandatory = $true, ParameterSetName = 'Pester6')]
+        [System.Management.Automation.SwitchParameter]
+        $Pester6,
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'Pester5')]
+        [System.Management.Automation.SwitchParameter]
+        $Pester5,
+
         [Parameter()]
         [System.Management.Automation.SwitchParameter]
         $UseNamedParameters,
@@ -72,94 +86,155 @@ function Convert-AssertMockCalled
 
     Write-Debug -Message ($script:localizedData.Convert_AssertMockCalled_Debug_ParsingCommandAst -f $CommandAst.Extent.Text)
 
-    # Add the correct Pester command
-    $newExtentText = 'Should-Invoke'
+    $sourceSyntaxVersion = Get-PesterCommandSyntaxVersion -CommandAst $CommandAst
 
-    $getPesterCommandParameterParameters = @{
-        CommandAst          = $CommandAst
-        CommandName         = 'Assert-MockCalled'
-        IgnoreParameter     = @()
-        PositionalParameter = @(
-            'CommandName',
-            'Times'
-        )
-        NamedParameter      = @(
-            'ParameterFilter',
-            'ModuleName',
-            'Scope',
-            'Exactly',
-            'Because'
-        )
-    }
-
-    $commandParameters = Get-PesterCommandParameter @getPesterCommandParameterParameters
-
-    # Determine if named or positional parameters should be forcibly used
-    if ($UseNamedParameters.IsPresent)
+    # Parse the command elements and convert them to Pester 6 syntax
+    if ($PSCmdlet.ParameterSetName -in @('Pester5', 'Pester6'))
     {
-        $commandParameters.Keys.ForEach({ $commandParameters.$_.Positional = $false })
-    }
-    elseif ($UsePositionalParameters.IsPresent)
-    {
-        # First set all to named parameters
-        $commandParameters.Keys.ForEach({ $commandParameters.$_.Positional = $false })
+        <#
+            Always convert to Pester 5 syntax. Converting to Pester 5 is an intermediate
+            step for Pester 6 syntax, which will be used to convert to Pester 6 at the end.
+        #>
+        $debugMessage = $script:localizedData.Convert_AssertMockCalled_Debug_ConvertingFromTo -f $sourceSyntaxVersion, 5
+
+        if ($PSCmdlet.ParameterSetName -eq 'Pester6')
+        {
+            $debugMessage += ' {0}' -f $script:localizedData.Convert_AssertMockCalled_Debug_IntermediateStep
+        }
+
+        Write-Debug -Message $debugMessage
+
+        # Add the correct Pester 5 command.
+        $newExtentText = 'Should -Invoke'
+
+        $getPesterCommandParameterParameters = @{
+            CommandAst          = $CommandAst
+            CommandName         = 'Assert-MockCalled'
+            IgnoreParameter     = @()
+            PositionalParameter = @(
+                'CommandName',
+                'Times',
+                'ParameterFilter',
+                'ModuleName',
+                'Scope'
+            )
+            NamedParameter      = @(
+                'Exactly'
+            )
+        }
+
+        $commandParameters = Get-PesterCommandParameter @getPesterCommandParameterParameters
 
         <#
-            If a previous positional parameter is missing then the ones behind
-            it cannot be set to positional.
+            Parameter 'ParameterFilter', 'ModuleName' and 'Scope' are only supported
+            as named parameters in Pester 5 and Pester 6 syntax.
         #>
-        if ($commandParameters.CommandName)
-        {
-            $commandParameters.CommandName.Positional = $true
-
-            if ($commandParameters.Times)
+        @(
+            'ParameterFilter'
+            'ModuleName'
+            'Scope'
+        ) | ForEach-Object -Process {
+            if ($commandParameters.$_)
             {
-                $commandParameters.Times.Positional = $true
+                $commandParameters.$_.Positional = $false
             }
         }
-    }
 
-    # Ensure ParameterFilter, ModuleName, and Scope remain named in Pester 5 syntax
-    if ($commandParameters.ContainsKey('ParameterFilter')) { $commandParameters.ParameterFilter.Positional = $false }
-    if ($commandParameters.ContainsKey('ModuleName'))     { $commandParameters.ModuleName.Positional = $false }
-    if ($commandParameters.ContainsKey('Scope'))          { $commandParameters.Scope.Positional = $false }
-
-    $newExtentText += $commandParameters.CommandName.Positional ? (' {0}' -f $commandParameters.CommandName.ExtentText) : ''
-    $newExtentText += $commandParameters.Times.Positional ? (' {0}' -f $commandParameters.Times.ExtentText) : ''
-
-    # Prepare remaining parameters as named parameters in alphabetical order.
-    $parameterNames = @{}
-
-    foreach ($currentParameter in $commandParameters.Keys)
-    {
-        if ($commandParameters.$currentParameter.Positional -eq $true)
+        # Determine if named or positional parameters should be forcibly used
+        if ($UseNamedParameters.IsPresent)
         {
-            continue
+            $commandParameters.Keys.ForEach({ $commandParameters.$_.Positional = $false })
         }
-
-        switch ($currentParameter)
+        elseif ($UsePositionalParameters.IsPresent)
         {
-            # There are no parameters that need to be converted to different names.
+            # First set all to named parameters
+            $commandParameters.Keys.ForEach({ $commandParameters.$_.Positional = $false })
 
-            default
+            <#
+                If a previous positional parameter is missing then the ones behind
+                it cannot be set to positional.
+            #>
+            if ($commandParameters.CommandName)
             {
-                $parameterNames.$currentParameter = $currentParameter
+                $commandParameters.CommandName.Positional = $true
 
-                break
+                if ($commandParameters.Times)
+                {
+                    $commandParameters.Times.Positional = $true
+                }
             }
         }
-    }
 
-    # This handles the named parameters in the command elements, added in alphabetical order.
-    foreach ($currentParameter in $parameterNames.Keys | Sort-Object)
-    {
-        $originalParameterName = $parameterNames.$currentParameter
+        # Add positional parameters in the correct order.
+        $newExtentText += $commandParameters.CommandName.Positional ? (' {0}' -f $commandParameters.CommandName.ExtentText) : ''
+        $newExtentText += $commandParameters.Times.Positional ? (' {0}' -f $commandParameters.Times.ExtentText) : ''
 
-        $newExtentText += ' -{0}' -f $currentParameter
+        # Prepare remaining parameters as named parameters in alphabetical order.
+        $parameterNames = @{}
 
-        if ($commandParameters.$originalParameterName.ExtentText)
+        foreach ($currentParameter in $commandParameters.Keys)
         {
-            $newExtentText += ' {0}' -f $commandParameters.$originalParameterName.ExtentText
+            if ($commandParameters.$currentParameter.Positional -eq $true)
+            {
+                continue
+            }
+
+            switch ($currentParameter)
+            {
+                # There are no parameters that need to be converted to different names.
+
+                default
+                {
+                    $parameterNames.$currentParameter = $currentParameter
+
+                    break
+                }
+            }
+        }
+
+        # This handles the named parameters in the command elements, added in alphabetical order.
+        foreach ($currentParameter in $parameterNames.Keys | Sort-Object)
+        {
+            $originalParameterName = $parameterNames.$currentParameter
+
+            $newExtentText += ' -{0}' -f $currentParameter
+
+            if ($commandParameters.$originalParameterName.ExtentText)
+            {
+                $newExtentText += ' {0}' -f $commandParameters.$originalParameterName.ExtentText
+            }
+        }
+
+        # Convert the extent to Pester 6 if necessary
+        if ($PSCmdlet.ParameterSetName -eq 'Pester6')
+        {
+            Write-Debug -Message ($script:localizedData.Convert_AssertMockCalled_Debug_ConvertingFromTo -f 5, 6)
+
+            $scriptBlockAst = [System.Management.Automation.Language.Parser]::ParseInput($newExtentText, [ref] $null, [ref] $null)
+
+            $commandAsts = $scriptBlockAst.FindAll({
+                    $args[0] -is [System.Management.Automation.Language.CommandAst]
+                }, $true)
+
+            $newExtentAst = $commandAsts | Select-Object -First 1
+
+            $convertShouldInvokeParameters = @{
+                Pester6    = $true
+                CommandAst = $newExtentAst
+            }
+
+            if ($UseNamedParameters.IsPresent)
+            {
+                $convertShouldInvokeParameters.UseNamedParameters = $true
+            }
+
+            if ($UsePositionalParameters.IsPresent)
+            {
+                $convertShouldInvokeParameters.UsePositionalParameters = $true
+            }
+
+
+            $newExtentText = Convert-ShouldInvoke @convertShouldInvokeParameters
         }
     }
 

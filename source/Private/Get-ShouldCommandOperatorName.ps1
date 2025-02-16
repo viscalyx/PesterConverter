@@ -1,26 +1,26 @@
 <#
-.SYNOPSIS
-    Retrieves the Should command operator based on the provided CommandAst.
+    .SYNOPSIS
+        Retrieves the Should command operator based on the provided CommandAst.
 
-.DESCRIPTION
-    The Get-ShouldCommandOperatorName function retrieves the Should command operator based
-    on the provided CommandAst object. It searches for specific operators and their
-    aliases in the CommandAst and returns the corresponding operator name.
+    .DESCRIPTION
+        The Get-ShouldCommandOperatorName function retrieves the Should command operator based
+        on the provided CommandAst object. It searches for specific operators and their
+        aliases in the CommandAst and returns the corresponding operator name.
 
-.PARAMETER CommandAst
-    Specifies the CommandAst object representing the command for which the Should
-    operator needs to be retrieved.
+    .PARAMETER CommandAst
+        Specifies the CommandAst object representing the command for which the Should
+        operator needs to be retrieved.
 
-.OUTPUTS
-    System.String
+    .OUTPUTS
+        System.String
 
-    The Should command operator name.
+        The Should command operator name.
 
-.EXAMPLE
-    $commandAst = [System.Management.Automation.Language.Parser]::ParseInput('Should -Be "Hello"')
-    Get-ShouldCommandOperatorName -CommandAst $commandAst
+    .EXAMPLE
+        $commandAst = [System.Management.Automation.Language.Parser]::ParseInput('Should -Be "Hello"')
+        Get-ShouldCommandOperatorName -CommandAst $commandAst
 
-    Returns "Be"
+        Returns "Be"
 #>
 
 function Get-ShouldCommandOperatorName
