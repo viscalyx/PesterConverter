@@ -69,6 +69,30 @@ Describe 'Convert-ShouldHaveCount' {
                 }
             }
 
+            It 'Should convert `Should -HaveCount $numericValue` correctly' {
+                InModuleScope -ScriptBlock {
+                    $mockCommandAst = {
+                        Should -HaveCount $numericValue
+                    }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
+
+                    $result = Convert-ShouldHaveCount -CommandAst $mockCommandAst
+
+                    $result | Should-BeString -CaseSensitive 'Should-BeCollection -Count $numericValue'
+                }
+            }
+
+            It 'Should convert `Should -Not:$false -HaveCount 2` correctly' {
+                InModuleScope -ScriptBlock {
+                    $mockCommandAst = {
+                        Should -Not:$false -HaveCount 2
+                    }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
+
+                    $result = Convert-ShouldHaveCount -CommandAst $mockCommandAst
+
+                    $result | Should-BeString -CaseSensitive 'Should-BeCollection -Count 2'
+                }
+            }
+
             It 'Should convert `Should -ActualValue $true -HaveCount 5` correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAst = {

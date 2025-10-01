@@ -44,14 +44,18 @@ AfterAll {
 
 Describe 'Convert-PesterSyntax' {
     BeforeAll {
-        # Save current ProgressPreference and then set it to SilentlyContinue
-        $script:originalProgressPreference = $ProgressPreference
-        $script:ProgressPreference = 'SilentlyContinue'
+        InModuleScope -ScriptBlock {
+            # Save current ProgressPreference and then set it to SilentlyContinue
+            $script:originalProgressPreference = $ProgressPreference
+            $script:ProgressPreference = 'SilentlyContinue'
+        }
     }
 
     AfterAll {
-        # Restore the original ProgressPreference
-        $script:ProgressPreference = $script:originalProgressPreference
+        InModuleScope -ScriptBlock {
+            # Restore the original ProgressPreference
+            $script:ProgressPreference = $script:originalProgressPreference
+        }
     }
 
     Context 'When converting v5 to v6' {
@@ -1451,6 +1455,94 @@ Describe 'Convert-PesterSyntax' {
                 $result = Convert-PesterSyntax -Path $mockScriptFilePath -OutputPath $mockOutputPath -Force
 
                 Should-BeNull -Actual $result -Because 'The function should not return anything when saving the converted script to a different output path'
+            }
+        }
+
+        Context 'When no version parameter is specified' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Should -Be' {
+                        It 'Should -Be' {
+                            $true | Should -Be $true
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+            }
+
+            It 'Should default to Pester6 conversion' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Should -Be' {
+                        It 'Should -Be' {
+                            $true | Should-Be $true
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+        }
+
+        Context 'When converting Assert-MockCalled' {
+            BeforeAll {
+                $mockAstExtentText = {
+                    Describe 'Assert-MockCalled' {
+                        It 'Assert-MockCalled' {
+                            Assert-MockCalled 'Get-Something' -Times 1 -Exactly -Scope It -ParameterFilter { $Path -eq 'value' }
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
+
+                Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
+            }
+
+            It 'Should return the correct converted script' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Assert-MockCalled' {
+                        It 'Assert-MockCalled' {
+                            Should-Invoke 'Get-Something' -Exactly -ParameterFilter { $Path -eq 'value' } -Scope It -Times 1
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using named parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Assert-MockCalled' {
+                        It 'Assert-MockCalled' {
+                            Should-Invoke -CommandName 'Get-Something' -Exactly -ParameterFilter { $Path -eq 'value' } -Scope It -Times 1
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UseNamedParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
+            }
+
+            It 'Should return the correct converted script using positional parameters' {
+                $mockExpectedConvertedScript = {
+                    Describe 'Assert-MockCalled' {
+                        It 'Assert-MockCalled' {
+                            Should-Invoke 'Get-Something' 1 -Exactly -ParameterFilter { $Path -eq 'value' } -Scope It
+                        }
+                    }
+                }.Ast.GetScriptBlock().ToString()
+
+                $result = Convert-PesterSyntax -Path $mockScriptFilePath -UsePositionalParameters -PassThru
+
+                $result | Should-BeString -CaseSensitive -Expected $mockExpectedConvertedScript -TrimWhitespace
             }
         }
     }

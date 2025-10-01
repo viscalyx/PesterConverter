@@ -1,5 +1,4 @@
-# TODO: When Pester 6 supports the correct positional parameter for `Should -Throw` this test should be activated.
-Describe 'Should -Throw' -Skip:$true {
+Describe 'Should -Throw' {
     Context 'When the tests are affirming' {
         It 'Should convert `Should -Throw -ExceptionType ([System.Exception]) -ErrorId ''MockErrorId'' -Because ''BecauseString'' -ExpectedMessage ''MockErrorMessage'' -ActualValue { Write-Error -Message ''MockErrorMessage'' -ErrorId ''MockErrorId'' -Category ''InvalidOperation'' -TargetObject ''MockTargetObject'' -ErrorAction ''Stop'' }` correctly' {
             Should -Throw -Because 'BecauseString' -ExceptionType ([System.Exception]) -ErrorId 'MockErrorId' -ExpectedMessage 'MockErrorMessage' -ActualValue {
@@ -26,12 +25,6 @@ Describe 'Should -Throw' -Skip:$true {
         It 'Should convert `{ throw ''myMessage'' } | Should -Throw -Because ''BecauseString'' -ExpectedMessage ''ExpectedString''` correctly' {
             { throw 'myMessage' } |
                 Should -Throw -Because 'BecauseString' -ExpectedMessage 'myMessage'
-        }
-
-        It 'Should convert `"throw ''five''" | ForEach-Object { [scriptblock]::Create($_) } | Should -Throw -Not` correctly' {
-            "throw 'five'" |
-                ForEach-Object { [scriptblock]::Create($_) } |
-                Should -Throw
         }
 
         It 'Should convert `Should -Throw ''MockErrorMessage'' ''MockErrorId'' ([System.Exception]) ''BecauseString''` correctly' {

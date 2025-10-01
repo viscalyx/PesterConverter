@@ -30,7 +30,7 @@ function ConvertTo-ActualParameterName
     param
     (
         [Parameter(Mandatory = $true)]
-        [ValidateSet('Should')]
+        [ValidateSet('Assert-MockCalled', 'Should')]
         [System.String]
         $CommandName,
 
@@ -41,6 +41,20 @@ function ConvertTo-ActualParameterName
 
     switch ($CommandName)
     {
+        # Assert-MockCalled in Pester 4.
+        'Assert-MockCalled'
+        {
+            $parameterNames = @(
+                'CommandName'
+                'Times'
+                'ParameterFilter'
+                'ModuleName'
+                'Scope'
+                'Exactly'
+                'ExclusiveFilter'
+            )
+        }
+
         # Should in Pester 5.
         'Should'
         {

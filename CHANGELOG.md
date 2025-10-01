@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Public commands:
   - `Convert-PesterSyntax`
-    - Add support for Should operators:
+    - Add support for `Should` operators:
       - Be
       - BeExactly
       - BeFalse
@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       - Match
       - MatchExactly
       - Throw
+    - Add support for `Assert-MockCalled`.
     - Added new parameter `OutputPath` to write the resulting file to
       a separate path.
 - Add integration tests.
@@ -57,3 +58,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Now supports Switch parameters.
   - Also supports when Switch parameters is the last parameter on the extent.
 - Update test assertions to use Pester v6 syntax.
+- Updated conversion documentation for `Should -Invoke`, `Should -Not -Invoke`
+  and `Should -HaveCount`.
+- Now converting `Should -HaveCount` works when `-Not:$false` is specified.
+- Bump action Stale to v10
+- Bump action Checkout to v5
