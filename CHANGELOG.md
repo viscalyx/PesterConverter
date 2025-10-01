@@ -60,3 +60,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated conversion documentation for `Should -Invoke`, `Should -Not -Invoke`
   and `Should -HaveCount`.
 - Now converting `Should -HaveCount` works when `-Not:$false` is specified.
+- Bump action Stale to v10
