@@ -34,6 +34,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       a separate path.
 - Add integration tests.
 
+### Changed
+
+- Bump GitHub Actions actions/checkout to v7
+
 ### Fixed
 
 - Improve code to resolve ScriptAnalyzer warnings and errors.
@@ -62,4 +66,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and `Should -HaveCount`.
 - Now converting `Should -HaveCount` works when `-Not:$false` is specified.
 - Bump action Stale to v10
-- Bump action Checkout to v5
+- Bump action Checkout to v6
+- Bump action codeql-action/upload-sarif to v4
