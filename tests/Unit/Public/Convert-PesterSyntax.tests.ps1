@@ -30,13 +30,15 @@ BeforeAll {
 
     $PSDefaultParameterValues['InModuleScope:ModuleName'] = $script:dscModuleName
     $PSDefaultParameterValues['Mock:ModuleName'] = $script:dscModuleName
-    $PSDefaultParameterValues['Should:ModuleName'] = $script:dscModuleName
+    $PSDefaultParameterValues['Should-Invoke:ModuleName'] = $script:dscModuleName
+    $PSDefaultParameterValues['Should-NotInvoke:ModuleName'] = $script:dscModuleName
 }
 
 AfterAll {
     $PSDefaultParameterValues.Remove('InModuleScope:ModuleName')
     $PSDefaultParameterValues.Remove('Mock:ModuleName')
-    $PSDefaultParameterValues.Remove('Should:ModuleName')
+    $PSDefaultParameterValues.Remove('Should-Invoke:ModuleName')
+    $PSDefaultParameterValues.Remove('Should-NotInvoke:ModuleName')
 
     # Unload the module being tested so that it doesn't impact any other tests.
     Get-Module -Name $script:dscModuleName -All | Remove-Module -Force
@@ -1394,8 +1396,6 @@ Describe 'Convert-PesterSyntax' {
                 $mockScriptFilePath = Join-Path -Path $TestDrive -ChildPath 'Mock.Tests.ps1'
 
                 Set-Content -Path $mockScriptFilePath -Value $mockAstExtentText -Encoding 'utf8'
-
-                Mock -CommandName Write-Warning
             }
 
             It 'Should not throw an exception' {
@@ -1442,7 +1442,7 @@ Describe 'Convert-PesterSyntax' {
             It 'Should throw an error when the output path does not exist' {
                 {
                     Convert-PesterSyntax -Path $mockScriptFilePath -OutputPath $mockNonExistentPath -Force
-                } | Should -Throw -FullyQualifiedErrorId 'CPS0002,Convert-PesterSyntax'
+                } | Should-Throw -FullyQualifiedErrorId 'CPS0002,Convert-PesterSyntax'
             }
 
             It 'Should throw an error when the output path is not a directory' {
