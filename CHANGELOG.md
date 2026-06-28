@@ -34,6 +34,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       a separate path.
 - Add integration tests.
 
+### Changed
+
+- Bump GitHub Actions actions/checkout to v7
+
 ### Fixed
 
 - Improve code to resolve ScriptAnalyzer warnings and errors.
