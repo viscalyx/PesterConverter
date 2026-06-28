@@ -79,30 +79,30 @@ Describe 'Changelog Management' -Tag 'Changelog' {
         # Only check if there are any changed files.
         if ($filesChanged)
         {
-            $filesChanged | Should -Contain 'CHANGELOG.md' -Because 'the CHANGELOG.md must be updated with at least one entry in the Unreleased section for each PR'
+            $filesChanged | Should-ContainCollection 'CHANGELOG.md' -Because 'the CHANGELOG.md must be updated with at least one entry in the Unreleased section for each PR'
         }
     }
 
     It 'Changelog format compliant with keepachangelog format' -Skip:(![bool](Get-Command git -EA SilentlyContinue)) {
-        { Get-ChangelogData -Path (Join-Path $ProjectPath 'CHANGELOG.md') -ErrorAction Stop } | Should -Not -Throw
+        $null = & ({ Get-ChangelogData -Path (Join-Path $ProjectPath 'CHANGELOG.md') -ErrorAction Stop })
     }
 
     It 'Changelog should have an Unreleased header' -Skip:$skipTest {
-            (Get-ChangelogData -Path (Join-Path -Path $ProjectPath -ChildPath 'CHANGELOG.md') -ErrorAction Stop).Unreleased | Should -Not -BeNullOrEmpty
+            (Get-ChangelogData -Path (Join-Path -Path $ProjectPath -ChildPath 'CHANGELOG.md') -ErrorAction Stop).Unreleased | Should-BeTruthy
     }
 }
 
 Describe 'General module control' -Tags 'FunctionalQuality' {
     It 'Should import without errors' {
-        { Import-Module -Name $script:moduleName -Force -ErrorAction Stop } | Should -Not -Throw
+        $null = & ({ Import-Module -Name $script:moduleName -Force -ErrorAction Stop })
 
-        Get-Module -Name $script:moduleName | Should -Not -BeNullOrEmpty
+        Get-Module -Name $script:moduleName | Should-BeTruthy
     }
 
     It 'Should remove without error' {
-        { Remove-Module -Name $script:moduleName -ErrorAction Stop } | Should -Not -Throw
+        $null = & ({ Remove-Module -Name $script:moduleName -ErrorAction Stop })
 
-        Get-Module $script:moduleName | Should -BeNullOrEmpty
+        Get-Module $script:moduleName | Should-BeFalsy
     }
 }
 
@@ -141,7 +141,7 @@ Describe 'Quality for module' -Tags 'TestQuality' {
     }
 
     It 'Should have a unit test for <Name>' -ForEach $testCases {
-        Get-ChildItem -Path 'tests\' -Recurse -Include "$Name.Tests.ps1" | Should -Not -BeNullOrEmpty
+        Get-ChildItem -Path 'tests\' -Recurse -Include "$Name.Tests.ps1" | Should-BeTruthy
     }
 
     It 'Should pass Script Analyzer for <Name>' -ForEach $testCases -Skip:(-not $scriptAnalyzerRules) {
@@ -149,8 +149,7 @@ Describe 'Quality for module' -Tags 'TestQuality' {
 
         $pssaResult = (Invoke-ScriptAnalyzer -Path $functionFile.FullName)
         $report = $pssaResult | Format-Table -AutoSize | Out-String -Width 110
-        $pssaResult | Should -BeNullOrEmpty -Because `
-            "some rule triggered.`r`n`r`n $report"
+        $pssaResult | Should-BeFalsy -Because "some rule triggered.`r`n`r`n $report"
     }
 }
 
@@ -171,7 +170,7 @@ Describe 'Help for module' -Tags 'helpQuality' {
 
         $functionHelp = $parsedFunction.GetHelpContent()
 
-        $functionHelp.Synopsis | Should -Not -BeNullOrEmpty
+        $functionHelp.Synopsis | Should-BeTruthy
     }
 
     It 'Should have a .DESCRIPTION with length greater than 40 characters for <Name>' -ForEach $testCases {
@@ -190,7 +189,7 @@ Describe 'Help for module' -Tags 'helpQuality' {
 
         $functionHelp = $parsedFunction.GetHelpContent()
 
-        $functionHelp.Description.Length | Should -BeGreaterThan 40
+        $functionHelp.Description.Length | Should-BeGreaterThan 40
     }
 
     It 'Should have at least one (1) example for <Name>' -ForEach $testCases {
@@ -209,9 +208,9 @@ Describe 'Help for module' -Tags 'helpQuality' {
 
         $functionHelp = $parsedFunction.GetHelpContent()
 
-        $functionHelp.Examples.Count | Should -BeGreaterThan 0
-        $functionHelp.Examples[0] | Should -Match ([regex]::Escape($function.Name))
-        $functionHelp.Examples[0].Length | Should -BeGreaterThan ($function.Name.Length + 10)
+        $functionHelp.Examples.Count | Should-BeGreaterThan 0
+        $functionHelp.Examples[0] | Should-MatchString ([regex]::Escape($function.Name))
+        $functionHelp.Examples[0].Length | Should-BeGreaterThan ($function.Name.Length + 10)
 
     }
 
@@ -235,8 +234,8 @@ Describe 'Help for module' -Tags 'helpQuality' {
 
         foreach ($parameter in $parameters)
         {
-            $functionHelp.Parameters.($parameter.ToUpper()) | Should -Not -BeNullOrEmpty -Because ('the parameter {0} must have a description' -f $parameter)
-            $functionHelp.Parameters.($parameter.ToUpper()).Length | Should -BeGreaterThan 25 -Because ('the parameter {0} must have descriptive description' -f $parameter)
+            $functionHelp.Parameters.($parameter.ToUpper()) | Should-BeTruthy -Because ('the parameter {0} must have a description' -f $parameter)
+            $functionHelp.Parameters.($parameter.ToUpper()).Length | Should-BeGreaterThan 25 -Because ('the parameter {0} must have descriptive description' -f $parameter)
         }
     }
 }
