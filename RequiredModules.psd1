@@ -33,4 +33,7 @@
     # Prerequisite modules for documentation.
     'DscResource.DocGenerator'     = 'latest'
     PlatyPS                        = 'latest'
+
+    # Help with running tests
+    'Viscalyx.Common'              = 'latest'
 }
