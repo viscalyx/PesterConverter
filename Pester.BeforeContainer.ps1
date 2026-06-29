@@ -1,3 +1,10 @@
+<#
+    .SYNOPSIS
+        Bootstrap script for Pester tests that runs before each container (each test file)
+
+    .DESCRIPTION
+        Bootstrap script for Pester tests that runs before each container (each test file)
+#>
 Write-Information -MessageData 'Invoking Pester.BeforeContainer.' -InformationAction 'Continue'
 
 try
