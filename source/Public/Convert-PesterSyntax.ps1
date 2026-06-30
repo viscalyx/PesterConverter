@@ -264,13 +264,15 @@ function Convert-PesterSyntax
 
                     $commandAstIsChild = [System.Boolean] $parentAst
 
-                    if ($commandAstIsChild)
-                    {
-                        Write-Warning -Message  ($script:localizedData.Convert_PesterSyntax_Warning_RecursivePesterCommand -f $commandName, $filePath)
-                        Write-Debug -Message ($script:localizedData.Convert_PesterSyntax_Debug_RecursivePesterCommandAst -f $parentAst)
+                    # if ($commandAstIsChild)
+                    # {
+                    #     Write-Warning -Message  ($script:localizedData.Convert_PesterSyntax_Warning_RecursivePesterCommand -f $commandName, $filePath)
+                    #     Write-Debug -Message ($script:localizedData.Convert_PesterSyntax_Debug_RecursivePesterCommandAst -f $parentAst)
 
-                        continue
-                    }
+                    #     continue
+                    # }
+
+                    $originalExtentText = Get-ExtentText -CommandAst $commandAst
 
                     switch ($commandName)
                     {
@@ -464,6 +466,31 @@ function Convert-PesterSyntax
 
                     if ($apply)
                     {
+                        if ($commandAstIsChild)
+                        {
+                            <#
+                                This handles edge cases where the AST belongs to a parent AST that we also need to change.
+                                To resolve this in one go we would have to modify the original extent for the parent at
+                                the same time as we modify the result.
+                            #>
+                            $childStartIndexInParentText = $commandAst.Extent.StartOffset - $parentAst.Extent.StartOffset
+                            $childTextLength = $commandAst.Extent.EndOffset - $commandAst.Extent.StartOffset
+
+                            <#
+                                Get the parent extent. Need to call this command to handle yet another edge case where
+                                Pester commands have been used inside each other for more than two levels.
+                            #>
+                            $parentExtentText = Get-ExtentText -CommandAst $parentAst
+
+                            $updatedParentText = $parentExtentText.Remove($childStartIndexInParentText, $childTextLength).Insert($childStartIndexInParentText, $newExtentText)
+
+                            <#
+                                We add a new property on the object since the Extent.Text is read-only.
+                                This property is read by Get-ExtentText.
+                            #>
+                            $parentAst.Extent | Add-Member -MemberType NoteProperty -Name 'TextWithConvertedChild' -Value $updatedParentText -Force
+                        }
+
                         # Replace the portion of the script that was converted.
                         $convertedScriptText = $convertedScriptText.Remove($startOffset, $endOffset - $startOffset).Insert($startOffset, $newExtentText)
                     }

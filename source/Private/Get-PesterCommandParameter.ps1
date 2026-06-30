@@ -63,7 +63,9 @@ function Get-PesterCommandParameter
 
     process
     {
-        Write-Debug -Message ($script:localizedData.Get_PesterCommandParameter_Debug_RetrievingParameters -f $CommandAst.Extent.Text)
+        $extentText = Get-ExtentText -CommandAst $CommandAst
+
+        Write-Debug -Message ($script:localizedData.Get_PesterCommandParameter_Debug_RetrievingParameters -f $extentText)
         Write-Debug -Message ($script:localizedData.Get_PesterCommandParameter_Debug_RetrievingCommandName -f $CommandName)
 
         # Filter out the command name from the command elements.
