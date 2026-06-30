@@ -4,7 +4,7 @@ param ()
 BeforeAll {
     $script:dscModuleName = 'PesterConverter'
 
-    Import-Module -Name $script:dscModuleName
+    Import-Module -Name $script:dscModuleName -Force
 
     $PSDefaultParameterValues['InModuleScope:ModuleName'] = $script:dscModuleName
     $PSDefaultParameterValues['Mock:ModuleName'] = $script:dscModuleName
@@ -1338,8 +1338,8 @@ Describe 'Convert-PesterSyntax' {
 
             It 'Should not throw an exception' {
                 $null = Convert-PesterSyntax -Path $mockScriptFilePath -PassThru
-
-                Should-Invoke -CommandName Write-Warning -Exactly -ParameterFilter { $Message -like '*Get-ShouldCommandOperatorName does not yet support support the Should operator that was found in extent*Should -BeNull*' } -Scope It -Times 1
+                #Get-ShouldCommandOperatorName does not yet support the `Should` operator that was found in file '/private/tmp/Pester_maij/Mock.Tests.ps1', or the operator name is short form instead of the full operator name. Extent: `Should -BeNull`
+                Should-Invoke -CommandName Write-Warning -Exactly -ParameterFilter { $Message -like '*Get-ShouldCommandOperatorName does not yet support the*Should*operator*in file*Should -BeNull*' } -Scope It -Times 1
             }
         }
 

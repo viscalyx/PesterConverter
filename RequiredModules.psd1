@@ -34,6 +34,9 @@
     'DscResource.DocGenerator'     = 'latest'
     PlatyPS                        = 'latest'
 
+    # Pester assertions
+    'Viscalyx.Assert'              = 'latest'
+
     # Help with running tests
     'Viscalyx.Common'              = 'latest'
 }

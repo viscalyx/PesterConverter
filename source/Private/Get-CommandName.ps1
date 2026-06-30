@@ -3,7 +3,7 @@
         Retrieves the command name from the provided CommandAst.
 
     .DESCRIPTION
-        The Get-CommandNameFromAst function analyzes the CommandAst object to extract
+        The Get-CommandName function analyzes the CommandAst object to extract
         and return the command name. It handles different AST element types to ensure
         the command name is accurately determined.
 

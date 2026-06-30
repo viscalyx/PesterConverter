@@ -4,7 +4,7 @@ param ()
 BeforeAll {
     $script:dscModuleName = 'PesterConverter'
 
-    Import-Module -Name $script:dscModuleName
+    Import-Module -Name $script:dscModuleName -Force
 
     $PSDefaultParameterValues['InModuleScope:ModuleName'] = $script:dscModuleName
     $PSDefaultParameterValues['Mock:ModuleName'] = $script:dscModuleName
@@ -47,6 +47,30 @@ Describe 'Convert-ShouldInvoke' {
                     $result = Convert-ShouldInvoke -CommandAst $mockCommandAst -Pester6 -UseNamedParameters
 
                     $result | Should-BeString -CaseSensitive "Should-Invoke -Because 'BecauseString' -CommandName 'TestCommand' -Times 3"
+                }
+            }
+
+            It 'Should convert a multi-line `Should -Invoke` correctly' {
+                InModuleScope -ScriptBlock {
+                    $mockCommandAst = {
+                        Should -Invoke -CommandName Start-SqlSetupProcess -ParameterFilter {
+                            $ArgumentList | Should -MatchExactly '\/quiet \/IAcceptLicenseTerms'
+
+                            # Return $true if none of the above throw.
+                            $true
+                        } -Exactly -Times 1 -Scope It
+                    }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
+
+                    $result = Convert-ShouldInvoke -CommandAst $mockCommandAst -Pester6 -UseNamedParameters
+
+                    $result | Should-BeBlockString @"
+Should-Invoke -CommandName Start-SqlSetupProcess -Exactly -ParameterFilter {
+                            `$ArgumentList | Should -MatchExactly '\/quiet \/IAcceptLicenseTerms'
+
+                            # Return `$true if none of the above throw.
+                            `$true
+                        } -Scope It -Times 1
+"@
                 }
             }
 
