@@ -75,7 +75,9 @@ function Convert-ShouldHaveCount
 
     Assert-BoundParameter @assertBoundParameterParameters
 
-    Write-Debug -Message ($script:localizedData.Convert_Should_Debug_ParsingCommandAst -f $CommandAst.Extent.Text)
+    $extentText = Get-ExtentText -CommandAst $CommandAst
+
+    Write-Debug -Message ($script:localizedData.Convert_Should_Debug_ParsingCommandAst -f $extentText)
 
     # Determine if the command is negated
     $isNegated = Test-PesterCommandNegated -CommandAst $CommandAst
@@ -90,9 +92,9 @@ function Convert-ShouldHaveCount
         # Negated tests are not supported.
         if ($isNegated)
         {
-            Write-Verbose -Message ($script:localizedData.Convert_HaveCount_Error_NegatedTestsNotSupported -f $CommandAst.Extent.Text)
+            Write-Verbose -Message ($script:localizedData.Convert_HaveCount_Error_NegatedTestsNotSupported -f $extentText)
 
-            return $CommandAst.Extent.Text
+            return $extentText
         }
 
         # Add the correct Pester 6 command name
@@ -200,7 +202,7 @@ function Convert-ShouldHaveCount
         }
     }
 
-    Write-Debug -Message ($script:localizedData.Convert_Should_Debug_ConvertedCommand -f $CommandAst.Extent.Text, $newExtentText)
+    Write-Debug -Message ($script:localizedData.Convert_Should_Debug_ConvertedCommand -f $extentText, $newExtentText)
 
     return $newExtentText
 }
