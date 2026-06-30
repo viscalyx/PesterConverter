@@ -1,5 +1,4 @@
-# TODO: When Pester 6 supports `Should-Invoke` this test should be activated.
-Describe 'Should -Invoke' -Skip:$true {
+Describe 'Should -Invoke' {
     BeforeAll {
         function TestCommand
         {
@@ -107,15 +106,13 @@ Describe 'Should -Invoke' -Skip:$true {
     }
 
     It 'Should convert `Should -Invoke` even if it has another `Should` in its extent' {
-        InModuleScope -Parameters $_ -ScriptBlock {
-            1..3 | ForEach-Object { Get-Something -Path 'test.txt' }
+        1..3 | ForEach-Object { Get-Something -Path 'test.txt' }
 
-            Should -Invoke -CommandName TestCommand -ParameterFilter {
-                'a' | Should -MatchExactly 'a'
+        Should -Invoke -CommandName TestCommand -ParameterFilter {
+            'a' | Should -MatchExactly 'a'
 
-                # Return $true if the assert above does not throw.
-                $true
-            } -Exactly -Times 1 -Scope It
-        }
+            # Return $true if the assert above does not throw.
+            $true
+        } -Exactly -Times 3 -Scope It
     }
 }

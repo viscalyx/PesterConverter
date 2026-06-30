@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   such edge case is found it is skipped. Another conversion pass on the
   converted file will convert those recursively used Pester commands.
   Fixes [issue #36](https://github.com/viscalyx/PesterConverter/issues/46).
+- Enable integration tests that was disabled.
 
 ## [0.2.0] - 2026-06-29
 
