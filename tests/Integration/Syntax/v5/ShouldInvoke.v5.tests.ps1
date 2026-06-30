@@ -113,6 +113,6 @@ Describe 'Should -Invoke' {
 
             # Return $true if the assert above does not throw.
             $true
-        } -Exactly -Times 1 -Scope It
+        } -Exactly -Times 3 -Scope It
     }
 }
