@@ -454,6 +454,8 @@ function Convert-PesterSyntax
                             else
                             {
                                 Write-Warning -Message ($script:localizedData.Convert_PesterSyntax_Warning_MissingSupportedCommandOperator -f $commandAst.Extent.Text, $filePath)
+
+                                $apply = $false
                             }
 
                             break
