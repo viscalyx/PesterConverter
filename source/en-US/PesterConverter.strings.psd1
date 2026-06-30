@@ -29,12 +29,12 @@ ConvertFrom-StringData @'
     Convert_PesterSyntax_Debug_ScriptBlockAst = Parsing the script block AST: {0}
     Convert_PesterSyntax_Debug_FoundShouldCommand = Found {0} `Should` command(s) in file '{1}'.
     Convert_PesterSyntax_Warning_UnsupportedCommandOperator = Unsupported command operator '{0}' in file '{2}'. Extent: `{1}`
-    Convert_PesterSyntax_Warning_MissingSupportedCommandOperator = Get-ShouldCommandOperatorName does not yet support support the `Should` operator that was found in file '{1}', or the operator name is short form instead of the full operator name. Extent: `{0}`
+    Convert_PesterSyntax_Warning_MissingSupportedCommandOperator = Get-ShouldCommandOperatorName does not yet support the `Should` operator that was found in file '{1}', or the operator name is short form instead of the full operator name. Extent: `{0}`
     Convert_PesterSyntax_NoPesterCommand = No supported Pester commands found in '{0}'.
     Convert_PesterSyntax_OutputPathDoesNotExist = The output path '{0}' does not exist. Please specify an existing path.
     Convert_PesterSyntax_OutputPathIsNotDirectory = The output path '{0}' is not a directory. Please specify a directory path.
     Convert_PesterSyntax_Warning_RecursivePesterCommand = Found an unsupported scenario; Pester command '{0}' is used inside another Pester command in the file '{1}'. Re-run the conversion on the converted file to convert these recursively used Pester commands.
-    Convert_PesterSyntax_Debug_RecursivePesterCommandAst = This as uses at least one recursive Pester command: {0}
+    Convert_PesterSyntax_Debug_RecursivePesterCommandAst = This AST uses at least one recursive Pester command: {0}
 
     ## Common for all Convert-Should* functions
     Convert_Should_Debug_ParsingCommandAst = Parsing the command AST: `{0}`
