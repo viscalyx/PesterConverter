@@ -1,4 +1,3 @@
-# TODO: When Pester 6 supports `Should-Invoke` this test should be activated.
 Describe 'Should -Invoke' {
     BeforeAll {
         function TestCommand

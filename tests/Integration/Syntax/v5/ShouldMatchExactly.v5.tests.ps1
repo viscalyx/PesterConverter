@@ -1,4 +1,3 @@
-# TODO: When Pester 6 supports `Should-MatchString` and `Should-NotMatchString` this test should be activated.
 Describe 'Should -MatchExactly' {
     Context 'When the tests are affirming' {
         It 'Should convert `Should -MatchExactly ''Test''` correctly' {
