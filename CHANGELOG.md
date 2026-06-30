@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Improve bootstrap of tests
 
+### Fixed
+
+- Warns for an unsupported conversion scenario where a Pester command calls
+  another Pester command, for example in a `FilterScript` scriptblock. If
+  such edge case is found it is skipped. Another conversion pass on the
+  converted file will convert those recursively used Pester commands.
+
 ## [0.2.0] - 2026-06-29
 
 ### Added

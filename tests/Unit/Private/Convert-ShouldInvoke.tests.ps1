@@ -50,6 +50,30 @@ Describe 'Convert-ShouldInvoke' {
                 }
             }
 
+            It 'Should convert a multi-line `Should -Invoke` correctly' {
+                InModuleScope -ScriptBlock {
+                    $mockCommandAst = {
+                        Should -Invoke -CommandName Start-SqlSetupProcess -ParameterFilter {
+                            $ArgumentList | Should -MatchExactly '\/quiet \/IAcceptLicenseTerms'
+
+                            # Return $true if none of the above throw.
+                            $true
+                        } -Exactly -Times 1 -Scope It
+                    }.Ast.Find({ $args[0] -is [System.Management.Automation.Language.CommandAst] }, $false)
+
+                    $result = Convert-ShouldInvoke -CommandAst $mockCommandAst -Pester6 -UseNamedParameters
+
+                    $result | Should-BeBlockString @"
+Should-Invoke -CommandName Start-SqlSetupProcess -Exactly -ParameterFilter {
+                            `$ArgumentList | Should -MatchExactly '\/quiet \/IAcceptLicenseTerms'
+
+                            # Return `$true if none of the above throw.
+                            `$true
+                        } -Scope It -Times 1
+"@
+                }
+            }
+
             It 'Should convert `Should -Invoke` using positional parameters correctly' {
                 InModuleScope -ScriptBlock {
                     $mockCommandAst = {

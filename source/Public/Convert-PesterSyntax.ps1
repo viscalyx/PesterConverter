@@ -259,6 +259,19 @@ function Convert-PesterSyntax
 
                     $commandName = Get-CommandName -CommandAst $commandAst -ErrorAction 'Stop'
 
+                    # This checks for edge cases where a Should operator has another Should operator inside it.
+                    $parentAst = @($pesterCommandAst).Where({ -not [object]::ReferenceEquals($_, $commandAst) -and $_.Extent.StartOffset -lt $commandAst.Extent.StartOffset -and $_.Extent.EndOffset -gt $commandAst.Extent.EndOffset }, 'First')
+
+                    $commandAstIsChild = [System.Boolean] $parentAst
+
+                    if ($commandAstIsChild)
+                    {
+                        Write-Warning -Message  ($script:localizedData.Convert_PesterSyntax_Warning_RecursivePesterCommand -f $commandName, $filePath)
+                        Write-Debug -Message ($script:localizedData.Convert_PesterSyntax_Debug_RecursivePesterCommandAst -f $parentAst)
+
+                        continue
+                    }
+
                     switch ($commandName)
                     {
                         'Assert-MockCalled'
@@ -432,7 +445,7 @@ function Convert-PesterSyntax
 
                                     default
                                     {
-                                        Write-Warning -Message ($script:localizedData.Convert_PesterSyntax_Warning_UnsupportedCommandOperator -f $operatorName, $commandAst.Extent.Text)
+                                        Write-Warning -Message ($script:localizedData.Convert_PesterSyntax_Warning_UnsupportedCommandOperator -f $operatorName, $commandAst.Extent.Text, $filePath)
 
                                         $apply = $false
                                     }
@@ -440,7 +453,7 @@ function Convert-PesterSyntax
                             }
                             else
                             {
-                                Write-Warning -Message ($script:localizedData.Convert_PesterSyntax_MissingSupportedCommandOperator -f $commandAst.Extent.Text)
+                                Write-Warning -Message ($script:localizedData.Convert_PesterSyntax_Warning_MissingSupportedCommandOperator -f $commandAst.Extent.Text, $filePath)
                             }
 
                             break
@@ -449,7 +462,7 @@ function Convert-PesterSyntax
 
                     if ($apply)
                     {
-                        # Replace the portion of the script.
+                        # Replace the portion of the script that was converted.
                         $convertedScriptText = $convertedScriptText.Remove($startOffset, $endOffset - $startOffset).Insert($startOffset, $newExtentText)
                     }
                 }
