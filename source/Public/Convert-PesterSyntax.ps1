@@ -3,8 +3,8 @@
         Converts the syntax of a file to the syntax of a newer Pester version.
 
     .DESCRIPTION
-        The Convert-PesterSyntax command is used to convert the syntax of a file to
-        the syntax of a newer Pester version.. It supports converting to Pester 6 format.
+        The Convert-PesterSyntax command converts the syntax of a file to the syntax
+        of a newer Pester version.
 
     .PARAMETER Path
         Specifies the path of the file(s) to be converted. This parameter is mandatory
@@ -22,13 +22,13 @@
         where supported.
 
     .PARAMETER Force
-        Specifies that the file should be created without any confirmation.
+        Specifies that the file should be converted without any confirmation.
 
     .PARAMETER PassThru
         Returns the script after converting the syntax. This parameter is most
         useful when passing in a single file to convert. If multiple files are
         passed in, the script of all the files will be returned as an array.
-        If PassThru is specified, no file will not be modified.
+        If PassThru is specified, no file will be modified.
 
     .PARAMETER OutputPath
         Specifies the path to save the converted file(s). If this parameter is
@@ -50,6 +50,10 @@
 
         Converts the syntax of all PowerShell files in the C:\Scripts directory and
         its subdirectories to Pester 6 syntax.
+
+    .NOTES
+        The supported conversion paths:
+        - Pester 5 to Pester 6 - See https://github.com/viscalyx/PesterConverter/wiki/Pester_v5_Conversion for more information.
 #>
 function Convert-PesterSyntax
 {
