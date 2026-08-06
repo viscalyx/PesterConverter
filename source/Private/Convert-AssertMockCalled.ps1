@@ -90,7 +90,9 @@ function Convert-AssertMockCalled
 
     Assert-BoundParameter @assertBoundParameterParameters
 
-    Write-Debug -Message ($script:localizedData.Convert_AssertMockCalled_Debug_ParsingCommandAst -f $CommandAst.Extent.Text)
+    $extentText = Get-ExtentText -CommandAst $CommandAst
+
+    Write-Debug -Message ($script:localizedData.Convert_AssertMockCalled_Debug_ParsingCommandAst -f $extentText)
 
     $sourceSyntaxVersion = Get-PesterCommandSyntaxVersion -CommandAst $CommandAst
 
@@ -244,7 +246,7 @@ function Convert-AssertMockCalled
         }
     }
 
-    Write-Debug -Message ($script:localizedData.Convert_AssertMockCalled_Debug_ConvertedCommand -f $CommandAst.Extent.Text, $newExtentText)
+    Write-Debug -Message ($script:localizedData.Convert_AssertMockCalled_Debug_ConvertedCommand -f $extentText, $newExtentText)
 
     return $newExtentText
 }

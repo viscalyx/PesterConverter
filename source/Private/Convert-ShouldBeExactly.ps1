@@ -73,7 +73,9 @@ function Convert-ShouldBeExactly
 
     Assert-BoundParameter @assertBoundParameterParameters
 
-    Write-Debug -Message ($script:localizedData.Convert_Should_Debug_ParsingCommandAst -f $CommandAst.Extent.Text)
+    $extentText = Get-ExtentText -CommandAst $CommandAst
+
+    Write-Debug -Message ($script:localizedData.Convert_Should_Debug_ParsingCommandAst -f $extentText)
 
     # Determine if the command is negated
     $isNegated = Test-PesterCommandNegated -CommandAst $CommandAst
@@ -191,7 +193,7 @@ function Convert-ShouldBeExactly
         }
     }
 
-    Write-Debug -Message ($script:localizedData.Convert_Should_Debug_ConvertedCommand -f $CommandAst.Extent.Text, $newExtentText)
+    Write-Debug -Message ($script:localizedData.Convert_Should_Debug_ConvertedCommand -f $extentText, $newExtentText)
 
     return $newExtentText
 }
